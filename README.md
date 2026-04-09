@@ -1,4 +1,4 @@
-# Measuring Energy Consumption for Topographic Uncertainty Propagation in Mass Flow Simulations using Soft Sensors
+# Soft Sensors to Measure Energy Consumption of Topographic Uncertainty Propagation in Mass Flow Simulations 
 
 ## Motivation 
 Benchmarking methods to propagate topographic uncertainties in surface flow simulations involves comparing their accuracy, resource usage, and energy consumption. Currently, compute time is used as a proxy for energy consumption; however, it can be misleading due to the increasing heterogeneity in modern computational workflows.
