@@ -4,7 +4,7 @@
 Benchmarking methods to propagate topographic uncertainties in surface flow simulations involves comparing their accuracy, resource usage, and energy consumption. Currently, compute time is used as a proxy for energy consumption; however, it can be misleading due to the increasing heterogeneity in modern computational workflows.
 
 ## Goal
-Estimate consumption and resource usage of surface flow simulators for topographic uncertainty quantification using soft sensors.
+Estimate consumption and resource usage of surface flow simulators for topographic uncertainty propagation using soft sensors.
 
 ## Tasks
 - \>\> Develop a workflow to propagate topographic uncertainty using a surface flow simulator with the Monte-Carlo method
