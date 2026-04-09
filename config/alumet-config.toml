@@ -1,0 +1,45 @@
+[plugins.csv]
+output_path = "alumet-output.csv"
+force_flush = true
+append_unit_to_metric_name = true
+use_unit_display_name = true
+csv_delimiter = ";"
+csv_late_delimiter = ","
+
+[plugins.procfs.kernel]
+enabled = true
+poll_interval = "5s"
+
+[plugins.procfs.memory]
+enabled = true
+poll_interval = "5s"
+metrics = [
+    "MemTotal",
+    "MemFree",
+    "MemAvailable",
+    "Cached",
+    "SwapCached",
+    "Active",
+    "Inactive",
+    "Mapped",
+]
+
+[plugins.procfs.network]
+enabled = true
+poll_interval = "5s"
+
+[plugins.procfs.processes]
+enabled = true
+refresh_interval = "2s"
+strategy = "watcher"
+
+[[plugins.procfs.processes.groups]]
+exe_regex = ""
+poll_interval = "2s"
+flush_interval = "4s"
+memory_mode = "quick"
+
+[plugins.procfs.processes.events]
+poll_interval = "1s"
+flush_interval = "4s"
+memory_mode = "quick"
