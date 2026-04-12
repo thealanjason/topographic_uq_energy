@@ -5,7 +5,7 @@ from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
 # --- Research Parameters ---
-iterations = 50
+iterations = 10
 std_dev = 0.5
 
 # 1. Dynamically locate the pristine baseline map
@@ -37,7 +37,7 @@ for i in range(iterations):
     # Write the updated object to disk
     dem.write(noisy_filename)
 
-    # 4. Execute the Simulation
+    # 4. Execute the Simulation & Measurement Pipeline
     # Pass the noisy file to the updated gaia_flood_test.py
     cmd = f"alumet-agent --config alumet-config.toml exec python gaia_flood_test.py --dem {noisy_filename}"
     

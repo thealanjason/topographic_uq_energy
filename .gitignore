@@ -1,0 +1,13 @@
+# Ignore Monte Carlo Data Outputs
+*.csv
+
+# Ignore SynXFlow Auto-Generated Folders & Binaries
+gaia_flood_case/
+run_smooth/
+run_rough/
+*.dat
+*.vtk
+
+# Ignore Python System Caches
+__pycache__/
+*.pyc

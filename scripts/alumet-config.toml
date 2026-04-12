@@ -1,0 +1,94 @@
+[agent]
+interval = "100ms"
+
+# --- 1. HARDWARE SENSORS ---
+[plugins.nvml]
+enabled = true
+poll_interval = "100ms"
+flush_interval = "100ms"
+mode = "full"
+
+[plugins.rapl]
+enabled = true
+poll_interval = "100ms"
+flush_interval = "100ms"
+no_perf_events = false
+
+# --- 2. PROCESS MONITOR ---
+[plugins.procfs]
+
+[plugins.procfs.kernel]
+enabled = false
+poll_interval = "100ms"
+
+[plugins.procfs.memory]
+enabled = false
+poll_interval = "100ms"
+metrics = [
+    "MemTotal",
+    "MemFree",
+    "MemAvailable",
+    "Cached",
+    "SwapCached",
+    "Active",
+    "Inactive",
+    "Mapped",
+]
+
+[plugins.procfs.network]
+enabled = false
+poll_interval = "100ms"
+
+[plugins.procfs.processes]
+enabled = true
+strategy = "event"
+refresh_interval = "100ms"
+
+[[plugins.procfs.processes.groups]]
+exe_regex = ""
+poll_interval = "100ms"
+flush_interval = "100ms"
+memory_mode = "quick"
+
+[plugins.procfs.processes.events]
+poll_interval = "100ms"
+flush_interval = "100ms"
+memory_mode = "quick"
+
+# --- 3. THE MATH ENGINE (ENERGY ATTRIBUTION) ---
+[plugins.energy-attribution]
+enabled = true
+
+# CPU Energy Attribution
+[plugins.energy-attribution.formulas.attributed_energy_cpu]
+expr = "cpu_energy * cpu_usage / 100.0"
+ref = "cpu_energy"
+retention_time = "1s"
+
+[plugins.energy-attribution.formulas.attributed_energy_cpu.per_resource]
+cpu_energy = { metric = "rapl_consumed_energy", resource_kind = "local_machine", domain = "package_total" }
+
+[plugins.energy-attribution.formulas.attributed_energy_cpu.per_consumer]
+cpu_usage = { metric = "cpu_percent", kind = "total" }
+
+# GPU Energy Attribution
+[plugins.energy-attribution.formulas.attributed_energy_gpu]
+expr = "gpu_energy * gpu_usage / 100.0 / 1000.0"
+ref = "gpu_energy"
+retention_time = "1s"
+
+[plugins.energy-attribution.formulas.attributed_energy_gpu.per_resource]
+gpu_energy = { metric = "nvml_energy_consumption" }
+
+[plugins.energy-attribution.formulas.attributed_energy_gpu.per_consumer]
+gpu_usage = { metric = "nvml_sm_utilization" }
+
+# --- 4. THE OUTPUT ---
+[plugins.csv]
+enabled = true
+force_flush = true
+output_path = "alumet-gpu-test.csv"
+append_unit_to_metric_name = false
+use_unit_display_name = false
+csv_delimiter = ","
+csv_late_delimiter = ";"
