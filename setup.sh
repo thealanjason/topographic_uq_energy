@@ -16,4 +16,3 @@ echo -e "\n[3/3] Compiling Alumet Agent using Rust (This may take a few minutes)
 micromamba run -n env-model cargo install --git https://github.com/alumet-dev/alumet.git alumet-agent
 
 echo -e "\n=== Setup Complete! ==="
-echo "You can now run your simulations using env-montecarlo."

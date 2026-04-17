@@ -5,7 +5,7 @@ from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
 # --- Research Parameters ---
-iterations = 50
+iterations = 2
 std_dev = 0.5
 
 # 1. Dynamically locate the pristine baseline map
@@ -39,8 +39,7 @@ for i in range(iterations):
 
     # 4. Execute the Simulation & Measurement Pipeline
     # Pass the noisy file to the updated gaia_flood_test.py
-    cmd = f"alumet-agent --config alumet-config.toml exec python gaia_flood_test.py --dem {noisy_filename}"
-    
+    cmd = f"micromamba run -n env-model alumet-agent --config scripts/alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename}"
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
 

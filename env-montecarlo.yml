@@ -6,3 +6,7 @@ dependencies:
   - numpy
   - scipy
   - pyyaml
+  - setuptools<70
+  - pip
+  - pip:
+    - synxflow

@@ -1,6 +1,12 @@
 [agent]
 interval = "100ms"
 
+[plugins.influxdb]
+enabled = false
+
+[plugins.prometheus-exporter]
+enabled = false
+
 # --- 1. HARDWARE SENSORS ---
 [plugins.nvml]
 enabled = true
@@ -81,7 +87,7 @@ retention_time = "1s"
 gpu_energy = { metric = "nvml_energy_consumption" }
 
 [plugins.energy-attribution.formulas.attributed_energy_gpu.per_consumer]
-gpu_usage = { metric = "nvml_sm_utilization" }
+gpu_usage = { metric = "nvml_gpu_utilization" }
 
 # --- 4. THE OUTPUT ---
 [plugins.csv]

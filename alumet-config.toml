@@ -1,0 +1,201 @@
+[plugins.csv]
+output_path = "alumet-output.csv"
+force_flush = true
+append_unit_to_metric_name = true
+use_unit_display_name = true
+csv_delimiter = ";"
+csv_late_delimiter = ","
+
+[plugins.prometheus-exporter]
+host = "0.0.0.0"
+prefix = ""
+suffix = "_alumet"
+port = 9091
+add_attributes_to_labels = true
+
+[plugins.influxdb]
+host = "http://localhost:8086"
+token = "FILL ME"
+org = "FILL ME"
+bucket = "FILL ME"
+attributes_as = "field"
+
+[plugins.mongodb]
+host = "localhost"
+port = 27017
+database = "FILL ME"
+collection = "FILL ME"
+username = "FILL ME"
+password = "FILL ME"
+
+[plugins.relay-client]
+client_name = "68G-gaia"
+relay_server = "[::1]:50051"
+buffer_max_length = 4096
+buffer_timeout = "30s"
+
+[plugins.relay-client.retry]
+max_times = 8
+initial_delay = "500ms"
+max_delay = "4s"
+
+[plugins.relay-server]
+address = "[::]:50051"
+
+[plugins.opentelemetry]
+collector_host = "http://localhost:4317"
+prefix = ""
+suffix = "_alumet"
+use_unit_display_name = true
+add_attributes_to_labels = true
+push_interval_seconds = 15
+
+[plugins.aggregation]
+interval = "1m"
+function = "Sum"
+metrics = []
+
+[plugins.energy-estimation-tdp]
+poll_interval = "5s"
+tdp = 100.0
+nb_vcpu = 1.0
+nb_cpu = 1.0
+
+[plugins.elasticsearch]
+server_url = "http://localhost:9200"
+allow_insecure = false
+index_prefix = "alumet"
+metric_unit_as_index_suffix = false
+
+[plugins.elasticsearch.auth.basic]
+user = "TODO"
+password = "TODO"
+
+[plugins.kwollect-input]
+site = "cluster"
+hostname = "node"
+metrics = ["metric"]
+login = "login"
+password = "password"
+utc_offset = 2
+
+[plugins.kwollect-output]
+url = "https://api.grid5000.fr/stable/sites/CHANGEME/metrics"
+hostname = "68G-gaia"
+append_unit_to_metric_name = true
+use_unit_display_name = true
+
+[plugins.filter]
+
+[plugins.energy-to-carbon]
+mode = "world_avg"
+
+[plugins.socket-control]
+socket_path = "alumet-control.sock"
+
+[plugins.k8s]
+k8s_api_url = "http://127.0.0.1:8080"
+token_retrieval = "auto"
+poll_interval = "5s"
+annotate_foreign_measurements = false
+
+[plugins.slurm]
+poll_interval = "1s"
+ignore_non_jobs = true
+jobs_monitoring_level = "job"
+add_source_in_pause_state = false
+annotate_foreign_measurements = false
+
+[plugins.oar]
+oar_version = "oar3"
+poll_interval = "1s"
+jobs_only = true
+annotate_foreign_measurements = false
+
+[plugins.cgroups]
+poll_interval = "5s"
+
+[plugins.grace-hopper]
+poll_interval = "1s"
+root_path = "/sys/class/hwmon"
+
+[plugins.rapl]
+poll_interval = "1s"
+flush_interval = "5s"
+no_perf_events = false
+
+[plugins.perf]
+poll_interval = "1s"
+flush_interval = "5s"
+hardware_events = [
+    "REF_CPU_CYCLES",
+    "CACHE_MISSES",
+    "BRANCH_MISSES",
+]
+software_events = []
+cache_events = ["LL_READ_MISS"]
+
+[plugins.procfs.kernel]
+enabled = true
+poll_interval = "5s"
+
+[plugins.procfs.memory]
+enabled = true
+poll_interval = "5s"
+metrics = [
+    "MemTotal",
+    "MemFree",
+    "MemAvailable",
+    "Cached",
+    "SwapCached",
+    "Active",
+    "Inactive",
+    "Mapped",
+]
+
+[plugins.procfs.network]
+enabled = true
+poll_interval = "5s"
+
+[plugins.procfs.processes]
+enabled = true
+refresh_interval = "2s"
+strategy = "watcher"
+
+[[plugins.procfs.processes.groups]]
+exe_regex = ""
+poll_interval = "2s"
+flush_interval = "4s"
+memory_mode = "quick"
+
+[plugins.procfs.processes.events]
+poll_interval = "1s"
+flush_interval = "4s"
+memory_mode = "quick"
+
+[plugins.nvml]
+poll_interval = "1s"
+flush_interval = "5s"
+skip_failed_devices = true
+mode = "full"
+
+[plugins.process-to-cgroup-bridge]
+processes_metrics = [
+    "some_metric_to_bridge",
+    "another_metric_to_bridge",
+]
+merge_similar_cgroups = true
+keep_processed_measurements = true
+
+[plugins.jetson]
+poll_interval = "1s"
+flush_interval = "5s"
+
+[plugins.quarch]
+quarch_ip = "1.2.3.4"
+quarch_port = 9760
+qis_port = 9780
+java_bin = "path_to_java"
+qis_jar_path = "path_to_qis"
+poll_interval = "150ms"
+flush_interval = "1s 500ms"
