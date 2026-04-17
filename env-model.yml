@@ -1,0 +1,15 @@
+name: env-model
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - numpy
+  - pyyaml
+  # --- Alumet Build Dependencies ---
+  - rust
+  - pkg-config
+  - openssl
+  # ---------------------------------
+  - pip
+  - pip:
+    - synxflow

@@ -5,7 +5,7 @@ from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
 # --- Research Parameters ---
-iterations = 10
+iterations = 50
 std_dev = 0.5
 
 # 1. Dynamically locate the pristine baseline map
