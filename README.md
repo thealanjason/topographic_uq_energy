@@ -10,5 +10,20 @@ Estimate consumption and resource usage of surface flow simulators for topograph
 - \>\> Develop a workflow to propagate topographic uncertainty using a surface flow simulator with the Monte-Carlo method
 - \>\> Use a Soft Sensor (e.g. Alumet) to estimate energy consumption and resource usage of the workflow
 
+## Getting started
+Ensure you have Micromamba installed on your system.
+
+We use a unified setup script to build all Micromamba environments and compile Alumet from source:
+
+bash setup.sh
+
+To execute the monte carlo and the analysis pipeline:
+
+bash run_pipeline.sh
+
+The resulting plots will be saved in the /plots directory.
+
 ## References
 [1] Zhao, H. and Kowalski, J.: Topographic uncertainty quantification for flow-like landslide models via stochastic simulations, Nat. Hazards Earth Syst. Sci., 20, 1441–1461, https://doi.org/10.5194/nhess-20-1441-2020, 2020.
+
+
