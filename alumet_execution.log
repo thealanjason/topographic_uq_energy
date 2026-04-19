@@ -1,13 +1,13 @@
-[2026-04-19T09:04:17Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-17T17:23:16.651183179Z, rustc 1.94.0, debug=false)
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Initializing the plugins...
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] 5 plugins initialized.
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Starting the plugins...
-[2026-04-19T09:04:17Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:17Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:17Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:17Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:17Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
-[2026-04-19T09:04:17Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
+[2026-04-19T10:15:25Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-19T10:12:18.949195408Z, rustc 1.94.0, debug=false)
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Initializing the plugins...
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] 5 plugins initialized.
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Starting the plugins...
+[2026-04-19T10:15:25Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:25Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:25Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:25Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:25Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
+[2026-04-19T10:15:25Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
     This warning is probably caused by insufficient privileges.
     To fix this, you have 3 possibilities:
     1. Grant the CAP_PERFMON (CAP_SYS_ADMIN on Linux < 5.8) capability to the agent binary.
@@ -19,8 +19,8 @@
         sudo sysctl -w kernel.perf_event_paranoid=0
             
     3. Run the agent as root (not recommanded).
-[2026-04-19T09:04:17Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Plugin startup complete.
+[2026-04-19T10:15:25Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Plugin startup complete.
     🧩 5 plugins started:
         - nvml v0.6.0
         - rapl v0.3.1
@@ -77,13 +77,13 @@
     
     🔔 0 metric listener registered.
     
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Starting the measurement pipeline...
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
-[2026-04-19T09:04:17Z INFO  plugin_procfs] Setting up on-demand process watcher.
-[2026-04-19T09:04:17Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
-[2026-04-19T09:04:17Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 782769.
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Starting the measurement pipeline...
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
+[2026-04-19T10:15:25Z INFO  plugin_procfs] Setting up on-demand process watcher.
+[2026-04-19T10:15:25Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
+[2026-04-19T10:15:25Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 804372.
 /mnt/userdrive/Users/home/adam-66g27iqtc6aoe5g/micromamba/envs/env-model/lib/python3.10/site-packages/synxflow/IO/Boundary.py:272: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
@@ -6023,7 +6023,7 @@ Writing output files
 3501.714111328125
 Writing output files
 Writing backup files
-Total runtime 1122.32ms
+Total runtime 1081.56ms
 3502.30224609375
 3502.890380859375
 3503.478515625
@@ -6195,26 +6195,26 @@ Total runtime 1122.32ms
 Simulation successfully finished!
 Simulation complete.
 Writing maximum inundated depth.
-[2026-04-19T09:04:22Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
-[2026-04-19T09:04:22Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
-[2026-04-19T09:04:22Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-782769 stopped itself.
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping the plugins...
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] All plugins have stopped.
-[2026-04-19T09:04:22Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-17T17:23:16.651183179Z, rustc 1.94.0, debug=false)
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Initializing the plugins...
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] 5 plugins initialized.
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Starting the plugins...
-[2026-04-19T09:04:22Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:22Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:22Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:22Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:22Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
-[2026-04-19T09:04:22Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
+[2026-04-19T10:15:30Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
+[2026-04-19T10:15:30Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
+[2026-04-19T10:15:30Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-804372 stopped itself.
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping the plugins...
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] All plugins have stopped.
+[2026-04-19T10:15:30Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-19T10:12:18.949195408Z, rustc 1.94.0, debug=false)
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Initializing the plugins...
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] 5 plugins initialized.
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Starting the plugins...
+[2026-04-19T10:15:30Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:30Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:30Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:30Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:30Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
+[2026-04-19T10:15:30Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
     This warning is probably caused by insufficient privileges.
     To fix this, you have 3 possibilities:
     1. Grant the CAP_PERFMON (CAP_SYS_ADMIN on Linux < 5.8) capability to the agent binary.
@@ -6226,8 +6226,8 @@ Writing maximum inundated depth.
         sudo sysctl -w kernel.perf_event_paranoid=0
             
     3. Run the agent as root (not recommanded).
-[2026-04-19T09:04:22Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Plugin startup complete.
+[2026-04-19T10:15:30Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Plugin startup complete.
     🧩 5 plugins started:
         - nvml v0.6.0
         - rapl v0.3.1
@@ -6284,13 +6284,13 @@ Writing maximum inundated depth.
     
     🔔 0 metric listener registered.
     
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Starting the measurement pipeline...
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
-[2026-04-19T09:04:22Z INFO  plugin_procfs] Setting up on-demand process watcher.
-[2026-04-19T09:04:22Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
-[2026-04-19T09:04:22Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 783087.
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
+[2026-04-19T10:15:30Z INFO  alumet::agent::builder] Starting the measurement pipeline...
+[2026-04-19T10:15:31Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
+[2026-04-19T10:15:31Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
+[2026-04-19T10:15:31Z INFO  plugin_procfs] Setting up on-demand process watcher.
+[2026-04-19T10:15:31Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
+[2026-04-19T10:15:31Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 804682.
 /mnt/userdrive/Users/home/adam-66g27iqtc6aoe5g/micromamba/envs/env-model/lib/python3.10/site-packages/synxflow/IO/Boundary.py:272: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
@@ -12230,7 +12230,7 @@ Writing output files
 3501.714111328125
 Writing output files
 Writing backup files
-Total runtime 1028.11ms
+Total runtime 1162.47ms
 3502.30224609375
 3502.890380859375
 3503.478515625
@@ -12402,26 +12402,26 @@ Total runtime 1028.11ms
 Simulation successfully finished!
 Simulation complete.
 Writing maximum inundated depth.
-[2026-04-19T09:04:27Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
-[2026-04-19T09:04:27Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
-[2026-04-19T09:04:27Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-783087 stopped itself.
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping the plugins...
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] All plugins have stopped.
-[2026-04-19T09:04:27Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-17T17:23:16.651183179Z, rustc 1.94.0, debug=false)
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Initializing the plugins...
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] 5 plugins initialized.
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Starting the plugins...
-[2026-04-19T09:04:27Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:27Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:27Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:27Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:27Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
-[2026-04-19T09:04:27Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
+[2026-04-19T10:15:36Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
+[2026-04-19T10:15:36Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
+[2026-04-19T10:15:36Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-804682 stopped itself.
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping the plugins...
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] All plugins have stopped.
+[2026-04-19T10:15:36Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-19T10:12:18.949195408Z, rustc 1.94.0, debug=false)
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Initializing the plugins...
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] 5 plugins initialized.
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Starting the plugins...
+[2026-04-19T10:15:36Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:36Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:36Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:36Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:36Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
+[2026-04-19T10:15:36Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
     This warning is probably caused by insufficient privileges.
     To fix this, you have 3 possibilities:
     1. Grant the CAP_PERFMON (CAP_SYS_ADMIN on Linux < 5.8) capability to the agent binary.
@@ -12433,8 +12433,8 @@ Writing maximum inundated depth.
         sudo sysctl -w kernel.perf_event_paranoid=0
             
     3. Run the agent as root (not recommanded).
-[2026-04-19T09:04:27Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Plugin startup complete.
+[2026-04-19T10:15:36Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Plugin startup complete.
     🧩 5 plugins started:
         - nvml v0.6.0
         - rapl v0.3.1
@@ -12491,13 +12491,13 @@ Writing maximum inundated depth.
     
     🔔 0 metric listener registered.
     
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Starting the measurement pipeline...
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
-[2026-04-19T09:04:27Z INFO  plugin_procfs] Setting up on-demand process watcher.
-[2026-04-19T09:04:27Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
-[2026-04-19T09:04:27Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 783402.
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Starting the measurement pipeline...
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
+[2026-04-19T10:15:36Z INFO  plugin_procfs] Setting up on-demand process watcher.
+[2026-04-19T10:15:36Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
+[2026-04-19T10:15:36Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 804995.
 /mnt/userdrive/Users/home/adam-66g27iqtc6aoe5g/micromamba/envs/env-model/lib/python3.10/site-packages/synxflow/IO/Boundary.py:272: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
@@ -18437,7 +18437,7 @@ Writing output files
 3501.714111328125
 Writing output files
 Writing backup files
-Total runtime 1025.36ms
+Total runtime 1029.99ms
 3502.30224609375
 3502.890380859375
 3503.478515625
@@ -18609,26 +18609,26 @@ Total runtime 1025.36ms
 Simulation successfully finished!
 Simulation complete.
 Writing maximum inundated depth.
-[2026-04-19T09:04:32Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
-[2026-04-19T09:04:32Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-783402 stopped itself.
-[2026-04-19T09:04:32Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping the plugins...
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] All plugins have stopped.
-[2026-04-19T09:04:32Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-17T17:23:16.651183179Z, rustc 1.94.0, debug=false)
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Initializing the plugins...
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] 5 plugins initialized.
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Starting the plugins...
-[2026-04-19T09:04:32Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:32Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:32Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:32Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:32Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
-[2026-04-19T09:04:32Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
+[2026-04-19T10:15:40Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
+[2026-04-19T10:15:40Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-804995 stopped itself.
+[2026-04-19T10:15:40Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping the plugins...
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] All plugins have stopped.
+[2026-04-19T10:15:41Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-19T10:12:18.949195408Z, rustc 1.94.0, debug=false)
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Initializing the plugins...
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] 5 plugins initialized.
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Starting the plugins...
+[2026-04-19T10:15:41Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:41Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:41Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:41Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:41Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
+[2026-04-19T10:15:41Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
     This warning is probably caused by insufficient privileges.
     To fix this, you have 3 possibilities:
     1. Grant the CAP_PERFMON (CAP_SYS_ADMIN on Linux < 5.8) capability to the agent binary.
@@ -18640,8 +18640,8 @@ Writing maximum inundated depth.
         sudo sysctl -w kernel.perf_event_paranoid=0
             
     3. Run the agent as root (not recommanded).
-[2026-04-19T09:04:32Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Plugin startup complete.
+[2026-04-19T10:15:41Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Plugin startup complete.
     🧩 5 plugins started:
         - nvml v0.6.0
         - rapl v0.3.1
@@ -18698,13 +18698,13 @@ Writing maximum inundated depth.
     
     🔔 0 metric listener registered.
     
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Starting the measurement pipeline...
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
-[2026-04-19T09:04:32Z INFO  plugin_procfs] Setting up on-demand process watcher.
-[2026-04-19T09:04:32Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
-[2026-04-19T09:04:32Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 783727.
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Starting the measurement pipeline...
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
+[2026-04-19T10:15:41Z INFO  plugin_procfs] Setting up on-demand process watcher.
+[2026-04-19T10:15:41Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
+[2026-04-19T10:15:41Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 805309.
 /mnt/userdrive/Users/home/adam-66g27iqtc6aoe5g/micromamba/envs/env-model/lib/python3.10/site-packages/synxflow/IO/Boundary.py:272: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
@@ -24644,7 +24644,7 @@ Writing output files
 3501.714111328125
 Writing output files
 Writing backup files
-Total runtime 1025.37ms
+Total runtime 1120.9ms
 3502.30224609375
 3502.890380859375
 3503.478515625
@@ -24816,26 +24816,26 @@ Total runtime 1025.37ms
 Simulation successfully finished!
 Simulation complete.
 Writing maximum inundated depth.
-[2026-04-19T09:04:37Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
-[2026-04-19T09:04:37Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
-[2026-04-19T09:04:37Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-783727 stopped itself.
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping the plugins...
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] All plugins have stopped.
-[2026-04-19T09:04:37Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-17T17:23:16.651183179Z, rustc 1.94.0, debug=false)
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Initializing the plugins...
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] 5 plugins initialized.
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Starting the plugins...
-[2026-04-19T09:04:37Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:37Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:37Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:37Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
-[2026-04-19T09:04:37Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
-[2026-04-19T09:04:37Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
+[2026-04-19T10:15:46Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
+[2026-04-19T10:15:46Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
+[2026-04-19T10:15:46Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-805309 stopped itself.
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping the plugins...
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] All plugins have stopped.
+[2026-04-19T10:15:46Z INFO  alumet_agent] Starting Alumet agent 'alumet-agent' v0.9.4-47f3d25-dirty (2026-04-19T10:12:18.949195408Z, rustc 1.94.0, debug=false)
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Initializing the plugins...
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] 5 plugins initialized.
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Starting the plugins...
+[2026-04-19T10:15:46Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:3F:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:46Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:56:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:46Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:C3:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:46Z INFO  plugin_nvidia_nvml] Found NVML device 00000000:DA:00.0 "NVIDIA L40S" with features: total_energy_consumption, instant_power, major_utilization, decoder_utilization, encoder_utilization, process_utilization_stats, temperature_gpu, running_compute_processes(latest), running_graphics_processes(latest)
+[2026-04-19T10:15:46Z INFO  plugin_rapl] Available RAPL domains: dram, package, platform
+[2026-04-19T10:15:46Z WARN  plugin_rapl::perf_event] I could not use perf_events to read RAPL energy counters: Permission denied (os error 13).
     This warning is probably caused by insufficient privileges.
     To fix this, you have 3 possibilities:
     1. Grant the CAP_PERFMON (CAP_SYS_ADMIN on Linux < 5.8) capability to the agent binary.
@@ -24847,8 +24847,8 @@ Writing maximum inundated depth.
         sudo sysctl -w kernel.perf_event_paranoid=0
             
     3. Run the agent as root (not recommanded).
-[2026-04-19T09:04:37Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Plugin startup complete.
+[2026-04-19T10:15:46Z WARN  plugin_rapl] I will fallback to the powercap sysfs, but perf_events is more efficient (see https://hal.science/hal-04420527).
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Plugin startup complete.
     🧩 5 plugins started:
         - nvml v0.6.0
         - rapl v0.3.1
@@ -24905,13 +24905,13 @@ Writing maximum inundated depth.
     
     🔔 0 metric listener registered.
     
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Starting the measurement pipeline...
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
-[2026-04-19T09:04:37Z INFO  plugin_procfs] Setting up on-demand process watcher.
-[2026-04-19T09:04:37Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
-[2026-04-19T09:04:37Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 784051.
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Running pre-pipeline-start hooks...
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Starting the measurement pipeline...
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] 🔥 ALUMET measurement pipeline has started.
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] Running post-pipeline-start hooks...
+[2026-04-19T10:15:46Z INFO  plugin_procfs] Setting up on-demand process watcher.
+[2026-04-19T10:15:46Z INFO  alumet::agent::builder] 🔥 ALUMET agent is ready.
+[2026-04-19T10:15:46Z INFO  alumet::agent::exec] Child process 'python' spawned with pid 805645.
 /mnt/userdrive/Users/home/adam-66g27iqtc6aoe5g/micromamba/envs/env-model/lib/python3.10/site-packages/synxflow/IO/Boundary.py:272: FutureWarning: ChainedAssignmentError: behaviour will change in pandas 3.0!
 You are setting values through chained assignment. Currently this works in certain cases, but when using Copy-on-Write (which will become the default behaviour in pandas 3.0) this will never work to update the original DataFrame or Series, because the intermediate object on which we are setting values will behave as a copy.
 A typical example is when you are setting values in a column of a DataFrame, like:
@@ -30851,7 +30851,7 @@ Writing output files
 3501.714111328125
 Writing output files
 Writing backup files
-Total runtime 1022.24ms
+Total runtime 1026.34ms
 3502.30224609375
 3502.890380859375
 3503.478515625
@@ -31023,13 +31023,13 @@ Total runtime 1022.24ms
 Simulation successfully finished!
 Simulation complete.
 Writing maximum inundated depth.
-[2026-04-19T09:04:42Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
-[2026-04-19T09:04:42Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
-[2026-04-19T09:04:42Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-784051 stopped itself.
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping the plugins...
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
-[2026-04-19T09:04:42Z INFO  alumet::agent::builder] All plugins have stopped.
+[2026-04-19T10:15:51Z INFO  alumet::agent::exec] Child process exited with exit status: 0, Alumet will now stop.
+[2026-04-19T10:15:51Z INFO  alumet::pipeline::elements::source::run] Source sources/procfs/pid-805645 stopped itself.
+[2026-04-19T10:15:51Z INFO  alumet::agent::exec] Publishing EndConsumerMeasurement event
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping the plugins...
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping plugin nvml v0.6.0
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping plugin rapl v0.3.1
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping plugin procfs v0.2.2
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping plugin energy-attribution v0.1.1
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] Stopping plugin csv v0.2.0
+[2026-04-19T10:15:51Z INFO  alumet::agent::builder] All plugins have stopped.

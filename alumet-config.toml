@@ -67,7 +67,7 @@ enabled = true
 
 # CPU Energy Attribution
 [plugins.energy-attribution.formulas.attributed_energy_cpu]
-expr = "cpu_energy * cpu_usage / 100.0"
+expr = "cpu_energy * (cpu_usage / 100.0) / 96.0"
 ref = "cpu_energy"
 retention_time = "1s"
 

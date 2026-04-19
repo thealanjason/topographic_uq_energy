@@ -12,7 +12,4 @@ run_rough/
 __pycache__/
 *.pyc
 
-# Ignore auto-generated root config, but keep scripts/alumet-config.toml
-/alumet-config.toml
-
 *.parquet

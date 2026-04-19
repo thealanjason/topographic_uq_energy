@@ -15,10 +15,4 @@ echo -e "\n[3/3] Compiling Alumet Agent using Rust (This may take a few minutes)
 
 micromamba run -n env-model cargo install --git https://github.com/alumet-dev/alumet.git alumet-agent
 
-echo "Cleaning up auto-generated Alumet configs..."
-if [ -f "alumet-config.toml" ]; then
-    rm alumet-config.toml
-    echo "Removed default root configuration."
-fi
-
 echo -e "\n=== Setup Complete! ==="

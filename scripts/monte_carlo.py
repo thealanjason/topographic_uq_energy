@@ -1,6 +1,8 @@
 import numpy as np
 import os
 import subprocess
+import multiprocessing
+import re
 from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
@@ -12,6 +14,26 @@ log_filename = 'alumet_execution.log'
 # 0. Clean up the old log file before starting a new ensemble
 if os.path.exists(log_filename):
     os.remove(log_filename)
+
+# --- Dynamic Hardware Detection ---
+detected_cores = multiprocessing.cpu_count()
+print(f"Hardware detected: {detected_cores} logical cores. Calibrating telemetry sensors...")
+
+config_path = 'alumet-config.toml'
+with open(config_path, 'r') as file:
+    config_text = file.read()
+
+# Inject the correct core count dynamically (targets the CPU expression specifically)
+dynamic_formula = f'expr = "cpu_energy * (cpu_usage / 100.0) / {detected_cores}.0"'
+config_text = re.sub(
+    r'expr = "cpu_energy \* [^"]+"', 
+    dynamic_formula, 
+    config_text
+)
+
+with open(config_path, 'w') as file:
+    file.write(config_text)
+# ----------------------------------
 
 # 1. Dynamically locate the pristine baseline map
 dem_file, demo_data, data_path = get_sample_data()
@@ -37,7 +59,7 @@ for i in range(iterations):
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    cmd = f"micromamba run -n env-model alumet-agent --config scripts/alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} 2>&1 | tee -a {log_filename}"
+    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} 2>&1 | tee -a {log_filename}"
     
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
