@@ -11,3 +11,6 @@ run_rough/
 # Ignore Python System Caches
 __pycache__/
 *.pyc
+
+# Ignore auto-generated root config, but keep scripts/alumet-config.toml
+/alumet-config.toml

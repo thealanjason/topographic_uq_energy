@@ -92,9 +92,9 @@ gpu_usage = { metric = "nvml_gpu_utilization" }
 # --- 4. THE OUTPUT ---
 [plugins.csv]
 enabled = true
-force_flush = true
 output_path = "alumet-gpu-test.csv"
-append_unit_to_metric_name = false
-use_unit_display_name = false
-csv_delimiter = ","
-csv_late_delimiter = ";"
+force_flush = true
+append_unit_to_metric_name = true
+use_unit_display_name = true
+csv_delimiter = ";"
+csv_late_delimiter = ","

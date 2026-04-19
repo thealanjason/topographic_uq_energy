@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-iterations = 2
+iterations = 5
 energy_results = []
 
 # Create a figure with two side-by-side subplots
@@ -18,11 +18,11 @@ for i in range(iterations):
         print(f"Skipping {filename} - File not found.")
         continue
         
-    df = pd.read_csv(filename)
+    df = pd.read_csv(filename, sep=';')
     
     # 1. Extract the Joules from Alumet
-    df_gpu = df[df['metric'] == 'attributed_energy_gpu'][['timestamp', 'value']].rename(columns={'value': 'gpu_joules'})
-    df_cpu = df[df['metric'] == 'attributed_energy_cpu'][['timestamp', 'value']].rename(columns={'value': 'cpu_joules'})
+    df_gpu = df[df['metric'].str.contains('attributed_energy_gpu', na=False)][['timestamp', 'value']].rename(columns={'value': 'gpu_joules'})
+    df_cpu = df[df['metric'].str.contains('attributed_energy_cpu', na=False)][['timestamp', 'value']].rename(columns={'value': 'cpu_joules'})
     
     if df_gpu.empty or df_cpu.empty:
         print(f"Iteration {i}: Missing CPU or GPU data.")

@@ -5,8 +5,13 @@ from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
 # --- Research Parameters ---
-iterations = 2
+iterations = 5
 std_dev = 0.5
+log_filename = 'alumet_execution.log'
+
+# 0. Clean up the old log file before starting a new ensemble
+if os.path.exists(log_filename):
+    os.remove(log_filename)
 
 # 1. Dynamically locate the pristine baseline map
 dem_file, demo_data, data_path = get_sample_data()
@@ -23,29 +28,21 @@ for i in range(iterations):
     print(f"==========================================")
 
     # 2. Inject Gaussian Noise
-    # Generates a matrix of random errors centered at 0 with standard deviation 0.5m
     noise = np.random.normal(0, std_dev, original_elevation.shape)
     noisy_elevation = original_elevation + noise
 
-
     # 3. Save the noisy map for this specific run
     noisy_filename = f'DEM_noisy_{i}.gz'
-    
-    # Replace the pristine data in memory with the noisy data
     dem.array = noisy_elevation 
-    
-    # Write the updated object to disk
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    # Pass the noisy file to the updated gaia_flood_test.py
-    cmd = f"micromamba run -n env-model alumet-agent --config scripts/alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename}"
+    cmd = f"micromamba run -n env-model alumet-agent --config scripts/alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} 2>&1 | tee -a {log_filename}"
+    
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
 
     # 5. Archive the Telemetry
-    # Alumet always outputs to 'alumet-gpu-test.csv'.
-    # We must rename it before the next iteration overwrites it.
     archive_csv = f'results_iter_{i}.csv'
     if os.path.exists('alumet-gpu-test.csv'):
         os.rename('alumet-gpu-test.csv', archive_csv)
