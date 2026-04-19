@@ -21,29 +21,45 @@ for i in range(iterations):
     df = pd.read_csv(filename, sep=';')
     
     # 1. Extract the Joules from Alumet
-    df_gpu = df[df['metric'].str.contains('attributed_energy_gpu', na=False)][['timestamp', 'value']].rename(columns={'value': 'gpu_joules'})
+    df_gpu_raw = df[df['metric'].str.contains('attributed_energy_gpu', na=False)][['timestamp', 'value']]
     df_cpu = df[df['metric'].str.contains('attributed_energy_cpu', na=False)][['timestamp', 'value']].rename(columns={'value': 'cpu_joules'})
     
-    if df_gpu.empty or df_cpu.empty:
+    if df_gpu_raw.empty or df_cpu.empty:
         print(f"Iteration {i}: Missing CPU or GPU data.")
         continue
 
     # 2. Format Time and Sort
-    df_gpu['timestamp'] = pd.to_datetime(df_gpu['timestamp'])
+    df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp'])
     df_cpu['timestamp'] = pd.to_datetime(df_cpu['timestamp'])
     
+    # Squash the 4 GPU rows per timestamp into a single unified GPU reading
+    df_gpu = df_gpu_raw.groupby('timestamp', as_index=False).sum().rename(columns={'value': 'gpu_joules'})
+
     df_gpu = df_gpu.sort_values('timestamp')
     df_cpu = df_cpu.sort_values('timestamp')
 
-    # 3. Existing Interpolation Logic (preserved as requested)
-    df_merged = pd.merge_asof(df_gpu, df_cpu, on='timestamp', direction='nearest')
+    # 3. Cumulative Energy Calculation
+    # Calculate the running total while timelines are still independent
+    df_gpu['gpu_cum'] = df_gpu['gpu_joules'].cumsum()
+    df_cpu['cpu_cum'] = df_cpu['cpu_joules'].cumsum()
 
-    # 4. Cumulative Energy Calculation
-    # total_joules is the energy used in that specific 100ms tick
-    df_merged['total_joules'] = df_merged['gpu_joules'] + df_merged['cpu_joules']
+    # Set timestamps as the index for alignment
+    df_gpu.set_index('timestamp', inplace=True)
+    df_cpu.set_index('timestamp', inplace=True)
+
+    # Perform an Outer Join (Union) on the cumulative columns
+    df_merged = df_cpu[['cpu_cum']].join(df_gpu[['gpu_cum']], how='outer')
     
-    # Cumulative sum gives the total "bill" paid up to that point in time
-    df_merged['cum_energy'] = df_merged['total_joules'].cumsum()
+    # Forward-fill the running totals
+    # Then fill early NaNs with 0
+    df_merged = df_merged.ffill().fillna(0)
+
+    # Reset index to get the 'timestamp' column back for plotting
+    df_merged = df_merged.reset_index()
+
+    # 4. Final Energy Calculation
+    # The total bill is the sum of the two running totals at any given microsecond
+    df_merged['cum_energy'] = df_merged['cpu_cum'] + df_merged['gpu_cum']
     
     # Record final total for stats
     run_total = df_merged['cum_energy'].iloc[-1]
@@ -70,7 +86,6 @@ if energy_results:
     ax2.scatter(iters, energy_results, color='orange', edgecolors='black', s=80, zorder=3)
     ax2.plot(iters, energy_results, color='orange', alpha=0.4, linestyle='--')
     
-    # Add a horizontal line for the mean
     mean_val = np.mean(energy_results)
     ax2.axhline(mean_val, color='red', linestyle=':', label=f'Mean: {mean_val:.2f} J')
     
