@@ -47,11 +47,11 @@ poll_interval = "100ms"
 
 [plugins.procfs.processes]
 enabled = true
-strategy = "event"
+strategy = "watcher"
 refresh_interval = "100ms"
 
 [[plugins.procfs.processes.groups]]
-exe_regex = ""
+exe_regex = "python"
 poll_interval = "100ms"
 flush_interval = "100ms"
 memory_mode = "quick"
@@ -69,7 +69,7 @@ enabled = true
 [plugins.energy-attribution.formulas.attributed_energy_cpu]
 expr = "cpu_energy * (cpu_usage / 100.0) / 96.0"
 ref = "cpu_energy"
-retention_time = "1s"
+retention_time = "2s"
 
 [plugins.energy-attribution.formulas.attributed_energy_cpu.per_resource]
 cpu_energy = { metric = "rapl_consumed_energy", resource_kind = "local_machine", domain = "package_total" }
@@ -77,23 +77,23 @@ cpu_energy = { metric = "rapl_consumed_energy", resource_kind = "local_machine",
 [plugins.energy-attribution.formulas.attributed_energy_cpu.per_consumer]
 cpu_usage = { metric = "cpu_percent", kind = "total" }
 
-# GPU Energy Attribution
+# GPU Energy Attribution (Updated for True Energy Odometer)
 [plugins.energy-attribution.formulas.attributed_energy_gpu]
-expr = "gpu_energy * gpu_usage / 100.0 / 1000.0"
-ref = "gpu_energy"
-retention_time = "1s"
+expr = "(total_energy / 1000.0) * (process_util / 100.0)"
+ref = "total_energy"
+retention_time = "2s"
 
 [plugins.energy-attribution.formulas.attributed_energy_gpu.per_resource]
-gpu_energy = { metric = "nvml_energy_consumption" }
+total_energy = { metric = "nvml_energy_consumption", resource_kind = "gpu" }
 
 [plugins.energy-attribution.formulas.attributed_energy_gpu.per_consumer]
-gpu_usage = { metric = "nvml_gpu_utilization" }
+process_util = { metric = "nvml_sm_utilization" }
 
 # --- 4. THE OUTPUT ---
 [plugins.csv]
 enabled = true
 output_path = "alumet-gpu-test.csv"
-force_flush = true
+force_flush = false
 append_unit_to_metric_name = true
 use_unit_display_name = true
 csv_delimiter = ";"

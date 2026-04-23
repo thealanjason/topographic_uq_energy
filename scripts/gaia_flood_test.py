@@ -1,42 +1,86 @@
+import argparse
 import os
 import numpy as np
 import pandas as pd
+import yaml
 from synxflow import IO, flood
 from synxflow.IO.demo_functions import get_sample_data
 
+# --- 0. Parse Command Line Arguments ---
+parser = argparse.ArgumentParser(description="Run SynXFlow Flood Simulation")
+parser.add_argument('--dem', type=str, default=None, help='Path to the DEM file to use')
+parser.add_argument('--config', type=str, default='config.yml', help='Path to the YAML config file')
+args = parser.parse_args()
+
+if not os.path.exists(args.config):
+    raise FileNotFoundError(f"Configuration file {args.config} not found!")
+
+with open(args.config, 'r') as file:
+    cfg = yaml.safe_load(file)
+
+# --- Helper Function for File Routing ---
+def resolve_path(config_value, demo_filename):
+    """Returns the custom path, or the SynXFlow demo path if set to 'demo'."""
+    if config_value == 'demo':
+        _, _, data_path = get_sample_data()
+        return os.path.join(data_path, demo_filename)
+    return config_value
+
 # 1. Setup Data Paths
-dem_file, demo_data, data_path = get_sample_data()
-DEM = IO.Raster(os.path.join(data_path, 'DEM.gz'))
+# Check if the orchestrator passed a custom noisy DEM.
+if args.dem and os.path.exists(args.dem):
+    target_dem_path = args.dem
+    print(f"Loading NOISY DEM: {target_dem_path}")
+else:
+    target_dem_path = resolve_path(cfg['files']['baseline_dem'], 'DEM.gz')
+    print(f"Loading BASELINE DEM: {target_dem_path}")
+
+DEM = IO.Raster(target_dem_path)
+
+current_mean = np.nanmean(DEM.array)
+print(f"--> VERIFICATION: Map loaded successfully.")
+print(f"--> VERIFICATION: Mean Elevation is {current_mean:.6f} meters")
+
 case_folder = os.path.join(os.getcwd(), 'gaia_flood_case')
 case_input = IO.InputModel(DEM, num_of_sections=1, case_folder=case_folder)
 
 # 2. Add Water Sources (Discharge and Rain)
-box_upstream = np.array([[1427, 195], [1446, 243]])
-box_downstream = np.array([[58, 1645], [72, 1170]])
-discharge_values = np.array([[0, 100], [3600, 100]]) 
+box_upstream = np.array(cfg['boundaries']['box_upstream'])
+box_downstream = np.array(cfg['boundaries']['box_downstream'])
+discharge_values = np.array(cfg['boundaries']['discharge_values'])
+downstream_h = np.array(cfg['boundaries']['downstream_h'])
+
 bound_list = [
     {'polyPoints': box_upstream, 'type': 'open', 'hU': discharge_values},
-    {'polyPoints': box_downstream, 'type': 'open', 'h': np.array([[0, 5], [3600, 5]])}
+    {'polyPoints': box_downstream, 'type': 'open', 'h': downstream_h}
 ]
 case_input.set_boundary_condition(boundary_list=bound_list)
 
-rain_mask = IO.Raster(os.path.join(data_path, 'rain_mask.gz'))
-rain_source = pd.read_csv(os.path.join(data_path, 'rain_source.csv'), header=None).to_numpy()
+# Resolve and load the rain files
+rain_mask_path = resolve_path(cfg['files']['rain_mask'], 'rain_mask.gz')
+rain_source_path = resolve_path(cfg['files']['rain_source'], 'rain_source.csv')
+
+rain_mask = IO.Raster(rain_mask_path)
+rain_source = pd.read_csv(rain_source_path, header=None).to_numpy()
 case_input.set_rainfall(rain_mask=rain_mask, rain_source=rain_source)
 
 # 3. Add Friction
-landcover = IO.Raster(os.path.join(data_path, 'landcover.gz'))
+# Resolve and load the landcover file
+landcover_path = resolve_path(cfg['files']['landcover'], 'landcover.gz')
+landcover = IO.Raster(landcover_path)
+
 case_input.set_landcover(landcover)
 case_input.set_grid_parameter(manning={
-    'param_value': [0.035, 0.055], 
-    'land_value': [0, 1], 
-    'default_value': 0.035
+    'param_value': cfg['friction']['param_value'], 
+    'land_value': cfg['friction']['land_value'], 
+    'default_value': cfg['friction']['default_value']
 })
 
 # 4. Settings and Execution
-case_input.set_initial_condition('h0', 0.0)
-case_input.set_gauges_position(np.array([[560, 1030], [1140, 330]]))
-case_input.set_runtime([0, 3600, 600, 1200]) # 1-hour simulation
+# Pull simulation settings from the YAML config
+case_input.set_initial_condition('h0', cfg['settings']['h0'])
+case_input.set_gauges_position(np.array(cfg['settings']['gauges_position']))
+case_input.set_runtime(cfg['settings']['runtime'])
 
 print("Writing files and starting GPU simulation...")
 case_input.write_input_files()

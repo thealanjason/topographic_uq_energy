@@ -1,15 +1,24 @@
 import numpy as np
 import os
 import subprocess
+import yaml
 import multiprocessing
 import re
 from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
-# --- Research Parameters ---
-iterations = 5
-std_dev = 0.5
-log_filename = 'alumet_execution.log'
+# --- Load Configuration ---
+config_file = 'config.yml'
+if not os.path.exists(config_file):
+    raise FileNotFoundError(f"Configuration file {config_file} not found!")
+
+with open(config_file, 'r') as file:
+    cfg = yaml.safe_load(file)
+
+# --- Research Parameters (from YAML) ---
+iterations = cfg['monte_carlo']['iterations']
+std_dev = cfg['monte_carlo']['std_dev']
+log_filename = cfg['monte_carlo']['log_filename']
 
 # 0. Clean up the old log file before starting a new ensemble
 if os.path.exists(log_filename):
@@ -17,27 +26,34 @@ if os.path.exists(log_filename):
 
 # --- Dynamic Hardware Detection ---
 detected_cores = multiprocessing.cpu_count()
-print(f"Hardware detected: {detected_cores} logical cores. Calibrating telemetry sensors...")
+print(f"Hardware detected: {detected_cores} logical cores. Calibrating telemetry...")
 
 config_path = 'alumet-config.toml'
-with open(config_path, 'r') as file:
-    config_text = file.read()
+if os.path.exists(config_path):
+    with open(config_path, 'r') as file:
+        config_text = file.read()
 
-# Inject the correct core count dynamically (targets the CPU expression specifically)
-dynamic_formula = f'expr = "cpu_energy * (cpu_usage / 100.0) / {detected_cores}.0"'
-config_text = re.sub(
-    r'expr = "cpu_energy \* [^"]+"', 
-    dynamic_formula, 
-    config_text
-)
+    # Safely inject the core count into the CPU formula only
+    dynamic_formula = f'expr = "cpu_energy * (cpu_usage / 100.0) / {detected_cores}.0"'
+    config_text = re.sub(r'expr\s*=\s*"cpu_energy[^"]+"', dynamic_formula, config_text)
 
-with open(config_path, 'w') as file:
-    file.write(config_text)
+    with open(config_path, 'w') as file:
+        file.write(config_text)
 # ----------------------------------
 
 # 1. Dynamically locate the pristine baseline map
-dem_file, demo_data, data_path = get_sample_data()
-base_dem_path = os.path.join(data_path, 'DEM.gz')
+base_dem_config = cfg['files']['baseline_dem']
+
+if base_dem_config == 'demo':
+    # Fallback to the SynXFlow built-in data
+    _, _, data_path = get_sample_data()
+    base_dem_path = os.path.join(data_path, 'DEM.gz')
+else:
+    # Use your custom file
+    base_dem_path = base_dem_config
+
+if not os.path.exists(base_dem_path):
+    raise FileNotFoundError(f"Baseline DEM not found at: {base_dem_path}")
 
 print(f"Starting Monte Carlo Ensemble: {iterations} runs, sigma={std_dev}m")
 
@@ -59,7 +75,7 @@ for i in range(iterations):
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} 2>&1 | tee -a {log_filename}"
+    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
     
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)

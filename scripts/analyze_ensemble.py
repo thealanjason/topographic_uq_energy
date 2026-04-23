@@ -2,77 +2,118 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import yaml
 
-iterations = 5
+
+def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
+    
+    if df_metric.empty:
+        return pd.Series(0.0, index=timeline, name=value_name)
+
+    aligned = (
+        df_metric.groupby("timestamp", as_index=True)["value"]
+        .sum()
+        .sort_index()
+        .reindex(timeline)
+        .astype(float)
+    )
+
+    first_valid = aligned.first_valid_index()
+    if first_valid is None:
+        return pd.Series(0.0, index=timeline, name=value_name)
+
+    aligned.loc[aligned.index < first_valid] = 0.0
+    aligned = aligned.interpolate(method="time", limit_area="inside")
+    aligned = aligned.fillna(0.0)
+    
+    last_valid = df_metric["timestamp"].max()
+    aligned.loc[aligned.index > last_valid] = np.nan
+    aligned.name = value_name
+    return aligned
+
+# ================================================
+
+config_file = 'config.yml'
+if not os.path.exists(config_file):
+    raise FileNotFoundError(f"Configuration file {config_file} not found!")
+
+with open(config_file, 'r') as file:
+    cfg = yaml.safe_load(file)
+
+iterations = cfg['monte_carlo']['iterations']
 energy_results = []
 
-# Create a figure with two side-by-side subplots
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
-
 print("--- Ensemble Total Energy Analysis (CPU + GPU) ---")
 
 for i in range(iterations):
     filename = f'results_iter_{i}.csv'
     
     if not os.path.exists(filename):
-        print(f"Skipping {filename} - File not found.")
         continue
         
     df = pd.read_csv(filename, sep=';')
     
-    # 1. Extract the Joules from Alumet
-    df_gpu_raw = df[df['metric'].str.contains('attributed_energy_gpu', na=False)][['timestamp', 'value']]
-    df_cpu = df[df['metric'].str.contains('attributed_energy_cpu', na=False)][['timestamp', 'value']].rename(columns={'value': 'cpu_joules'})
+    # 1. Extract Joules & Isolate the Process
+    df_gpu_raw = df[(df['metric'].str.contains('attributed_energy_gpu', na=False)) & (df['consumer_kind'] == 'process')]
+    df_cpu_raw = df[(df['metric'].str.contains('attributed_energy_cpu', na=False)) & (df['consumer_kind'] == 'process')]
     
-    if df_gpu_raw.empty or df_cpu.empty:
+    if df_gpu_raw.empty or df_cpu_raw.empty:
         print(f"Iteration {i}: Missing CPU or GPU data.")
         continue
 
-    # 2. Format Time and Sort
-    df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp'])
-    df_cpu['timestamp'] = pd.to_datetime(df_cpu['timestamp'])
+    target_pid = df_gpu_raw['consumer_id'].mode()[0]
     
-    # Squash the 4 GPU rows per timestamp into a single unified GPU reading
-    df_gpu = df_gpu_raw.groupby('timestamp', as_index=False).sum().rename(columns={'value': 'gpu_joules'})
+    df_gpu_raw = df_gpu_raw[df_gpu_raw['consumer_id'] == target_pid][['timestamp', 'value']]
+    df_cpu_raw = df_cpu_raw[df_cpu_raw['consumer_id'] == target_pid][['timestamp', 'value']]
+
+    # 2. Format Time
+    df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp']).dt.floor('100ms')
+    df_cpu_raw['timestamp'] = pd.to_datetime(df_cpu_raw['timestamp']).dt.floor('100ms')
+    
+    # 3. Squash Duplicates
+    df_gpu = df_gpu_raw.groupby('timestamp', as_index=False).sum()
+    df_cpu = df_cpu_raw.groupby('timestamp', as_index=False).sum()
 
     df_gpu = df_gpu.sort_values('timestamp')
     df_cpu = df_cpu.sort_values('timestamp')
 
-    # 3. Cumulative Energy Calculation
-    # Calculate the running total while timelines are still independent
-    df_gpu['gpu_cum'] = df_gpu['gpu_joules'].cumsum()
-    df_cpu['cpu_cum'] = df_cpu['cpu_joules'].cumsum()
+    # 4. Cumulative Energy Calculation
+    df_gpu['value'] = df_gpu['value'].cumsum()
+    df_cpu['value'] = df_cpu['value'].cumsum()
 
-    # Set timestamps as the index for alignment
-    df_gpu.set_index('timestamp', inplace=True)
-    df_cpu.set_index('timestamp', inplace=True)
-
-    # Perform an Outer Join (Union) on the cumulative columns
-    df_merged = df_cpu[['cpu_cum']].join(df_gpu[['gpu_cum']], how='outer')
+    # 5. Timeline allignment
+    timeline = pd.DatetimeIndex(
+        pd.Index(df_cpu["timestamp"]).union(pd.Index(df_gpu["timestamp"])).sort_values()
+    )
     
-    # Forward-fill the running totals
-    # Then fill early NaNs with 0
-    df_merged = df_merged.ffill().fillna(0)
+    if timeline.empty:
+        continue
 
-    # Reset index to get the 'timestamp' column back for plotting
-    df_merged = df_merged.reset_index()
+    cpu_aligned = _align_cumulative_energy_to_timeline(df_cpu, timeline, "cpu_cum")
+    gpu_aligned = _align_cumulative_energy_to_timeline(df_gpu, timeline, "gpu_cum")
 
-    # 4. Final Energy Calculation
-    # The total bill is the sum of the two running totals at any given microsecond
+    df_merged = pd.DataFrame({
+        "timestamp": timeline,
+        "cpu_cum": cpu_aligned.to_numpy(),
+        "gpu_cum": gpu_aligned.to_numpy(),
+    })
+    
+    df_merged.dropna(subset=["cpu_cum", "gpu_cum"], inplace=True)
+
+    # 6. Final Energy Calculation
     df_merged['cum_energy'] = df_merged['cpu_cum'] + df_merged['gpu_cum']
     
-    # Record final total for stats
     run_total = df_merged['cum_energy'].iloc[-1]
+    cpu_total = df_merged['cpu_cum'].iloc[-1]
+    gpu_total = df_merged['gpu_cum'].iloc[-1]
     energy_results.append(run_total)
 
-    # 5. Time alignment for X-axis
     df_merged['time_sec'] = (df_merged['timestamp'] - df_merged['timestamp'].iloc[0]).dt.total_seconds()
     
-    print(f"Iteration {i}: {run_total:.2f} Total Joules (Duration: {df_merged['time_sec'].iloc[-1]:.2f}s)")
-    
-    # Plot 1: Energy Curve
-    ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=0.7, linewidth=1.5, label=f'Run {i}')
-
+    print(f"Iteration {i}: {run_total:.2f} Total J [CPU: {cpu_total:.2f} J | GPU: {gpu_total:.2f} J] (Duration: {df_merged['time_sec'].iloc[-1]:.2f}s)")
+    line_label = 'Monte Carlo Iterations' if i == 0 else None
+    ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=0.7, linewidth=1.5, label=line_label)
 # --- Finalize Subplot 1: Cumulative Energy vs Time ---
 ax1.set_title("Cumulative Energy Consumption (CPU + GPU)")
 ax1.set_xlabel("Time (seconds)")
