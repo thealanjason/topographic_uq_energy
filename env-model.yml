@@ -2,16 +2,11 @@ name: env-model
 channels:
   - conda-forge
 dependencies:
-  - python=3.10
+  - python=3.11
   - numpy
   - pandas
   - pyyaml
   - setuptools<70
-  # --- Alumet Build Dependencies ---
-  - rust
-  - pkg-config
-  - openssl
-  # ---------------------------------
   - pip
   - pip:
     - synxflow
