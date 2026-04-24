@@ -64,8 +64,8 @@ for i in range(iterations):
 
     target_pid = df_gpu_raw['consumer_id'].mode()[0]
     
-    df_gpu_raw = df_gpu_raw[df_gpu_raw['consumer_id'] == target_pid][['timestamp', 'value']]
-    df_cpu_raw = df_cpu_raw[df_cpu_raw['consumer_id'] == target_pid][['timestamp', 'value']]
+    df_gpu_raw = df_gpu_raw[df_gpu_raw['consumer_id'] == target_pid][['timestamp', 'value']].copy()
+    df_cpu_raw = df_cpu_raw[df_cpu_raw['consumer_id'] == target_pid][['timestamp', 'value']].copy()
 
     # 2. Format Time
     df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp']).dt.floor('100ms')
@@ -101,6 +101,10 @@ for i in range(iterations):
     
     df_merged.dropna(subset=["cpu_cum", "gpu_cum"], inplace=True)
 
+    if df_merged.empty:
+        print(f"Iteration {i}: No overlapping CPU/GPU data. Skipping.")
+        continue
+
     # 6. Final Energy Calculation
     df_merged['cum_energy'] = df_merged['cpu_cum'] + df_merged['gpu_cum']
     
@@ -114,6 +118,7 @@ for i in range(iterations):
     print(f"Iteration {i}: {run_total:.2f} Total J [CPU: {cpu_total:.2f} J | GPU: {gpu_total:.2f} J] (Duration: {df_merged['time_sec'].iloc[-1]:.2f}s)")
     line_label = 'Monte Carlo Iterations' if i == 0 else None
     ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=0.7, linewidth=1.5, label=line_label)
+
 # --- Finalize Subplot 1: Cumulative Energy vs Time ---
 ax1.set_title("Cumulative Energy Consumption (CPU + GPU)")
 ax1.set_xlabel("Time (seconds)")
