@@ -1,9 +1,0 @@
-name: env-energy-analysis
-channels:
-  - conda-forge
-dependencies:
-  - python=3.10
-  - pandas
-  - numpy
-  - matplotlib
-  - pyyaml
