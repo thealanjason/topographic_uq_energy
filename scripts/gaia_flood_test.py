@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import yaml
 from synxflow import IO, flood
-from synxflow.IO.demo_functions import get_sample_data
 
 # --- 0. Parse Command Line Arguments ---
 parser = argparse.ArgumentParser(description="Run SynXFlow Flood Simulation")
@@ -18,21 +17,14 @@ if not os.path.exists(args.config):
 with open(args.config, 'r') as file:
     cfg = yaml.safe_load(file)
 
-# --- Helper Function for File Routing ---
-def resolve_path(config_value, demo_filename):
-    """Returns the custom path, or the SynXFlow demo path if set to 'demo'."""
-    if config_value == 'demo':
-        _, _, data_path = get_sample_data()
-        return os.path.join(data_path, demo_filename)
-    return config_value
-
 # 1. Setup Data Paths
 # Check if the orchestrator passed a custom noisy DEM.
 if args.dem and os.path.exists(args.dem):
     target_dem_path = args.dem
     print(f"Loading NOISY DEM: {target_dem_path}")
 else:
-    target_dem_path = resolve_path(cfg['files']['baseline_dem'], 'DEM.gz')
+    # Directly read the baseline DEM path from the config
+    target_dem_path = cfg['files']['baseline_dem']
     print(f"Loading BASELINE DEM: {target_dem_path}")
 
 DEM = IO.Raster(target_dem_path)
@@ -56,17 +48,17 @@ bound_list = [
 ]
 case_input.set_boundary_condition(boundary_list=bound_list)
 
-# Resolve and load the rain files
-rain_mask_path = resolve_path(cfg['files']['rain_mask'], 'rain_mask.gz')
-rain_source_path = resolve_path(cfg['files']['rain_source'], 'rain_source.csv')
+# Directly read the rain files from the config
+rain_mask_path = cfg['files']['rain_mask']
+rain_source_path = cfg['files']['rain_source']
 
 rain_mask = IO.Raster(rain_mask_path)
 rain_source = pd.read_csv(rain_source_path, header=None).to_numpy()
 case_input.set_rainfall(rain_mask=rain_mask, rain_source=rain_source)
 
 # 3. Add Friction
-# Resolve and load the landcover file
-landcover_path = resolve_path(cfg['files']['landcover'], 'landcover.gz')
+# Read the landcover file from the config
+landcover_path = cfg['files']['landcover']
 landcover = IO.Raster(landcover_path)
 
 case_input.set_landcover(landcover)
@@ -86,4 +78,3 @@ print("Writing files and starting GPU simulation...")
 case_input.write_input_files()
 flood.run(case_folder)
 print("Simulation complete.")
-

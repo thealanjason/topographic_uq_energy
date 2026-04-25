@@ -5,10 +5,10 @@ monte_carlo:
   log_filename: 'alumet_execution.log'
 
 files: # paths to the files used in the simulation
-  baseline_dem: 'demo'
-  rain_mask: 'demo'
-  rain_source: 'demo'
-  landcover: 'demo'
+  baseline_dem: 'DEM.gz'
+  rain_mask: 'rain_mask.gz'
+  rain_source: 'rain_source.csv'
+  landcover: 'landcover.gz'
 
 boundaries:
   box_upstream: # X and Y coordinates of the upstream box
