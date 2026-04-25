@@ -2,8 +2,6 @@ import numpy as np
 import os
 import subprocess
 import yaml
-import multiprocessing
-import re
 from synxflow import IO
 from synxflow.IO.demo_functions import get_sample_data
 
@@ -18,38 +16,18 @@ with open(config_file, 'r') as file:
 # --- Research Parameters (from YAML) ---
 iterations = cfg['monte_carlo']['iterations']
 std_dev = cfg['monte_carlo']['std_dev']
-log_filename = cfg['monte_carlo']['log_filename']
 
-# 0. Clean up the old log file before starting a new ensemble
-if os.path.exists(log_filename):
-    os.remove(log_filename)
-
-# --- Dynamic Hardware Detection ---
-detected_cores = multiprocessing.cpu_count()
-print(f"Hardware detected: {detected_cores} logical cores. Calibrating telemetry...")
-
-config_path = 'alumet-config.toml'
-if os.path.exists(config_path):
-    with open(config_path, 'r') as file:
-        config_text = file.read()
-
-    # Safely inject the core count into the CPU formula only
-    dynamic_formula = f'expr = "cpu_energy * (cpu_usage / 100.0) / {detected_cores}.0"'
-    config_text = re.sub(r'expr\s*=\s*"cpu_energy[^"]+"', dynamic_formula, config_text)
-
-    with open(config_path, 'w') as file:
-        file.write(config_text)
-# ----------------------------------
+# 0. Setup Master Output Directory
+BASE_OUT_DIR = "ensemble_results"
+os.makedirs(BASE_OUT_DIR, exist_ok=True)
 
 # 1. Dynamically locate the pristine baseline map
 base_dem_config = cfg['files']['baseline_dem']
 
 if base_dem_config == 'demo':
-    # Fallback to the SynXFlow built-in data
     _, _, data_path = get_sample_data()
     base_dem_path = os.path.join(data_path, 'DEM.gz')
 else:
-    # Use your custom file
     base_dem_path = base_dem_config
 
 if not os.path.exists(base_dem_path):
@@ -60,10 +38,17 @@ print(f"Starting Monte Carlo Ensemble: {iterations} runs, sigma={std_dev}m")
 dem = IO.Raster(base_dem_path)
 original_elevation = dem.array
 
+# Path to the shared Gaia Alumet binary
+alumet_bin = "/Users/share/alumet/alumet-agent"
+#alumet_bin = "/Users/share/alumet/alumet-agent-v0.9.3"
+
 for i in range(iterations):
     print(f"\n==========================================")
     print(f"      Running Iteration {i+1} / {iterations}      ")
     print(f"==========================================")
+
+    iter_dir = os.path.join(BASE_OUT_DIR, f"iter_{i}")
+    os.makedirs(iter_dir, exist_ok=True)
 
     # 2. Inject Gaussian Noise
     noise = np.random.normal(0, std_dev, original_elevation.shape)
@@ -75,20 +60,33 @@ for i in range(iterations):
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
+    python_exe = subprocess.check_output(
+        "micromamba run -n env-model which python", shell=True, text=True
+    ).strip()
+    
+    iter_log = os.path.join(iter_dir, "execution.log")
+    archive_csv = os.path.join(iter_dir, "telemetry.csv")
+    
+    cmd = (
+        f"{alumet_bin} --config alumet-config.toml "
+        f"exec {python_exe} scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} "
+        f"2>&1 | tee {iter_log}"
+    )
     
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
 
-    # 5. Archive the Telemetry
-    archive_csv = f'results_iter_{i}.csv'
-    if os.path.exists('alumet-gpu-test.csv'):
-        os.rename('alumet-gpu-test.csv', archive_csv)
+    # 5. Archive Telemetry
+    default_alumet_output = 'alumet-output.csv' 
+    
+    if os.path.exists(default_alumet_output):
+        os.rename(default_alumet_output, archive_csv)
         print(f"Saved energy telemetry to {archive_csv}")
     else:
-        print(f"WARNING: Telemetry missing for iteration {i}!")
+        print(f"WARNING: Telemetry missing ({default_alumet_output} not found) for iteration {i}!")
     
     # 6. Cleanup
-    os.remove(noisy_filename)
+    if os.path.exists(noisy_filename):
+        os.remove(noisy_filename)
 
 print("\nEnsemble complete!")

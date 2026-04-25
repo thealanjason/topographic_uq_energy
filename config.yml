@@ -2,7 +2,6 @@
 monte_carlo:
   iterations: 2
   std_dev: 0.5
-  log_filename: 'alumet_execution.log'
 
 files: # paths to the files used in the simulation
   baseline_dem: 'demo'

@@ -1,35 +1,20 @@
-[agent]
-interval = "100ms"
+# CSV Output Plugin
+[plugins.csv]
+output_path = "alumet-output.csv"
+force_flush = true
+append_unit_to_metric_name = true
+use_unit_display_name = true
+csv_delimiter = ";"
+csv_late_delimiter = ","
 
-[plugins.influxdb]
-enabled = false
-
-[plugins.prometheus-exporter]
-enabled = false
-
-# --- 1. HARDWARE SENSORS ---
-[plugins.nvml]
-enabled = true
-poll_interval = "100ms"
-flush_interval = "100ms"
-mode = "full"
-
-[plugins.rapl]
-enabled = true
-poll_interval = "100ms"
-flush_interval = "100ms"
-no_perf_events = false
-
-# --- 2. PROCESS MONITOR ---
-[plugins.procfs]
-
+# Procfs Plugin
 [plugins.procfs.kernel]
-enabled = false
-poll_interval = "100ms"
+enabled = true
+poll_interval = "500ms"
 
 [plugins.procfs.memory]
-enabled = false
-poll_interval = "100ms"
+enabled = true
+poll_interval = "500ms"
 metrics = [
     "MemTotal",
     "MemFree",
@@ -43,33 +28,71 @@ metrics = [
 
 [plugins.procfs.network]
 enabled = false
-poll_interval = "100ms"
+poll_interval = "500ms"
 
 [plugins.procfs.processes]
 enabled = true
-strategy = "watcher"
-refresh_interval = "100ms"
+refresh_interval = "500ms"
+strategy = "event"
 
 [[plugins.procfs.processes.groups]]
-exe_regex = "python"
-poll_interval = "100ms"
-flush_interval = "100ms"
+exe_regex = "python.*"
+poll_interval = "500ms"
+flush_interval = "1s"
 memory_mode = "quick"
 
 [plugins.procfs.processes.events]
-poll_interval = "100ms"
-flush_interval = "100ms"
+poll_interval = "500ms"
+flush_interval = "1s"
 memory_mode = "quick"
 
-# --- 3. THE MATH ENGINE (ENERGY ATTRIBUTION) ---
+# RAPL Plugin (CPU energy)
+[plugins.rapl]
+poll_interval = "500ms"
+flush_interval = "1s"
+no_perf_events = false
+
+# Perf Plugin (hardware/software counters)
+[plugins.perf]
+poll_interval = "500ms"
+flush_interval = "1s"
+hardware_events = [
+    "CPU_CYCLES",
+    "INSTRUCTIONS",
+    "CACHE_REFERENCES",
+    "CACHE_MISSES",
+    "BRANCH_INSTRUCTIONS",
+    "BRANCH_MISSES",
+    "BUS_CYCLES",
+    "REF_CPU_CYCLES",
+]
+software_events = [
+    "PAGE_FAULTS",
+    "CONTEXT_SWITCHES",
+    "CPU_MIGRATIONS",
+    "PAGE_FAULTS_MIN",
+    "PAGE_FAULTS_MAJ",
+    "ALIGNMENT_FAULTS",
+    "EMULATION_FAULTS",
+    "CGROUP_SWITCHES",
+]
+cache_events = []
+
+# NVML Plugin
+[plugins.nvml]
+poll_interval = "500ms"
+flush_interval = "1s"
+skip_failed_devices = true
+mode = "full"
+
+# Energy Attribution Plugin
 [plugins.energy-attribution]
 enabled = true
 
-# CPU Energy Attribution
 [plugins.energy-attribution.formulas.attributed_energy_cpu]
-expr = "cpu_energy * (cpu_usage / 100.0) / 96.0"
+expr = "cpu_energy * (cpu_usage / 100.0)"
 ref = "cpu_energy"
-retention_time = "2s"
+retention_time = "1s"
 
 [plugins.energy-attribution.formulas.attributed_energy_cpu.per_resource]
 cpu_energy = { metric = "rapl_consumed_energy", resource_kind = "local_machine", domain = "package_total" }
@@ -77,24 +100,13 @@ cpu_energy = { metric = "rapl_consumed_energy", resource_kind = "local_machine",
 [plugins.energy-attribution.formulas.attributed_energy_cpu.per_consumer]
 cpu_usage = { metric = "cpu_percent", kind = "total" }
 
-# GPU Energy Attribution (Updated for True Energy Odometer)
 [plugins.energy-attribution.formulas.attributed_energy_gpu]
-expr = "(total_energy / 1000.0) * (process_util / 100.0)"
-ref = "total_energy"
-retention_time = "2s"
+expr = "gpu_energy * gpu_usage / 100.0 / 1000.0"
+ref = "gpu_energy"
+retention_time = "1s"
 
 [plugins.energy-attribution.formulas.attributed_energy_gpu.per_resource]
-total_energy = { metric = "nvml_energy_consumption", resource_kind = "gpu" }
+gpu_energy = { metric = "nvml_energy_consumption" }
 
 [plugins.energy-attribution.formulas.attributed_energy_gpu.per_consumer]
-process_util = { metric = "nvml_sm_utilization" }
-
-# --- 4. THE OUTPUT ---
-[plugins.csv]
-enabled = true
-output_path = "alumet-gpu-test.csv"
-force_flush = false
-append_unit_to_metric_name = true
-use_unit_display_name = true
-csv_delimiter = ";"
-csv_late_delimiter = ","
+gpu_usage = { metric = "nvml_sm_utilization" }
