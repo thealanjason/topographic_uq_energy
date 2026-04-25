@@ -1,5 +1,6 @@
 # Ignore Monte Carlo Data Outputs
 *.csv
+ensemble_results/
 
 # Ignore Synxflow files except for DEM.gz
 *.gz
