@@ -5,10 +5,14 @@ monte_carlo:
   log_filename: 'alumet_execution.log'
 
 files: # paths to the files used in the simulation
-  baseline_dem: 'demo'
-  rain_mask: 'demo'
-  rain_source: 'demo'
-  landcover: 'demo'
+  baseline_dem: 'DEM.gz'
+  
+  use_rain: false
+  rain_mask: 'rain_mask.gz'
+  rain_source: 'rain_source.csv'
+  
+  use_landcover: false
+  landcover: 'landcover.gz'
 
 boundaries:
   box_upstream: # X and Y coordinates of the upstream box
@@ -24,7 +28,7 @@ boundaries:
     - [0, 5]
     - [3600, 5]
 
-friction: # friction values and indexes
+friction: # friction values and indexes. Uses default_value if landcover is not used.
   param_value: [0.035, 0.055]
   land_value: [0, 1]
   default_value: 0.035

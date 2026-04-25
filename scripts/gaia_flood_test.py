@@ -3,8 +3,8 @@ import os
 import numpy as np
 import pandas as pd
 import yaml
+import copy
 from synxflow import IO, flood
-from synxflow.IO.demo_functions import get_sample_data
 
 # --- 0. Parse Command Line Arguments ---
 parser = argparse.ArgumentParser(description="Run SynXFlow Flood Simulation")
@@ -18,25 +18,18 @@ if not os.path.exists(args.config):
 with open(args.config, 'r') as file:
     cfg = yaml.safe_load(file)
 
-# --- Helper Function for File Routing ---
-def resolve_path(config_value, demo_filename):
-    """Returns the custom path, or the SynXFlow demo path if set to 'demo'."""
-    if config_value == 'demo':
-        _, _, data_path = get_sample_data()
-        return os.path.join(data_path, demo_filename)
-    return config_value
-
 # 1. Setup Data Paths
-# Check if the orchestrator passed a custom noisy DEM.
+# Check if monte_carlo provided a noisy DEM
 if args.dem and os.path.exists(args.dem):
     target_dem_path = args.dem
     print(f"Loading NOISY DEM: {target_dem_path}")
 else:
-    target_dem_path = resolve_path(cfg['files']['baseline_dem'], 'DEM.gz')
+    target_dem_path = cfg['files']['baseline_dem']
     print(f"Loading BASELINE DEM: {target_dem_path}")
 
 DEM = IO.Raster(target_dem_path)
 
+# Debug line for comparing means of elevations
 current_mean = np.nanmean(DEM.array)
 print(f"--> VERIFICATION: Map loaded successfully.")
 print(f"--> VERIFICATION: Mean Elevation is {current_mean:.6f} meters")
@@ -44,7 +37,7 @@ print(f"--> VERIFICATION: Mean Elevation is {current_mean:.6f} meters")
 case_folder = os.path.join(os.getcwd(), 'gaia_flood_case')
 case_input = IO.InputModel(DEM, num_of_sections=1, case_folder=case_folder)
 
-# 2. Add Water Sources (Discharge and Rain)
+# 2. Add Water Sources (Discharge boundaries)
 box_upstream = np.array(cfg['boundaries']['box_upstream'])
 box_downstream = np.array(cfg['boundaries']['box_downstream'])
 discharge_values = np.array(cfg['boundaries']['discharge_values'])
@@ -56,33 +49,52 @@ bound_list = [
 ]
 case_input.set_boundary_condition(boundary_list=bound_list)
 
-# Resolve and load the rain files
-rain_mask_path = resolve_path(cfg['files']['rain_mask'], 'rain_mask.gz')
-rain_source_path = resolve_path(cfg['files']['rain_source'], 'rain_source.csv')
+# --- CONDITIONAL: Rainfall Module ---
+if cfg['files'].get('use_rain', True):
+    print("--> VERIFICATION: Rainfall module ENABLED.")
+    rain_mask_path = cfg['files']['rain_mask']
+    rain_source_path = cfg['files']['rain_source']
 
-rain_mask = IO.Raster(rain_mask_path)
-rain_source = pd.read_csv(rain_source_path, header=None).to_numpy()
-case_input.set_rainfall(rain_mask=rain_mask, rain_source=rain_source)
+    rain_mask = IO.Raster(rain_mask_path)
+    rain_source = pd.read_csv(rain_source_path, header=None).to_numpy()
+    case_input.set_rainfall(rain_mask=rain_mask, rain_source=rain_source)
+else:
+    print("--> VERIFICATION: Rainfall module DISABLED. Simulating dry weather.")
 
-# 3. Add Friction
-# Resolve and load the landcover file
-landcover_path = resolve_path(cfg['files']['landcover'], 'landcover.gz')
-landcover = IO.Raster(landcover_path)
+# --- CONDITIONAL: Friction & Landcover Module ---
+default_friction = cfg['friction']['default_value']
 
-case_input.set_landcover(landcover)
-case_input.set_grid_parameter(manning={
-    'param_value': cfg['friction']['param_value'], 
-    'land_value': cfg['friction']['land_value'], 
-    'default_value': cfg['friction']['default_value']
-})
+if cfg['files'].get('use_landcover', True):
+    print("--> VERIFICATION: Landcover module ENABLED. Applying heterogeneous friction.")
+    landcover_path = cfg['files']['landcover']
+    landcover = IO.Raster(landcover_path)
+
+    case_input.set_landcover(landcover)
+    case_input.set_grid_parameter(manning={
+        'param_value': cfg['friction']['param_value'], 
+        'land_value': cfg['friction']['land_value'], 
+        'default_value': default_friction
+    })
+else:
+    print(f"--> VERIFICATION: Landcover module DISABLED. Applying uniform friction ({default_friction}).")
+    
+    # Create a synthetic landcover map from the DEM to satisfy the physics engine
+    dummy_landcover = copy.deepcopy(DEM)
+    dummy_landcover.array = np.zeros_like(DEM.array)
+
+    case_input.set_landcover(dummy_landcover)
+    case_input.set_grid_parameter(manning={
+        'param_value': [default_friction], 
+        'land_value': [0], 
+        'default_value': default_friction
+    })
 
 # 4. Settings and Execution
-# Pull simulation settings from the YAML config
 case_input.set_initial_condition('h0', cfg['settings']['h0'])
 case_input.set_gauges_position(np.array(cfg['settings']['gauges_position']))
 case_input.set_runtime(cfg['settings']['runtime'])
 
-print("Writing files and starting GPU simulation...")
+print("\nWriting files and starting GPU simulation...")
 case_input.write_input_files()
 flood.run(case_folder)
 print("Simulation complete.")

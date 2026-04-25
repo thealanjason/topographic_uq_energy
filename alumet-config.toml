@@ -47,11 +47,11 @@ poll_interval = "100ms"
 
 [plugins.procfs.processes]
 enabled = true
-strategy = "watcher"
+strategy = "event"
 refresh_interval = "100ms"
 
 [[plugins.procfs.processes.groups]]
-exe_regex = "python"
+exe_regex = ""
 poll_interval = "100ms"
 flush_interval = "100ms"
 memory_mode = "quick"
