@@ -1,6 +1,12 @@
 # Ignore Monte Carlo Data Outputs
 *.csv
 
+# Ignore Synxflow files except for DEM.gz
+*.gz
+
+# Ignore plots
+plots/
+
 # Ignore SynXFlow Auto-Generated Folders & Binaries
 gaia_flood_case/
 run_smooth/
