@@ -47,11 +47,11 @@ poll_interval = "100ms"
 
 [plugins.procfs.processes]
 enabled = true
-strategy = "watcher"
+strategy = "event"
 refresh_interval = "100ms"
 
 [[plugins.procfs.processes.groups]]
-exe_regex = "python"
+exe_regex = ""
 poll_interval = "100ms"
 flush_interval = "100ms"
 memory_mode = "quick"
@@ -67,7 +67,7 @@ enabled = true
 
 # CPU Energy Attribution
 [plugins.energy-attribution.formulas.attributed_energy_cpu]
-expr = "cpu_energy * (cpu_usage / 100.0) / 96.0"
+expr = "cpu_energy * (cpu_usage / 100.0)"
 ref = "cpu_energy"
 retention_time = "2s"
 
