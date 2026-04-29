@@ -79,8 +79,8 @@ else:
     print(f"--> VERIFICATION: Landcover module DISABLED. Applying uniform friction ({default_friction}).")
     
     # Create a synthetic landcover map from the DEM to satisfy the physics engine
-    dummy_landcover = copy.deepcopy(DEM)
-    dummy_landcover.array = np.zeros_like(DEM.array)
+    dummy_landcover = copy.copy(DEM)
+    dummy_landcover.array = np.where(np.isnan(DEM.array), np.nan, 0.0)
 
     case_input.set_landcover(dummy_landcover)
     case_input.set_grid_parameter(manning={
