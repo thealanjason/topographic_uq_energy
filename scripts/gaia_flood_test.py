@@ -55,6 +55,12 @@ if cfg['files'].get('use_rain', True):
     rain_mask_path = cfg['files']['rain_mask']
     rain_source_path = cfg['files']['rain_source']
 
+    if not os.path.exists(rain_mask_path):
+        raise FileNotFoundError(f"Rainfall initialization failed: rain_mask file not found at '{rain_mask_path}'")
+    
+    if not os.path.exists(rain_source_path):
+        raise FileNotFoundError(f"Rainfall initialization failed: rain_source CSV not found at '{rain_source_path}'")
+
     rain_mask = IO.Raster(rain_mask_path)
     rain_source = pd.read_csv(rain_source_path, header=None).to_numpy()
     case_input.set_rainfall(rain_mask=rain_mask, rain_source=rain_source)
