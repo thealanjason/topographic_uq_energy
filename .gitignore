@@ -1,9 +1,6 @@
 # Ignore Monte Carlo Data Outputs
 *.csv
-
-# Ignore Synxflow files except for DEM.gz
-*.gz
-!DEM.gz
+!rain_source.csv
 
 # Ignore plots
 plots/
