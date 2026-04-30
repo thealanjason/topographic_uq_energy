@@ -5,7 +5,6 @@ import yaml
 import multiprocessing
 import re
 from synxflow import IO
-from synxflow.IO.demo_functions import get_sample_data
 
 # --- Load Configuration ---
 config_file = 'config.yml'
@@ -41,16 +40,8 @@ if os.path.exists(config_path):
         file.write(config_text)
 # ----------------------------------
 
-# 1. Dynamically locate the pristine baseline map
-base_dem_config = cfg['files']['baseline_dem']
-
-if base_dem_config == 'demo':
-    # Fallback to the SynXFlow built-in data
-    _, _, data_path = get_sample_data()
-    base_dem_path = os.path.join(data_path, 'DEM.gz')
-else:
-    # Use your custom file
-    base_dem_path = base_dem_config
+# 1. Locate the pristine baseline map
+base_dem_path = cfg['files']['baseline_dem']
 
 if not os.path.exists(base_dem_path):
     raise FileNotFoundError(f"Baseline DEM not found at: {base_dem_path}")
