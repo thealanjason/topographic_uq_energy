@@ -2,7 +2,7 @@ import numpy as np
 import os
 import subprocess
 import yaml
-from synxflow import IO
+import rasterio
 from synxflow.IO.demo_functions import get_sample_data
 
 # --- Load Configuration ---
@@ -35,8 +35,16 @@ if not os.path.exists(base_dem_path):
 
 print(f"Starting Monte Carlo Ensemble: {iterations} runs, sigma={std_dev}m")
 
-dem = IO.Raster(base_dem_path)
-original_elevation = dem.array
+abs_dem_path = os.path.abspath(base_dem_path)
+vfs_path = f'/vsigzip/{abs_dem_path}' if base_dem_path.endswith('.gz') else base_dem_path
+
+# Read the map using Rasterio
+with rasterio.open(vfs_path) as src:
+    original_elevation = src.read(1)  # Read the first band (elevation data)
+    dem_meta = src.meta.copy()  # Save the coordinates/projection data for later
+
+# Force the output to be a standard TIFF to avoid compression write errors
+dem_meta.update(driver='GTiff')
 
 # Path to the shared Gaia Alumet binary
 alumet_bin = "/Users/share/alumet/alumet-agent"
@@ -54,10 +62,15 @@ for i in range(iterations):
     noise = np.random.normal(0, std_dev, original_elevation.shape)
     noisy_elevation = original_elevation + noise
 
-    # 3. Save the noisy map for this specific run
-    noisy_filename = f'DEM_noisy_{i}.gz'
-    dem.array = noisy_elevation 
-    dem.write(noisy_filename)
+    nodata_val = dem_meta.get('nodata')
+    if nodata_val is not None:
+        # Revert any no-data pixels back to their exact original value
+        noisy_elevation[original_elevation == nodata_val] = nodata_val
+
+    # 3. Save the noisy map using Rasterio (as a safe .tif)
+    noisy_filename = f'DEM_noisy_{i}.tif'
+    with rasterio.open(noisy_filename, 'w', **dem_meta) as dst:
+        dst.write(noisy_elevation.astype(dem_meta['dtype']), 1)
 
     # 4. Execute the Simulation & Measurement Pipeline
     python_exe = subprocess.check_output(
