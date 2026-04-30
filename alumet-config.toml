@@ -10,11 +10,11 @@ csv_late_delimiter = ","
 # Procfs Plugin
 [plugins.procfs.kernel]
 enabled = true
-poll_interval = "500ms"
+poll_interval = "50ms"
 
 [plugins.procfs.memory]
 enabled = true
-poll_interval = "500ms"
+poll_interval = "50ms"
 metrics = [
     "MemTotal",
     "MemFree",
@@ -28,33 +28,33 @@ metrics = [
 
 [plugins.procfs.network]
 enabled = false
-poll_interval = "500ms"
+poll_interval = "50ms"
 
 [plugins.procfs.processes]
 enabled = true
-refresh_interval = "500ms"
+refresh_interval = "50ms"
 strategy = "event"
 
 [[plugins.procfs.processes.groups]]
 exe_regex = "python.*"
-poll_interval = "500ms"
+poll_interval = "50ms"
 flush_interval = "1s"
 memory_mode = "quick"
 
 [plugins.procfs.processes.events]
-poll_interval = "500ms"
+poll_interval = "50ms"
 flush_interval = "1s"
 memory_mode = "quick"
 
 # RAPL Plugin (CPU energy)
 [plugins.rapl]
-poll_interval = "500ms"
+poll_interval = "50ms"
 flush_interval = "1s"
 no_perf_events = false
 
 # Perf Plugin (hardware/software counters)
 [plugins.perf]
-poll_interval = "500ms"
+poll_interval = "50ms"
 flush_interval = "1s"
 hardware_events = [
     "CPU_CYCLES",
@@ -80,7 +80,7 @@ cache_events = []
 
 # NVML Plugin
 [plugins.nvml]
-poll_interval = "500ms"
+poll_interval = "200ms"
 flush_interval = "1s"
 skip_failed_devices = true
 mode = "full"
@@ -90,7 +90,7 @@ mode = "full"
 enabled = true
 
 [plugins.energy-attribution.formulas.attributed_energy_cpu]
-expr = "cpu_energy * (cpu_usage / 100.0)"
+expr = "cpu_energy * (cpu_usage / 100.0) / 96.0"
 ref = "cpu_energy"
 retention_time = "1s"
 
