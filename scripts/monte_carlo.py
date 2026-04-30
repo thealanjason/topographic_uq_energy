@@ -41,7 +41,7 @@ if os.path.exists(config_path):
 # ----------------------------------
 
 # 1. Locate the pristine baseline map
-base_dem_path = cfg['files']['baseline_dem']
+base_dem_path = cfg['dem']
 
 if not os.path.exists(base_dem_path):
     raise FileNotFoundError(f"Baseline DEM not found at: {base_dem_path}")
@@ -66,7 +66,7 @@ for i in range(iterations):
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
+    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/flood_model.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
     
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
