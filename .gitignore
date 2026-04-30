@@ -2,8 +2,9 @@
 *.csv
 !rain_source.csv
 
-# Ignore plots
+# Ignore plots and visualizations
 plots/
+*.png
 
 # Ignore SynXFlow Auto-Generated Folders & Binaries
 gaia_flood_case/

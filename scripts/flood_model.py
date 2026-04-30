@@ -1,6 +1,18 @@
 import argparse
 import os
+import warnings
+import sys
+from pathlib import Path
+
+# Suppress numpy/matplotlib compatibility warnings early
+warnings.filterwarnings('ignore')
+
+# Patch numpy.warnings if it doesn't exist to prevent AttributeError
 import numpy as np
+if not hasattr(np, 'warnings'):
+    import warnings as _warnings_module
+    np.warnings = _warnings_module
+
 import pandas as pd
 import yaml
 import copy
@@ -19,6 +31,8 @@ if not os.path.exists(args.config):
 
 with open(args.config, 'r') as file:
     cfg = yaml.safe_load(file)
+
+project_root = os.path.dirname(os.path.abspath(args.config))
 
 # 1. Get DEM Path. Prefer path provided as arguement
 if args.dem and os.path.exists(args.dem):
@@ -123,3 +137,70 @@ print("\nWriting files and starting GPU simulation...")
 case_input.write_input_files()
 flood.run(case_folder)
 print("Simulation complete.")
+
+# 5. Visualization (if enabled in config)
+# Prefer model.visualize in config.yml, but also support legacy visualization.visualize.
+visualize_enabled = model.get('visualize', cfg.get('visualization', {}).get('visualize', False))
+
+if visualize_enabled:
+    print("\nGenerating visualizations...")
+    try:
+        # Save figures in the project root and keep names unique per run.
+        run_tag = Path(target_dem_path).stem
+        if run_tag.startswith('DEM_noisy_'):
+            run_tag = run_tag.replace('DEM_noisy_', 'iter_')
+        output_dir = project_root
+        
+        # Suppress warnings during visualization generation
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            
+            # 5a. Visualize the DEM (3D representation using hillshade)
+            dem_hillshade_filename = os.path.join(output_dir, f'dem_3d_{run_tag}.png')
+            IO.grid_show.hillshade(
+                DEM,
+                figsize=(14, 10),
+                azdeg=315,
+                altdeg=45,
+                vert_exag=2,
+                cmap='gray',
+                blend_mode='overlay',
+                alpha=1.0,
+                scale_ratio=1
+            )
+            # Note: hillshade doesn't have a figname parameter, so we save manually
+            import matplotlib.pyplot as plt
+            plt.savefig(dem_hillshade_filename, dpi=300, bbox_inches='tight')
+            plt.close()
+            print(f"  - DEM 3D hillshade saved: {dem_hillshade_filename}")
+            
+            # 5b. Visualize water depth map
+            sim_output_dir = os.path.join(case_folder, 'output')
+            h_max_path = os.path.join(sim_output_dir, 'h_max_3600.asc')
+            h_final_path = os.path.join(sim_output_dir, 'h_3600.asc')
+            output_h_path = h_max_path if os.path.exists(h_max_path) else h_final_path
+            
+            if os.path.exists(output_h_path):
+                h_raster = IO.Raster(output_h_path)
+                
+                # Save water depth map
+                mapshow_filename = os.path.join(output_dir, f'water_height_{run_tag}.png')
+                IO.grid_show.mapshow(
+                    h_raster,
+                    figname=mapshow_filename,
+                    figsize=(12, 10),
+                    dpi=300,
+                    title='Simulated Water Depth',
+                    cax=True,
+                    cax_str='Depth (m)'
+                )
+                print(f"  - Water depth map saved: {mapshow_filename}")
+            else:
+                print(f"  WARNING: Output water depth file not found at {output_h_path}")
+        
+        print(f"Visualizations saved to {output_dir}")
+            
+    except Exception as e:
+        print(f"WARNING: Visualization generation failed: {str(e)}")
+        import traceback
+        traceback.print_exc()

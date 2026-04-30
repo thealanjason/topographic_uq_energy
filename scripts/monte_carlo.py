@@ -2,9 +2,9 @@ import numpy as np
 import os
 import subprocess
 import yaml
+import synxflow.IO as IO
 import multiprocessing
 import re
-from synxflow import IO
 
 # --- Load Configuration ---
 config_file = 'config.yml'
@@ -78,8 +78,9 @@ for i in range(iterations):
         print(f"Saved energy telemetry to {archive_csv}")
     else:
         print(f"WARNING: Telemetry missing for iteration {i}!")
-    
+
     # 6. Cleanup
-    os.remove(noisy_filename)
+    if os.path.exists(noisy_filename):
+        os.remove(noisy_filename)
 
 print("\nEnsemble complete!")

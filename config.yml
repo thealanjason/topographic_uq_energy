@@ -9,7 +9,7 @@ dem: 'DEM.gz'
 
 model: 
   debug: true
-  visualize: false
+  visualize: true
 
   rainfall:
     on: false
