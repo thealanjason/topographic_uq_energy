@@ -18,21 +18,22 @@ if not os.path.exists(args.config):
 with open(args.config, 'r') as file:
     cfg = yaml.safe_load(file)
 
-# 1. Setup Data Paths
-# Get DEM Path. Prefer path provided as arguement
+# 1. Get DEM Path. Prefer path provided as arguement
 if args.dem and os.path.exists(args.dem):
     target_dem_path = args.dem
     print(f"Loading DEM: {target_dem_path}")
-elif os.path.exists(cfg['files']['baseline_dem']):
-    target_dem_path = cfg['files']['baseline_dem']
+elif os.path.exists(cfg['dem']):
+    target_dem_path = cfg['dem']
     print(f"Loading DEM: {target_dem_path}")
-else: 
+else:
     raise FileNotFoundError(f"DEM file not found! Please check provided path")
 
 
 DEM = IO.Raster(target_dem_path)
 
-if cfg["debug"]:
+
+model = cfg['model']
+if model["debug"]:
     # Debug line for comparing means of elevations
     current_mean = np.nanmean(DEM.array)
     print(f"--> VERIFICATION: Map loaded successfully.")
@@ -42,10 +43,11 @@ case_folder = os.path.join(os.getcwd(), 'gaia_flood_case')
 case_input = IO.InputModel(DEM, num_of_sections=1, case_folder=case_folder)
 
 # 2. Add Water Sources (Discharge boundaries)
-box_upstream = np.array(cfg['boundaries']['box_upstream'])
-box_downstream = np.array(cfg['boundaries']['box_downstream'])
-discharge_values = np.array(cfg['boundaries']['discharge_values'])
-downstream_h = np.array(cfg['boundaries']['downstream_h'])
+bc = model['boundary_conditions']
+box_upstream = np.array(bc['box_upstream'])
+box_downstream = np.array(bc['box_downstream'])
+discharge_values = np.array(bc['discharge_values'])
+downstream_h = np.array(bc['downstream_h'])
 
 bound_list = [
     {'polyPoints': box_upstream, 'type': 'open', 'hU': discharge_values},
@@ -54,15 +56,19 @@ bound_list = [
 case_input.set_boundary_condition(boundary_list=bound_list)
 
 # --- CONDITIONAL: Rainfall Module ---
-if cfg['files'].get('use_rain', True):
+if model['rainfall'].get('on', True):
     print("--> VERIFICATION: Rainfall module ENABLED.")
-    rain_mask_path = cfg['files']['rain_mask']
-    rain_source_path = cfg['files']['rain_source']
+    rain_mask_path = model['rainfall']['mask']
+    rain_source_path = model['rainfall']['source']
 
-    if not os.path.exists(rain_mask_path):
+    if os.path.exists(rain_mask_path):
+        print(f"Loading rain mask: {rain_mask_path}")
+    else:
         raise FileNotFoundError(f"Rainfall initialization failed: rain_mask file not found at '{rain_mask_path}'")
-    
-    if not os.path.exists(rain_source_path):
+
+    if os.path.exists(rain_source_path):
+        print(f"Loading rain source: {rain_source_path}")
+    else:
         raise FileNotFoundError(f"Rainfall initialization failed: rain_source CSV not found at '{rain_source_path}'")
 
     rain_mask = IO.Raster(rain_mask_path)
@@ -72,17 +78,23 @@ else:
     print("--> VERIFICATION: Rainfall module DISABLED. Simulating dry weather.")
 
 # --- CONDITIONAL: Friction & Landcover Module ---
-default_friction = cfg['friction']['default_value']
+default_friction = model['friction']['default']
 
-if cfg['files'].get('use_landcover', True):
+if model['landcover'].get('on', True):
     print("--> VERIFICATION: Landcover module ENABLED. Applying heterogeneous friction.")
-    landcover_path = cfg['files']['landcover']
+    landcover_path = model['landcover']['mask']
+
+    if os.path.exists(landcover_path):
+        print(f"Loading landcover: {landcover_path}")
+    else:
+        raise FileNotFoundError(f"Landcover initialization failed: landcover file not found at '{landcover_path}'")
+
     landcover = IO.Raster(landcover_path)
 
     case_input.set_landcover(landcover)
     case_input.set_grid_parameter(manning={
-        'param_value': cfg['friction']['param_value'], 
-        'land_value': cfg['friction']['land_value'], 
+        'land_value': model['friction']['landcover']['value'],
+        'param_value': model['friction']['landcover']['friction'],
         'default_value': default_friction
     })
 else:
@@ -99,10 +111,11 @@ else:
         'default_value': default_friction
     })
 
-# 4. Settings and Execution
-case_input.set_initial_condition('h0', cfg['settings']['h0'])
-case_input.set_gauges_position(np.array(cfg['settings']['gauges_position']))
-case_input.set_runtime(cfg['settings']['runtime'])
+# Settings and Execution
+case_input.set_initial_condition('h0', model['initial_conditions']['h0'])
+case_input.set_gauges_position(np.array(model['observation']['gauges_position']))
+solver = model['solver']
+case_input.set_runtime([solver['start_time'], solver['end_time'], solver['log_interval'], solver['save_interval']])
 
 print("\nWriting files and starting GPU simulation...")
 case_input.write_input_files()
