@@ -4,34 +4,54 @@ monte_carlo:
   std_dev: 0.5
   log_filename: 'alumet_execution.log'
 
-files: # paths to the files used in the simulation
-  baseline_dem: 'demo'
-  rain_mask: 'demo'
-  rain_source: 'demo'
-  landcover: 'demo'
+dem: 'DEM.gz'
 
-boundaries:
-  box_upstream: # X and Y coordinates of the upstream box
-    - [1427, 195]
-    - [1446, 243]
-  box_downstream: # X and Y coordinates of the downstream box
-    - [58, 1645]
-    - [72, 1170]
-  discharge_values: # time series of discharge values for the upstream [time, flow rate]
-    - [0, 1000]
-    - [3600, 100]
-  downstream_h: # time series of water height values for the downstream [time, height]
-    - [0, 5]
-    - [3600, 5]
 
-friction: # friction values and indexes
-  param_value: [0.035, 0.055]
-  land_value: [0, 1]
-  default_value: 0.035
+model: 
+  debug: true
+  visualize: true
 
-settings:
-  h0: 0.0 # initial water height
-  gauges_position:
+  rainfall:
+    on: false
+    mask: 'rain_mask.gz'
+    source: 'rain_source.csv'
+
+  landcover:
+    on: false
+    mask: 'landcover.gz'
+
+  initial_conditions:
+    h0: 0.0 # initial water height
+  boundary_conditions:
+    box_upstream: # X and Y coordinates of the upstream box
+      - [1427, 195]
+      - [1446, 243]
+    box_downstream: # X and Y coordinates of the downstream box
+      - [58, 1645]
+      - [72, 1170]
+    discharge_values: # time series of discharge values for the upstream [time, flow rate]
+      - [0, 1000]
+      - [3600, 100]
+    downstream_h: # time series of water height values for the downstream [time, height]
+      - [0, 5]
+      - [3600, 5]
+
+  friction: # friction values and indexes. Uses default if landcover is not used.
+    default: 0.035
+    landcover: 
+      friction: [0.035, 0.055]
+      value: [0, 1]
+
+  solver:
+    start_time: 0
+    end_time: 3600
+    log_interval: 600
+    save_interval: 1200 
+
+  observation:
+    gauges_position:
     - [560, 1030]
     - [1140, 330]
-  runtime: [0, 3600, 600, 1200] # [start time, end time, log interval, save interval]
+
+
+
