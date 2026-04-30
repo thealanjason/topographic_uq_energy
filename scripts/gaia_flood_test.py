@@ -19,20 +19,24 @@ with open(args.config, 'r') as file:
     cfg = yaml.safe_load(file)
 
 # 1. Setup Data Paths
-# Check if monte_carlo provided a noisy DEM
+# Get DEM Path. Prefer path provided as arguement
 if args.dem and os.path.exists(args.dem):
     target_dem_path = args.dem
-    print(f"Loading NOISY DEM: {target_dem_path}")
-else:
+    print(f"Loading DEM: {target_dem_path}")
+elif os.path.exists(cfg['files']['baseline_dem']):
     target_dem_path = cfg['files']['baseline_dem']
-    print(f"Loading BASELINE DEM: {target_dem_path}")
+    print(f"Loading DEM: {target_dem_path}")
+else: 
+    raise FileNotFoundError(f"DEM file not found! Please check provided path")
+
 
 DEM = IO.Raster(target_dem_path)
 
-# Debug line for comparing means of elevations
-current_mean = np.nanmean(DEM.array)
-print(f"--> VERIFICATION: Map loaded successfully.")
-print(f"--> VERIFICATION: Mean Elevation is {current_mean:.6f} meters")
+if cfg["debug"]:
+    # Debug line for comparing means of elevations
+    current_mean = np.nanmean(DEM.array)
+    print(f"--> VERIFICATION: Map loaded successfully.")
+    print(f"--> VERIFICATION: Mean Elevation is {current_mean:.6f} meters")
 
 case_folder = os.path.join(os.getcwd(), 'gaia_flood_case')
 case_input = IO.InputModel(DEM, num_of_sections=1, case_folder=case_folder)

@@ -4,6 +4,8 @@ monte_carlo:
   std_dev: 0.5
   log_filename: 'alumet_execution.log'
 
+debug: true
+
 files: # paths to the files used in the simulation
   baseline_dem: 'DEM.gz'
   
