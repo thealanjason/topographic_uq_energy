@@ -5,6 +5,8 @@ import pandas as pd
 import yaml
 import copy
 from synxflow import IO, flood
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning) #For Pandas Warnings from SynXflow
 
 # --- 0. Parse Command Line Arguments ---
 parser = argparse.ArgumentParser(description="Run SynXFlow Flood Simulation")
