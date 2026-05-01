@@ -47,7 +47,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
 print("--- Ensemble Total Energy Analysis (CPU + GPU) ---")
 
 for i in range(iterations):
-    filename = f'results_iter_{i}.csv'
+    filename = f'ensemble_results/iter_{i}/telemetry.csv'
     
     if not os.path.exists(filename):
         continue
@@ -62,10 +62,9 @@ for i in range(iterations):
         print(f"Iteration {i}: Missing CPU or GPU data.")
         continue
 
-    target_pid = df_gpu_raw['consumer_id'].mode()[0]
-    
-    df_gpu_raw = df_gpu_raw[df_gpu_raw['consumer_id'] == target_pid][['timestamp', 'value']].copy()
-    df_cpu_raw = df_cpu_raw[df_cpu_raw['consumer_id'] == target_pid][['timestamp', 'value']].copy()
+    # We directly copy the remaining columns to prevent memory warnings.
+    df_gpu_raw = df_gpu_raw[['timestamp', 'value']].copy()
+    df_cpu_raw = df_cpu_raw[['timestamp', 'value']].copy()
 
     # 2. Format Time
     df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp']).dt.floor('100ms')
