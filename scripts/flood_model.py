@@ -176,8 +176,9 @@ if visualize_enabled:
             
             # 5b. Visualize water depth map
             sim_output_dir = os.path.join(case_folder, 'output')
-            h_max_path = os.path.join(sim_output_dir, 'h_max_3600.asc')
-            h_final_path = os.path.join(sim_output_dir, 'h_3600.asc')
+            end_time_int = int(solver['end_time'])
+            h_max_path = os.path.join(sim_output_dir, f'h_max_{end_time_int}.asc')
+            h_final_path = os.path.join(sim_output_dir, f'h_{end_time_int}.asc')
             output_h_path = h_max_path if os.path.exists(h_max_path) else h_final_path
             
             if os.path.exists(output_h_path):
