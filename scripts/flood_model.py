@@ -154,25 +154,23 @@ if visualize_enabled:
         # Suppress warnings during visualization generation
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            
-            # 5a. Visualize the DEM (3D representation using hillshade)
-            dem_hillshade_filename = os.path.join(output_dir, f'dem_3d_{run_tag}.png')
-            IO.grid_show.hillshade(
-                DEM,
-                figsize=(14, 10),
-                azdeg=315,
-                altdeg=45,
-                vert_exag=2,
-                cmap='gray',
-                blend_mode='overlay',
-                alpha=1.0,
-                scale_ratio=1
-            )
-            # Note: hillshade doesn't have a figname parameter, so we save manually
             import matplotlib.pyplot as plt
+            
+            # 5a. Visualize the DEM with coloring and colorbar
+            dem_hillshade_filename = os.path.join(output_dir, f'dem_3d_{run_tag}.png')
+            
+            fig, ax = plt.subplots(figsize=(12, 11))
+            im = ax.imshow(DEM.array, cmap='terrain', aspect='equal', interpolation='nearest')
+            ax.set_title('Digital Elevation Model', fontsize=16)
+            
+            cbar = plt.colorbar(im, ax=ax, pad=0.05)
+            cbar.set_label('Elevation (m)', fontsize=12, labelpad=20)
+            cbar.ax.tick_params(labelsize=10)
+            
+            fig.subplots_adjust(right=0.88)
             plt.savefig(dem_hillshade_filename, dpi=300, bbox_inches='tight')
             plt.close()
-            print(f"  - DEM 3D hillshade saved: {dem_hillshade_filename}")
+            print(f"  - DEM visualization saved: {dem_hillshade_filename}")
             
             # 5b. Visualize water depth map
             sim_output_dir = os.path.join(case_folder, 'output')
