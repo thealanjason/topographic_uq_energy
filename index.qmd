@@ -25,11 +25,11 @@ format:
 </style>
 
 ## Table of Contents
-* [Introduction & Motivation](#intro)
+* [Introduction](#intro)
 * [Motivation](#motivation)
 * [Experimental Setup](#setup)
 * [Preliminary Results](#results)
-* [Conclusion & Future Work](#conclusion)
+* [Conclusion](#conclusion)
 
 ## Introduction {#intro}
 - What is topographic uncertainty propagation?
