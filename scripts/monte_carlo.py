@@ -3,7 +3,8 @@ import os
 import subprocess
 import yaml
 import rasterio
-from synxflow.IO.demo_functions import get_sample_data
+import multiprocessing
+import re
 
 # --- Load Configuration ---
 config_file = 'config.yml'
@@ -21,14 +22,8 @@ std_dev = cfg['monte_carlo']['std_dev']
 BASE_OUT_DIR = "ensemble_results"
 os.makedirs(BASE_OUT_DIR, exist_ok=True)
 
-# 1. Dynamically locate the pristine baseline map
-base_dem_config = cfg['files']['baseline_dem']
-
-if base_dem_config == 'demo':
-    _, _, data_path = get_sample_data()
-    base_dem_path = os.path.join(data_path, 'DEM.gz')
-else:
-    base_dem_path = base_dem_config
+# 1. Locate the pristine baseline map
+base_dem_path = cfg['dem']
 
 if not os.path.exists(base_dem_path):
     raise FileNotFoundError(f"Baseline DEM not found at: {base_dem_path}")
