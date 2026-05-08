@@ -43,7 +43,7 @@ format:
 ## Experimental Setup {#setup}
 - Alumet
 - Synxflow
-- Montecarlo
+- Monte Carlo
 - Ensemble analysis
 
 ## Preliminary Results {#results}
