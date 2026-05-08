@@ -2,10 +2,9 @@ import numpy as np
 import os
 import subprocess
 import yaml
+import synxflow.IO as IO
 import multiprocessing
 import re
-from synxflow import IO
-from synxflow.IO.demo_functions import get_sample_data
 
 # --- Load Configuration ---
 config_file = 'config.yml'
@@ -41,16 +40,8 @@ if os.path.exists(config_path):
         file.write(config_text)
 # ----------------------------------
 
-# 1. Dynamically locate the pristine baseline map
-base_dem_config = cfg['files']['baseline_dem']
-
-if base_dem_config == 'demo':
-    # Fallback to the SynXFlow built-in data
-    _, _, data_path = get_sample_data()
-    base_dem_path = os.path.join(data_path, 'DEM.gz')
-else:
-    # Use your custom file
-    base_dem_path = base_dem_config
+# 1. Locate the pristine baseline map
+base_dem_path = cfg['dem']
 
 if not os.path.exists(base_dem_path):
     raise FileNotFoundError(f"Baseline DEM not found at: {base_dem_path}")
@@ -75,7 +66,7 @@ for i in range(iterations):
     dem.write(noisy_filename)
 
     # 4. Execute the Simulation & Measurement Pipeline
-    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
+    cmd = f"micromamba run -n env-model alumet-agent --config alumet-config.toml exec python scripts/flood_model.py --dem {noisy_filename} --config {config_file} 2>&1 | tee -a {log_filename}"
     
     print(f"Executing: {cmd}")
     subprocess.run(cmd, shell=True)
@@ -87,8 +78,9 @@ for i in range(iterations):
         print(f"Saved energy telemetry to {archive_csv}")
     else:
         print(f"WARNING: Telemetry missing for iteration {i}!")
-    
+
     # 6. Cleanup
-    os.remove(noisy_filename)
+    if os.path.exists(noisy_filename):
+        os.remove(noisy_filename)
 
 print("\nEnsemble complete!")
