@@ -145,11 +145,15 @@ visualize_enabled = model.get('visualize', cfg.get('visualization', {}).get('vis
 if visualize_enabled:
     print("\nGenerating visualizations...")
     try:
-        # Save figures in the project root and keep names unique per run.
+        # Save figures in organized subdirectories
         run_tag = Path(target_dem_path).stem
         if run_tag.startswith('DEM_noisy_'):
             run_tag = run_tag.replace('DEM_noisy_', 'iter_')
-        output_dir = project_root
+        
+        dem_output_dir = os.path.join(project_root, 'plots', 'dem_3d')
+        water_output_dir = os.path.join(project_root, 'plots', 'water_height')
+        os.makedirs(dem_output_dir, exist_ok=True)
+        os.makedirs(water_output_dir, exist_ok=True)
         
         # Suppress warnings during visualization generation
         with warnings.catch_warnings():
@@ -157,7 +161,7 @@ if visualize_enabled:
             import matplotlib.pyplot as plt
             
             # 5a. Visualize the DEM with coloring and colorbar
-            dem_hillshade_filename = os.path.join(output_dir, f'dem_3d_{run_tag}.png')
+            dem_hillshade_filename = os.path.join(dem_output_dir, f'dem_3d_{run_tag}.png')
             
             fig, ax = plt.subplots(figsize=(12, 11))
             im = ax.imshow(DEM.array, cmap='terrain', aspect='equal', interpolation='nearest')
@@ -183,7 +187,7 @@ if visualize_enabled:
                 h_raster = IO.Raster(output_h_path)
                 
                 # Save water depth map
-                mapshow_filename = os.path.join(output_dir, f'water_height_{run_tag}.png')
+                mapshow_filename = os.path.join(water_output_dir, f'water_height_{run_tag}.png')
                 IO.grid_show.mapshow(
                     h_raster,
                     figname=mapshow_filename,
@@ -197,7 +201,7 @@ if visualize_enabled:
             else:
                 print(f"  WARNING: Output water depth file not found at {output_h_path}")
         
-        print(f"Visualizations saved to {output_dir}")
+        print(f"Visualizations saved to plots/dem_3d/ and plots/water_height/")
             
     except Exception as e:
         print(f"WARNING: Visualization generation failed: {str(e)}")
