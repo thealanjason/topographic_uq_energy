@@ -3,8 +3,6 @@ import os
 import subprocess
 import yaml
 import rasterio
-import multiprocessing
-import re
 
 # --- Load Configuration ---
 config_file = 'config.yml'
