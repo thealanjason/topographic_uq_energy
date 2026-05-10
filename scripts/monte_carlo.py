@@ -77,7 +77,7 @@ for i in range(iterations):
     
     cmd = (
         f"{alumet_bin} --config alumet-config.toml "
-        f"exec {python_exe} scripts/gaia_flood_test.py --dem {noisy_filename} --config {config_file} "
+        f"exec {python_exe} scripts/flood_model.py --dem {noisy_filename} --config {config_file} "
         f"2>&1 | tee {iter_log}"
     )
     
