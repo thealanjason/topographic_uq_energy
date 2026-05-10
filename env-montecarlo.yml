@@ -9,5 +9,4 @@ dependencies:
   - setuptools<70
   - pip
   - pip:
-    - synxflow
     - rasterio
