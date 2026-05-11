@@ -2,7 +2,14 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import re
 import yaml
+from pathlib import Path
+
+try:
+    from PIL import Image
+except ImportError:
+    Image = None
 
 
 def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
@@ -55,6 +62,47 @@ def _build_total_energy_timeline(
         return gpu_index
     return cpu_index
 
+
+def _create_gif_from_pngs(image_dir: Path, output_path: Path, duration_ms: int = 800) -> None:
+    """Build a GIF slideshow from PNG images in a directory."""
+    if Image is None:
+        print(f"Skipping GIF creation for {image_dir}: Pillow is not available.")
+        return
+
+    image_paths = sorted(
+        image_dir.glob("*.png"),
+        key=lambda path: (
+            int(match.group(1)) if (match := re.search(r"_iter_(\d+)", path.stem)) else float("inf"),
+            path.name,
+        ),
+    )
+
+    if not image_paths:
+        print(f"No PNG files found in {image_dir}; skipping GIF creation.")
+        return
+
+    frames = []
+    target_size = None
+    for image_path in image_paths:
+        with Image.open(image_path) as img:
+            frame = img.convert("RGBA")
+            if target_size is None:
+                target_size = frame.size
+            elif frame.size != target_size:
+                frame = frame.resize(target_size, Image.Resampling.LANCZOS)
+            frames.append(frame.copy())
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    frames[0].save(
+        output_path,
+        save_all=True,
+        append_images=frames[1:],
+        duration=duration_ms,
+        loop=0,
+        disposal=2,
+    )
+    print(f"GIF saved to '{output_path}' from {len(frames)} frame(s).")
+
 # ================================================
 
 config_file = 'config.yml'
@@ -65,6 +113,13 @@ with open(config_file, 'r') as file:
     cfg = yaml.safe_load(file)
 
 iterations = cfg['monte_carlo']['iterations']
+visualize_config = cfg.get('model', {}).get('visualize', False)
+if isinstance(visualize_config, dict):
+    visualize = visualize_config.get('enabled', False)
+    gif_duration_ms = visualize_config.get('gif_duration_ms', 800)
+else:
+    visualize = bool(visualize_config)
+    gif_duration_ms = 800
 energy_results = []
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
@@ -179,3 +234,9 @@ plt.tight_layout()
 os.makedirs('plots', exist_ok=True)
 plt.savefig('plots/energy_cost_analysis.png', dpi=300)
 print("\nDouble-pane plot saved as 'energy_cost_analysis.png'")
+
+if visualize:
+    _create_gif_from_pngs(Path("plots/dem_3d"), Path("plots/dem_3d.gif"), duration_ms=gif_duration_ms)
+    _create_gif_from_pngs(Path("plots/water_height"), Path("plots/water_height.gif"), duration_ms=gif_duration_ms)
+else:
+    print("GIF creation skipped because model.visualize is false.")

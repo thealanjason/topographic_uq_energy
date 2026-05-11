@@ -9,7 +9,9 @@ dem: 'DEM.gz'
 
 model: 
   debug: true
-  visualize: true
+  visualize:
+    enabled: true
+    gif_duration_ms: 100 # duration of each frame in the generated GIF (in milliseconds)
 
   rainfall:
     on: false
