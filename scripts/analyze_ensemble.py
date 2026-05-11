@@ -6,17 +6,24 @@ import yaml
 
 
 def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
-    
+    """
+    Align a cumulative metric to a shared timeline.
+
+    Missing values between the earlier start/end of this stream and later start/end of the other stream are returned as 0.
+    Between observed samples, values are linearly interpolated on timestamp.
+    After the last observed sample, the cumulative value is carried forward so the total does not drop back to zero.
+    """
     if df_metric.empty:
         return pd.Series(0.0, index=timeline, name=value_name)
 
-    aligned = (
+    source = (
         df_metric.groupby("timestamp", as_index=True)["value"]
         .sum()
         .sort_index()
-        .reindex(timeline)
         .astype(float)
     )
+    interpolation_index = pd.DatetimeIndex(source.index.union(timeline).sort_values())
+    aligned = source.reindex(interpolation_index)
 
     first_valid = aligned.first_valid_index()
     if first_valid is None:
@@ -24,12 +31,29 @@ def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.D
 
     aligned.loc[aligned.index < first_valid] = 0.0
     aligned = aligned.interpolate(method="time", limit_area="inside")
-    aligned = aligned.fillna(0.0)
-    
-    last_valid = df_metric["timestamp"].max()
-    aligned.loc[aligned.index > last_valid] = np.nan
+    aligned = aligned.ffill().fillna(0.0)
+    aligned = aligned.reindex(timeline)
     aligned.name = value_name
     return aligned
+
+
+def _build_total_energy_timeline(
+    cpu_pid: pd.DataFrame,
+    gpu_pid: pd.DataFrame,
+) -> pd.DatetimeIndex:
+    """
+    Build timestamps for attributed total energy.
+
+    Mirrors Alumet's energy-attribution interpolation plug-in (https://github.com/alumet-dev/alumet/tree/main/plugins/energy-attribution): 
+    one timeseries is the reference and remains unchanged, while other timeseries are interpolated onto its timestamps.
+    CPU timestamps are the reference when CPU data exists; GPU timestamps are used only for GPU-only data.
+    """
+    cpu_index = pd.DatetimeIndex(pd.Index(cpu_pid["timestamp"]).unique()).sort_values()
+    gpu_index = pd.DatetimeIndex(pd.Index(gpu_pid["timestamp"]).unique()).sort_values()
+
+    if cpu_index.empty:
+        return gpu_index
+    return cpu_index
 
 # ================================================
 
@@ -58,7 +82,7 @@ for i in range(iterations):
     df_gpu_raw = df[(df['metric'].str.contains('attributed_energy_gpu', na=False)) & (df['consumer_kind'] == 'process')]
     df_cpu_raw = df[(df['metric'].str.contains('attributed_energy_cpu', na=False)) & (df['consumer_kind'] == 'process')]
     
-    if df_gpu_raw.empty or df_cpu_raw.empty:
+    if df_gpu_raw.empty and df_cpu_raw.empty:
         print(f"Iteration {i}: Missing CPU or GPU data.")
         continue
 
@@ -82,9 +106,7 @@ for i in range(iterations):
     df_cpu['value'] = df_cpu['value'].cumsum()
 
     # 5. Timeline allignment
-    timeline = pd.DatetimeIndex(
-        pd.Index(df_cpu["timestamp"]).union(pd.Index(df_gpu["timestamp"])).sort_values()
-    )
+    timeline = _build_total_energy_timeline(df_cpu, df_gpu)
     
     if timeline.empty:
         continue
@@ -97,7 +119,7 @@ for i in range(iterations):
         "cpu_cum": cpu_aligned.to_numpy(),
         "gpu_cum": gpu_aligned.to_numpy(),
     })
-    
+
     df_merged.dropna(subset=["cpu_cum", "gpu_cum"], inplace=True)
 
     if df_merged.empty:
