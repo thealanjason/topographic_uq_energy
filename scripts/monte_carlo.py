@@ -39,9 +39,11 @@ with rasterio.open(vfs_path) as src:
 # Force the output to be a standard TIFF to avoid compression write errors
 dem_meta.update(driver='GTiff')
 
-# Path to the shared Gaia Alumet binary
-alumet_bin = "/Users/share/alumet/alumet-agent"
-#alumet_bin = "/Users/share/alumet/alumet-agent-v0.9.3"
+# Path to the Alumet binary (from config)
+alumet_bin = cfg['monte_carlo']['alumet_bin']
+
+if not os.path.exists(alumet_bin):
+    raise FileNotFoundError(f"Alumet binary not found at: {alumet_bin}")
 
 for i in range(iterations):
     print(f"\n==========================================")
