@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import subprocess
+import tomllib
 import yaml
 import rasterio
 
@@ -45,6 +46,12 @@ alumet_bin = cfg['monte_carlo']['alumet_bin']
 if not os.path.exists(alumet_bin):
     raise FileNotFoundError(f"Alumet binary not found at: {alumet_bin}")
 
+# Read the CSV output name from Alumet's own config so the filename stays single-sourced.
+with open('alumet-config.toml', 'rb') as file:
+    alumet_cfg = tomllib.load(file)
+
+default_alumet_output = alumet_cfg['plugins']['csv']['output_path']
+
 for i in range(iterations):
     print(f"\n==========================================")
     print(f"      Running Iteration {i+1} / {iterations}      ")
@@ -74,6 +81,10 @@ for i in range(iterations):
     
     iter_log = os.path.join(iter_dir, "execution.log")
     archive_csv = os.path.join(iter_dir, "telemetry.csv")
+
+    # Remove any leftover telemetry from a previous run before starting a new iteration.
+    if os.path.exists(default_alumet_output):
+        os.remove(default_alumet_output)
     
     cmd = (
         f"{alumet_bin} --config alumet-config.toml "
@@ -82,11 +93,10 @@ for i in range(iterations):
     )
     
     print(f"Executing: {cmd}")
-    subprocess.run(cmd, shell=True)
+    # Use bash -o pipefail to catch failures in the pipeline, and check=True to raise on failure
+    subprocess.run(f"bash -o pipefail -c \"{cmd}\"", shell=True, check=True)
 
     # 5. Archive Telemetry
-    default_alumet_output = 'alumet-output.csv' 
-    
     if os.path.exists(default_alumet_output):
         os.rename(default_alumet_output, archive_csv)
         print(f"Saved energy telemetry to {archive_csv}")
