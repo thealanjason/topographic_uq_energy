@@ -6,6 +6,11 @@
 plots/
 *.png
 
+# Quarto & Presentation Artifacts
+index_files/
+.quarto/
+index.html
+
 # Ignore Synxflow files except for DEM.gz
 *.gz
 
