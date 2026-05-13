@@ -36,7 +36,7 @@ refresh_interval = "50ms"
 strategy = "event"
 
 [[plugins.procfs.processes.groups]]
-exe_regex = "python.*"
+exe_regex = ""
 poll_interval = "50ms"
 flush_interval = "1s"
 memory_mode = "quick"
