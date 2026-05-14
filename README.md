@@ -1,6 +1,7 @@
 # Soft Sensors to Measure Energy Consumption of Topographic Uncertainty Propagation in Mass Flow Simulations 
 
-<img alt="Static Badge" src="https://img.shields.io/badge/Presentation_Slides-purple?link=https%3A%2F%2Fthealanjason.github.io%2Ftopographic_uq_energy%2F%23%2Ftitle-slide">
+[![Static Badge](https://img.shields.io/badge/Presentation_Slides-purple)](https://thealanjason.github.io/topographic_uq_energy/#/title-slide)
+
 
 
 Authors: **[Eren Edgü](@erenedgu), [Alan Correa](mailto:correa@mbd.rwth-aachen.de)**
