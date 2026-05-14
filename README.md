@@ -1,4 +1,9 @@
 # Soft Sensors to Measure Energy Consumption of Topographic Uncertainty Propagation in Mass Flow Simulations 
+![Static Badge](https://img.shields.io/badge/See-Slides-purple?link=https%3A%2F%2Fthealanjason.github.io%2Ftopographic_uq_energy%2F%23%2Ftitle-slide)
+
+Authors: **[Eren Edgü](@erenedgu), [Alan Correa](mailto:correa@mbd.rwth-aachen.de)**
+
+
 
 ## Motivation 
 Benchmarking methods to propagate topographic uncertainties in surface flow simulations involves comparing their accuracy, resource usage, and energy consumption. Currently, compute time is used as a proxy for energy consumption; however, it can be misleading due to the increasing heterogeneity in modern computational workflows.
