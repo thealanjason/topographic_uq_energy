@@ -2,11 +2,8 @@ name: env-montecarlo
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
+  - python
   - numpy
   - scipy
   - pyyaml
-  - setuptools<70
-  - pip
-  - pip:
-    - synxflow
+  - rasterio
