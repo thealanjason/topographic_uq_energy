@@ -4,7 +4,7 @@
 
 
 
-Authors: **[Eren Edgü](https://github.com/erenedgu), [Alan Correa](mailto:correa@mbd.rwth-aachen.de)**
+Authors: **[Eren Edgü](https://github.com/erenedgu), [Alan Correa](https://github.com/thealanjason)**
 
 
 
