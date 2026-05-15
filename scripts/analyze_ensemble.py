@@ -101,12 +101,46 @@ with open(config_file, 'r') as file:
     cfg = yaml.safe_load(file)
 
 iterations = cfg['monte_carlo']['iterations']
-analysis_visualization_cfg = cfg.get('analysis', {}).get('visualization', {})
+analysis_cfg = cfg.get('analysis', {})
+analysis_visualization_cfg = analysis_cfg.get('visualization', {})
 generate_gif = analysis_visualization_cfg.get('generate_gif', False)
 gif_duration_ms = analysis_visualization_cfg.get('duration_ms', 800)
+
+# Extract plotting parameters from config
+dpi = analysis_visualization_cfg.get('dpi', 300)
+figsize = tuple(analysis_visualization_cfg.get('figsize', [10, 6]))
+grid_cfg = analysis_visualization_cfg.get('grid', {})
+grid_enabled = grid_cfg.get('enabled', True)
+grid_linestyle = grid_cfg.get('linestyle', '--')
+grid_alpha = grid_cfg.get('alpha', 0.6)
+
+cumulative_plot_cfg = analysis_visualization_cfg.get('cumulative_plot', {})
+cumulative_linewidth = cumulative_plot_cfg.get('linewidth', 1.5)
+cumulative_alpha = cumulative_plot_cfg.get('alpha', 0.7)
+
+iteration_plot_cfg = analysis_visualization_cfg.get('iteration_plot', {})
+scatter_color = iteration_plot_cfg.get('scatter_color', 'orange')
+scatter_edgecolor = iteration_plot_cfg.get('scatter_edgecolor', 'black')
+scatter_size = iteration_plot_cfg.get('scatter_size', 80)
+line_color = iteration_plot_cfg.get('line_color', 'orange')
+line_alpha = iteration_plot_cfg.get('line_alpha', 0.4)
+line_style = iteration_plot_cfg.get('line_style', '--')
+iter_mean_color = iteration_plot_cfg.get('mean_color', 'red')
+iter_mean_linestyle = iteration_plot_cfg.get('mean_linestyle', ':')
+
+distribution_plot_cfg = analysis_visualization_cfg.get('distribution_plot', {})
+hist_color = distribution_plot_cfg.get('hist_color', 'steelblue')
+hist_edgecolor = distribution_plot_cfg.get('hist_edgecolor', 'black')
+hist_alpha = distribution_plot_cfg.get('hist_alpha', 0.8)
+kde_color = distribution_plot_cfg.get('kde_color', 'darkblue')
+kde_linewidth = distribution_plot_cfg.get('kde_linewidth', 2)
+kde_bw_method = distribution_plot_cfg.get('kde_bw_method', 0.3)
+dist_mean_color = distribution_plot_cfg.get('mean_color', 'red')
+dist_mean_linestyle = distribution_plot_cfg.get('mean_linestyle', ':')
+
 energy_results = []
 
-fig1, ax1 = plt.subplots(figsize=(10, 6))
+fig1, ax1 = plt.subplots(figsize=figsize)
 print("--- Ensemble Total Energy Analysis (CPU + GPU) ---")
 
 for i in range(iterations):
@@ -177,44 +211,46 @@ for i in range(iterations):
     
     print(f"Iteration {i}: {run_total:.2f} Total J [CPU: {cpu_total:.2f} J | GPU: {gpu_total:.2f} J] (Duration: {df_merged['time_sec'].iloc[-1]:.2f}s)")
     line_label = 'Monte Carlo Iterations' if i == 0 else None
-    ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=0.7, linewidth=1.5, label=line_label)
+    ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=cumulative_alpha, linewidth=cumulative_linewidth, label=line_label)
 
 # --- Finalize Plot 1: Cumulative Energy vs Time ---
 ax1.set_title("Cumulative Energy Consumption (CPU + GPU)")
 ax1.set_xlabel("Time (seconds)")
 ax1.set_ylabel("Total Energy Consumed (Joules)")
-ax1.grid(True, linestyle='--', alpha=0.6)
+if grid_enabled:
+    ax1.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
 ax1.legend()
 
 fig1.tight_layout()
 os.makedirs('plots', exist_ok=True)
-fig1.savefig('plots/cumulative_energy_consumption.png', dpi=300)
+fig1.savefig('plots/cumulative_energy_consumption.png', dpi=dpi)
 plt.close(fig1)
 print("\nPlot saved as 'cumulative_energy_consumption.png'")
 
 # --- Finalize Plot 2: Energy vs Iterations ---
-fig2, ax2 = plt.subplots(figsize=(10, 6))
+fig2, ax2 = plt.subplots(figsize=figsize)
 if energy_results:
     iters = range(len(energy_results))
-    ax2.scatter(iters, energy_results, color='orange', edgecolors='black', s=80, zorder=3)
-    ax2.plot(iters, energy_results, color='orange', alpha=0.4, linestyle='--')
+    ax2.scatter(iters, energy_results, color=scatter_color, edgecolors=scatter_edgecolor, s=scatter_size, zorder=3)
+    ax2.plot(iters, energy_results, color=line_color, alpha=line_alpha, linestyle=line_style)
     
     mean_val = np.mean(energy_results)
-    ax2.axhline(mean_val, color='red', linestyle=':', label=f'Mean: {mean_val:.2f} J')
+    ax2.axhline(mean_val, color=iter_mean_color, linestyle=iter_mean_linestyle, label=f'Mean: {mean_val:.2f} J')
     
     ax2.set_title("Total Energy Cost per Iteration")
     ax2.set_xlabel("Iteration Number")
     ax2.set_ylabel("Final Joules")
-    ax2.grid(True, linestyle='--', alpha=0.6)
+    if grid_enabled:
+        ax2.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
     ax2.legend()
 
 fig2.tight_layout()
-fig2.savefig('plots/energy_cost_per_iteration.png', dpi=300)
+fig2.savefig('plots/energy_cost_per_iteration.png', dpi=dpi)
 plt.close(fig2)
 print("Plot saved as 'energy_cost_per_iteration.png'")
 
 # --- Finalize Plot 3: Distribution of Final Energy Values ---
-fig3, ax3 = plt.subplots(figsize=(10, 6))
+fig3, ax3 = plt.subplots(figsize=figsize)
 if energy_results:
     # Freedman-Diaconis rule for bin width
     q75, q25 = np.percentile(energy_results, [75, 25])
@@ -224,30 +260,31 @@ if energy_results:
     n, bins_edges, patches = ax3.hist(
         energy_results,
         bins=bins,
-        color='steelblue',
-        edgecolor='black',
-        alpha=0.8,
+        color=hist_color,
+        edgecolor=hist_edgecolor,
+        alpha=hist_alpha,
     )
 
     # Add Kernel Density Estimate smooth line overlay
     ax3_twin = None
     if len(energy_results) > 1:
-        kde = stats.gaussian_kde(energy_results, bw_method=0.3)
+        kde = stats.gaussian_kde(energy_results, bw_method=kde_bw_method)
         x_range = np.linspace(min(energy_results), max(energy_results), 200)
         kde_values = kde(x_range)
         # Scale KDE to match histogram height
         kde_values = kde_values * n.sum() * (bins_edges[1] - bins_edges[0])
         ax3_twin = ax3.twinx()
-        ax3_twin.plot(x_range, kde_values, color='darkblue', linewidth=2, label='Kernel Density Estimate')
+        ax3_twin.plot(x_range, kde_values, color=kde_color, linewidth=kde_linewidth, label='Kernel Density Estimate')
         ax3_twin.set_ylabel('Density', fontsize=10)
 
     mean_val = np.mean(energy_results)
-    ax3.axvline(mean_val, color='red', linestyle=':', label=f'Mean: {mean_val:.2f} J')
+    ax3.axvline(mean_val, color=dist_mean_color, linestyle=dist_mean_linestyle, label=f'Mean: {mean_val:.2f} J')
 
     ax3.set_title("Distribution of Total Energy Cost")
     ax3.set_xlabel("Final Joules")
     ax3.set_ylabel("Count")
-    ax3.grid(True, linestyle='--', alpha=0.6)
+    if grid_enabled:
+        ax3.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
     
     # Combine legends from both axes
     lines1, labels1 = ax3.get_legend_handles_labels()
@@ -261,7 +298,7 @@ else:
     ax3.set_axis_off()
 
 fig3.tight_layout()
-fig3.savefig('plots/energy_cost_distribution.png', dpi=300)
+fig3.savefig('plots/energy_cost_distribution.png', dpi=dpi)
 plt.close(fig3)
 print("Plot saved as 'energy_cost_distribution.png'")
 
