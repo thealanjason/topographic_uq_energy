@@ -78,15 +78,9 @@ def _create_gif_from_pngs(image_dir: Path, output_path: Path, duration_ms: int =
         return
 
     frames = []
-    target_size = None
     for image_path in image_paths:
         with Image.open(image_path) as img:
             frame = img.convert("RGBA")
-            if target_size is None:
-                target_size = frame.size
-            elif frame.size != target_size:
-                resampling_module = getattr(Image, "Resampling", Image)
-                frame = frame.resize(target_size, resampling_module.LANCZOS)
             frames.append(frame.copy())
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
