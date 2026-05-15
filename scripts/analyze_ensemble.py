@@ -6,6 +6,7 @@ import re
 import yaml
 from pathlib import Path
 from PIL import Image
+from scipy import stats
 
 
 def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
@@ -204,7 +205,6 @@ if energy_results:
     ax2.set_title("Total Energy Cost per Iteration")
     ax2.set_xlabel("Iteration Number")
     ax2.set_ylabel("Final Joules")
-    ax2.set_xticks(iters)
     ax2.grid(True, linestyle='--', alpha=0.6)
     ax2.legend()
 
@@ -212,6 +212,58 @@ fig2.tight_layout()
 fig2.savefig('plots/energy_cost_per_iteration.png', dpi=300)
 plt.close(fig2)
 print("Plot saved as 'energy_cost_per_iteration.png'")
+
+# --- Finalize Plot 3: Distribution of Final Energy Values ---
+fig3, ax3 = plt.subplots(figsize=(10, 6))
+if energy_results:
+    # Freedman-Diaconis rule for bin width
+    q75, q25 = np.percentile(energy_results, [75, 25])
+    iqr = q75 - q25
+    bin_width = 2 * iqr / (len(energy_results) ** (1/3)) if iqr > 0 else (max(energy_results) - min(energy_results)) / 10
+    bins = max(3, int(np.ceil((max(energy_results) - min(energy_results)) / bin_width)))
+    n, bins_edges, patches = ax3.hist(
+        energy_results,
+        bins=bins,
+        color='steelblue',
+        edgecolor='black',
+        alpha=0.8,
+    )
+
+    # Add Kernel Density Estimate smooth line overlay
+    ax3_twin = None
+    if len(energy_results) > 1:
+        kde = stats.gaussian_kde(energy_results, bw_method=0.3)
+        x_range = np.linspace(min(energy_results), max(energy_results), 200)
+        kde_values = kde(x_range)
+        # Scale KDE to match histogram height
+        kde_values = kde_values * n.sum() * (bins_edges[1] - bins_edges[0])
+        ax3_twin = ax3.twinx()
+        ax3_twin.plot(x_range, kde_values, color='darkblue', linewidth=2, label='Kernel Density Estimate')
+        ax3_twin.set_ylabel('Density', fontsize=10)
+
+    mean_val = np.mean(energy_results)
+    ax3.axvline(mean_val, color='red', linestyle=':', label=f'Mean: {mean_val:.2f} J')
+
+    ax3.set_title("Distribution of Total Energy Cost")
+    ax3.set_xlabel("Final Joules")
+    ax3.set_ylabel("Count")
+    ax3.grid(True, linestyle='--', alpha=0.6)
+    
+    # Combine legends from both axes
+    lines1, labels1 = ax3.get_legend_handles_labels()
+    if ax3_twin is not None:
+        lines2, labels2 = ax3_twin.get_legend_handles_labels()
+        ax3.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+    else:
+        ax3.legend()
+else:
+    ax3.text(0.5, 0.5, "No energy results available.", ha='center', va='center', transform=ax3.transAxes)
+    ax3.set_axis_off()
+
+fig3.tight_layout()
+fig3.savefig('plots/energy_cost_distribution.png', dpi=300)
+plt.close(fig3)
+print("Plot saved as 'energy_cost_distribution.png'")
 
 # --- Print Final Statistics ---
 if energy_results:
