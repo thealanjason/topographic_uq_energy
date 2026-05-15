@@ -15,7 +15,7 @@ analysis:
 model: 
   debug: true
   visualize:
-    enabled: false
+    enabled: true
 
   rainfall:
     on: false
