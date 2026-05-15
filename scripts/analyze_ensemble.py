@@ -5,11 +5,7 @@ import os
 import re
 import yaml
 from pathlib import Path
-
-try:
-    from PIL import Image
-except ImportError:
-    Image = None
+from PIL import Image
 
 
 def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
