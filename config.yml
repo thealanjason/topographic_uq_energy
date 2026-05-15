@@ -6,12 +6,16 @@ monte_carlo:
 
 dem: 'DEM.gz'
 
+analysis:
+  visualization:
+    generate_gif: true
+    duration_ms: 100 # duration of each frame in the generated GIF (in milliseconds)
+
 
 model: 
   debug: true
   visualize:
-    enabled: true
-    gif_duration_ms: 100 # duration of each frame in the generated GIF (in milliseconds)
+    enabled: false
 
   rainfall:
     on: false

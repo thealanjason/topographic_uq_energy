@@ -104,13 +104,9 @@ with open(config_file, 'r') as file:
     cfg = yaml.safe_load(file)
 
 iterations = cfg['monte_carlo']['iterations']
-visualize_config = cfg.get('model', {}).get('visualize', False)
-if isinstance(visualize_config, dict):
-    visualize = visualize_config.get('enabled', False)
-    gif_duration_ms = visualize_config.get('gif_duration_ms', 800)
-else:
-    visualize = bool(visualize_config)
-    gif_duration_ms = 800
+analysis_visualization_cfg = cfg.get('analysis', {}).get('visualization', {})
+generate_gif = analysis_visualization_cfg.get('generate_gif', False)
+gif_duration_ms = analysis_visualization_cfg.get('duration_ms', 800)
 energy_results = []
 
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
@@ -226,8 +222,8 @@ os.makedirs('plots', exist_ok=True)
 plt.savefig('plots/energy_cost_analysis.png', dpi=300)
 print("\nDouble-pane plot saved as 'energy_cost_analysis.png'")
 
-if visualize:
+if generate_gif:
     _create_gif_from_pngs(Path("plots/dem_3d"), Path("plots/dem_3d.gif"), duration_ms=gif_duration_ms)
     _create_gif_from_pngs(Path("plots/water_height"), Path("plots/water_height.gif"), duration_ms=gif_duration_ms)
 else:
-    print("GIF creation skipped because model.visualize is false.")
+    print("GIF creation skipped because analysis.visualization.generate_gif is false.")
