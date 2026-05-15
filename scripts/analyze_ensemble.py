@@ -105,7 +105,7 @@ generate_gif = analysis_visualization_cfg.get('generate_gif', False)
 gif_duration_ms = analysis_visualization_cfg.get('duration_ms', 800)
 energy_results = []
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+fig1, ax1 = plt.subplots(figsize=(10, 6))
 print("--- Ensemble Total Energy Analysis (CPU + GPU) ---")
 
 for i in range(iterations):
@@ -178,14 +178,21 @@ for i in range(iterations):
     line_label = 'Monte Carlo Iterations' if i == 0 else None
     ax1.plot(df_merged['time_sec'], df_merged['cum_energy'], alpha=0.7, linewidth=1.5, label=line_label)
 
-# --- Finalize Subplot 1: Cumulative Energy vs Time ---
+# --- Finalize Plot 1: Cumulative Energy vs Time ---
 ax1.set_title("Cumulative Energy Consumption (CPU + GPU)")
 ax1.set_xlabel("Time (seconds)")
 ax1.set_ylabel("Total Energy Consumed (Joules)")
 ax1.grid(True, linestyle='--', alpha=0.6)
 ax1.legend()
 
-# --- Finalize Subplot 2: Energy vs Iterations ---
+fig1.tight_layout()
+os.makedirs('plots', exist_ok=True)
+fig1.savefig('plots/cumulative_energy_consumption.png', dpi=300)
+plt.close(fig1)
+print("\nPlot saved as 'cumulative_energy_consumption.png'")
+
+# --- Finalize Plot 2: Energy vs Iterations ---
+fig2, ax2 = plt.subplots(figsize=(10, 6))
 if energy_results:
     iters = range(len(energy_results))
     ax2.scatter(iters, energy_results, color='orange', edgecolors='black', s=80, zorder=3)
@@ -201,6 +208,11 @@ if energy_results:
     ax2.grid(True, linestyle='--', alpha=0.6)
     ax2.legend()
 
+fig2.tight_layout()
+fig2.savefig('plots/energy_cost_per_iteration.png', dpi=300)
+plt.close(fig2)
+print("Plot saved as 'energy_cost_per_iteration.png'")
+
 # --- Print Final Statistics ---
 if energy_results:
     energy_array = np.array(energy_results)
@@ -212,11 +224,6 @@ if energy_results:
     print(f"Mean Energy Cost: {mean_energy:.2f} Joules")
     print(f"Standard Deviation: ±{std_dev_energy:.2f} Joules")
     print(f"Coefficient of Variation: {cov:.2f}%")
-
-plt.tight_layout()
-os.makedirs('plots', exist_ok=True)
-plt.savefig('plots/energy_cost_analysis.png', dpi=300)
-print("\nDouble-pane plot saved as 'energy_cost_analysis.png'")
 
 if generate_gif:
     _create_gif_from_pngs(Path("plots/dem_3d"), Path("plots/dem_3d.gif"), duration_ms=gif_duration_ms)
