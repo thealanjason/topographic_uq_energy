@@ -65,10 +65,6 @@ def _build_total_energy_timeline(
 
 def _create_gif_from_pngs(image_dir: Path, output_path: Path, duration_ms: int = 800) -> None:
     """Build a GIF slideshow from PNG images in a directory."""
-    if Image is None:
-        print(f"Skipping GIF creation for {image_dir}: Pillow is not available.")
-        return
-
     image_paths = sorted(
         image_dir.glob("*.png"),
         key=lambda path: (
