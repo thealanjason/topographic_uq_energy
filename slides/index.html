@@ -131,7 +131,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block">
-  <h1 class="title">Soft Sensors for Energy Consumption in<br>Topographic Uncertainty Propagation</h1>
+  <h1 class="title">Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -146,22 +146,148 @@ Eren Edgü <br> Alan Correa
 
   <p class="date">June 1, 2026</p>
 </section>
-<section class="slide level2">
-
-<style>
-/* This shrinks the title text so it doesn't cover the whole slide */
-.reveal .slides section.quarto-title-block h1.title {
-  font-size: 1.8em !important;
-  margin-bottom: 0.5em;
-}
-/* This ensures the authors and institute have room */
-.reveal .slides section.quarto-title-block .quarto-title-authors {
-  font-size: 0.8em;
-}
-</style>
-</section>
 <section id="table-of-contents" class="slide level2">
 <h2>Table of Contents</h2>
+<style>
+/* 1. HIDE FOOTER LINE AND SLIDE NUMBER ON TITLE SLIDE (Keep Logo) */
+.reveal:has(section.quarto-title-block.present)::before,
+.reveal:has(section.quarto-title-block.present) .slide-number {
+  display: none !important;
+}
+
+/* 2. TITLE SLIDE STYLING */
+.reveal:has(section.quarto-title-block.present) {
+  background: linear-gradient(to bottom, #0052a3 30%, white 30%) !important;
+}
+
+.reveal .slides section.quarto-title-block {
+  top: 0 !important;
+  transform: none !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  height: 100vh !important;
+  padding: 0 !important;
+}
+
+.reveal .slides section.quarto-title-block h1.title {
+  margin-top: 240px !important; 
+  margin-left: -10px !important; 
+  margin-bottom: 15px !important; 
+  color: #0052a3 !important;
+  font-size: 1.3em !important; 
+  font-weight: bold !important;
+  line-height: 1.1;
+  text-align: left !important;
+  width: 90%; 
+}
+
+/* --- METADATA LAYOUT & UNIFORM FONT --- */
+.reveal .slides section.quarto-title-block .quarto-title-authors,
+.reveal .slides section.quarto-title-block .institute,
+.reveal .slides section.quarto-title-block .quarto-title-meta,
+.reveal .slides section.quarto-title-block .date {
+  margin-left: -10px !important; 
+  margin-top: 5px !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  text-align: left !important;
+  color: #000 !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  visibility: visible !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-meta {
+  display: block !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-authors *,
+.reveal .slides section.quarto-title-block .institute *,
+.reveal .slides section.quarto-title-block .quarto-title-meta *,
+.reveal .slides section.quarto-title-block .date * {
+  font-size: inherit !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-meta-heading {
+  display: none !important;
+}
+
+/* 3. GLOBAL FOOTER & LOGO */
+.reveal::after {
+  content: "";
+  position: fixed;
+  bottom: 25px;
+  right: 35px;
+  width: 440px;
+  height: 110px;
+  background-image: url('mbd_logo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.reveal::before {
+  content: "";
+  position: fixed;
+  bottom: 120px;
+  left: 50px;
+  right: 50px;
+  height: 1px;
+  background-color: #323232;
+  z-index: 100;
+}
+
+.slide-number {
+  left: 45px !important;
+  bottom: 80px !important;
+  right: auto !important;
+  font-size: 18px !important;
+  color: #4a4a4a !important;
+}
+
+.slide-number::after {
+  content: "Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation | Eren Edgü, Alan Correa | MBD Chair";
+  position: fixed;
+  bottom: 85px;
+  left: 200px;
+  font-size: 18px;
+  color: #4a4a4a !important;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+/* 4. CONTENT SLIDE ALIGNMENT */
+.reveal .slides section:not(.quarto-title-block) {
+  text-align: left !important;
+  margin-left: -10px !important; 
+  width: 100% !important; 
+}
+
+.reveal .slides section:not(.quarto-title-block) h1,
+.reveal .slides section:not(.quarto-title-block) h2 {
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important; 
+}
+
+.reveal .slides section:not(.quarto-title-block) ul,
+.reveal .slides section:not(.quarto-title-block) ol {
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 1.2em !important; 
+}
+</style>
 <ul>
 <li><a href="#/intro">Introduction</a></li>
 <li><a href="#/motivation">Motivation</a></li>
@@ -382,9 +508,9 @@ Eren Edgü <br> Alan Correa
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1280,
 
-        height: 700,
+        height: 720,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,

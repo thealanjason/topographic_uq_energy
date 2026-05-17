@@ -1,0 +1,183 @@
+---
+title: "Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation"
+author: "Eren Edgü <br> Alan Correa"
+institute: "Chair of Methods for Model-based Development in Computational Engineering"
+date: "2026-06-01"
+date-format: "MMMM D, YYYY"
+format: 
+  revealjs:
+    width: 1280
+    height: 720
+    center-title-slide: false
+    theme: default
+    transition: fade
+    slide-number: true
+---
+
+## Table of Contents
+
+<style>
+/* 1. HIDE FOOTER LINE AND SLIDE NUMBER ON TITLE SLIDE (Keep Logo) */
+.reveal:has(section.quarto-title-block.present)::before,
+.reveal:has(section.quarto-title-block.present) .slide-number {
+  display: none !important;
+}
+
+/* 2. TITLE SLIDE STYLING */
+.reveal:has(section.quarto-title-block.present) {
+  background: linear-gradient(to bottom, #0052a3 30%, white 30%) !important;
+}
+
+.reveal .slides section.quarto-title-block {
+  top: 0 !important;
+  transform: none !important; 
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  height: 100vh !important;
+  padding: 0 !important;
+}
+
+.reveal .slides section.quarto-title-block h1.title {
+  margin-top: 240px !important; 
+  margin-left: -10px !important; 
+  margin-bottom: 15px !important; 
+  color: #0052a3 !important;
+  font-size: 1.3em !important; 
+  font-weight: bold !important;
+  line-height: 1.1;
+  text-align: left !important;
+  width: 90%; 
+}
+
+/* --- METADATA LAYOUT & UNIFORM FONT --- */
+.reveal .slides section.quarto-title-block .quarto-title-authors,
+.reveal .slides section.quarto-title-block .institute,
+.reveal .slides section.quarto-title-block .quarto-title-meta,
+.reveal .slides section.quarto-title-block .date {
+  margin-left: -10px !important; 
+  margin-top: 5px !important;
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  display: block !important;
+  text-align: left !important;
+  color: #000 !important;
+  font-size: 28px !important;
+  font-weight: 400 !important;
+  line-height: 1.3 !important;
+  visibility: visible !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-meta {
+  display: block !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-authors *,
+.reveal .slides section.quarto-title-block .institute *,
+.reveal .slides section.quarto-title-block .quarto-title-meta *,
+.reveal .slides section.quarto-title-block .date * {
+  font-size: inherit !important;
+  color: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.reveal .slides section.quarto-title-block .quarto-title-meta-heading {
+  display: none !important;
+}
+
+/* 3. GLOBAL FOOTER & LOGO */
+.reveal::after {
+  content: "";
+  position: fixed;
+  bottom: 25px;
+  right: 35px;
+  width: 440px;
+  height: 110px;
+  background-image: url('mbd_logo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.reveal::before {
+  content: "";
+  position: fixed;
+  bottom: 120px;
+  left: 50px;
+  right: 50px;
+  height: 1px;
+  background-color: #323232;
+  z-index: 100;
+}
+
+.slide-number {
+  left: 45px !important;
+  bottom: 80px !important;
+  right: auto !important;
+  font-size: 18px !important;
+  color: #4a4a4a !important;
+}
+
+.slide-number::after {
+  content: "Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation | Eren Edgü, Alan Correa | MBD Chair";
+  position: fixed;
+  bottom: 85px;
+  left: 200px;
+  font-size: 18px;
+  color: #4a4a4a !important;
+  white-space: nowrap;
+  z-index: 999;
+}
+
+/* 4. CONTENT SLIDE ALIGNMENT */
+.reveal .slides section:not(.quarto-title-block) {
+  text-align: left !important;
+  margin-left: -10px !important; 
+  width: 100% !important; 
+}
+
+.reveal .slides section:not(.quarto-title-block) h1,
+.reveal .slides section:not(.quarto-title-block) h2 {
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important; 
+}
+
+.reveal .slides section:not(.quarto-title-block) ul,
+.reveal .slides section:not(.quarto-title-block) ol {
+  text-align: left !important;
+  margin-left: 0 !important;
+  padding-left: 1.2em !important; 
+}
+</style>
+
+* [Introduction](#intro)
+* [Motivation](#motivation)
+* [Experimental Setup](#setup)
+* [Preliminary Results](#results)
+* [Conclusion](#conclusion)
+
+## Introduction {#intro}
+- What is topographic uncertainty propagation?
+- Why is it important for flood simulations?
+- Alumet Introduction
+
+## Motivation
+- Why measure energy directly?
+- CPU time vs ALUMET attributed energy graph
+
+## Experimental Setup {#setup}
+- Alumet
+- Synxflow
+- Monte Carlo
+- Ensemble analysis
+
+## Preliminary Results {#results}
+
+## Conclusion {#conclusion}
