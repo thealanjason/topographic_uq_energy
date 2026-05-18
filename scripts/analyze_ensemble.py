@@ -9,6 +9,27 @@ from PIL import Image
 from scipy import stats
 
 
+def _extract_pid_from_execution_log(iteration: int) -> int:
+    """
+    Extract the SynxFlow process PID from execution.log.
+    
+    Searches for the line: "Child process '...' spawned with pid XXXXX."
+    Returns the PID as an integer, or None if not found.
+    """
+    log_file = f'ensemble_results/iter_{iteration}/execution.log'
+    
+    if not os.path.exists(log_file):
+        return None
+    
+    with open(log_file, 'r') as f:
+        for line in f:
+            match = re.search(r'spawned with pid (\d+)', line)
+            if match:
+                return int(match.group(1))
+    
+    return None
+
+
 def _align_cumulative_energy_to_timeline(df_metric: pd.DataFrame, timeline: pd.DatetimeIndex, value_name: str) -> pd.Series:
     """
     Align a cumulative metric to a shared timeline.
@@ -148,15 +169,24 @@ for i in range(iterations):
     
     if not os.path.exists(filename):
         continue
-        
-    df = pd.read_csv(filename, sep=';')
     
-    # 1. Extract Joules & Isolate the Process
-    df_gpu_raw = df[(df['metric'].str.contains('attributed_energy_gpu', na=False)) & (df['consumer_kind'] == 'process')]
-    df_cpu_raw = df[(df['metric'].str.contains('attributed_energy_cpu', na=False)) & (df['consumer_kind'] == 'process')]
+    # Extract the target process PID from execution.log
+    target_pid = _extract_pid_from_execution_log(i)
+    if target_pid is None:
+        raise FileNotFoundError(f"Iteration {i}: Could not extract PID from execution.log. Execution log missing or PID not found.")
+        
+    df = pd.read_csv(filename, sep=';', dtype={'resource_id': 'str'})
+    
+    # 1. Extract Joules & Isolate the Process by PID
+    df_gpu_raw = df[(df['metric'].str.contains('attributed_energy_gpu', na=False)) 
+                    & (df['consumer_kind'] == 'process')
+                    & (df['consumer_id'] == target_pid)]
+    df_cpu_raw = df[(df['metric'].str.contains('attributed_energy_cpu', na=False)) 
+                    & (df['consumer_kind'] == 'process')
+                    & (df['consumer_id'] == target_pid)]
     
     if df_gpu_raw.empty and df_cpu_raw.empty:
-        print(f"Iteration {i}: Missing CPU or GPU data.")
+        print(f"Iteration {i}: Missing CPU or GPU data for PID {target_pid}.")
         continue
 
     # We directly copy the remaining columns to prevent memory warnings.
