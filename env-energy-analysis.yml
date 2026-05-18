@@ -3,7 +3,9 @@ channels:
   - conda-forge
 dependencies:
   - python=3.11
-  - pandas<2.0.0
-  - numpy<2.0.0
+  - pandas
+  - numpy
+  - scipy
   - matplotlib
+  - pillow
   - pyyaml

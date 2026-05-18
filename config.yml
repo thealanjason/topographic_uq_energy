@@ -6,10 +6,48 @@ monte_carlo:
 
 dem: 'DEM.gz'
 
+analysis:
+  visualization:
+    generate_gif: false  # Whether to generate animated GIFs from output frames
+    duration_ms: 100  # Duration of each frame in the generated GIF (milliseconds)
+    # Output settings
+    dpi: 300  # Resolution of output PNG images (dots per inch)
+    figsize: [10, 6]  # Figure size for all plots [width, height] in inches
+    # Grid settings
+    grid:
+      enabled: true  # Show grid lines on plots
+      linestyle: '--'  # Grid line style: '-' solid, '--' dashed, ':' dotted
+      alpha: 0.6  # Grid transparency (0.0 = invisible, 1.0 = opaque)
+    # Plot 1: Cumulative Energy over Time
+    cumulative_plot:
+      linewidth: 1.5  # Width of the cumulative energy lines
+      alpha: 0.7  # Transparency of each iteration line (lower = more transparent)
+    # Plot 2: Energy Cost per Iteration
+    iteration_plot:
+      scatter_color: 'orange'  # Color of the data point markers
+      scatter_edgecolor: 'black'  # Edge color of markers
+      scatter_size: 80  # Size of scatter plot markers
+      line_color: 'orange'  # Color of the connecting line between points
+      line_alpha: 0.4  # Transparency of the connecting line
+      line_style: '--'  # Line style: '-' solid, '--' dashed, ':' dotted
+      mean_color: 'red'  # Color of the mean reference line
+      mean_linestyle: ':'  # Style of the mean line
+    # Plot 3: Energy Distribution
+    distribution_plot:
+      hist_color: 'steelblue'  # Color of histogram bars
+      hist_edgecolor: 'black'  # Edge color of histogram bars
+      hist_alpha: 0.8  # Transparency of histogram
+      kde_color: 'darkblue'  # Color of the kernel density estimate curve
+      kde_linewidth: 2  # Width of the KDE curve line
+      kde_bw_method: 0.3  # KDE bandwidth method (controls smoothing)
+      mean_color: 'red'  # Color of the mean reference line
+      mean_linestyle: ':'  # Style of the mean line
+
 
 model: 
   debug: true
-  visualize: true
+  visualize:
+    enabled: true
 
   rainfall:
     on: false
