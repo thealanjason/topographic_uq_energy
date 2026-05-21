@@ -139,8 +139,11 @@ flood.run(case_folder)
 print("Simulation complete.")
 
 # 5. Visualization (if enabled in config)
-# Prefer model.visualize in config.yml, but also support legacy visualization.visualize.
-visualize_enabled = model.get('visualize', cfg.get('visualization', {}).get('visualize', False))
+visualize_config = model.get('visualize', False)
+if isinstance(visualize_config, dict):
+    visualize_enabled = visualize_config.get('enabled', False)
+else:
+    visualize_enabled = bool(visualize_config)
 
 if visualize_enabled:
     print("\nGenerating visualizations...")
