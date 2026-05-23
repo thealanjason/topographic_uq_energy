@@ -7,6 +7,7 @@ import yaml
 from pathlib import Path
 from PIL import Image
 from scipy import stats
+import pickle
 
 
 def _extract_pid_from_execution_log(iteration: int) -> int:
@@ -399,6 +400,190 @@ def print_statistics(energy_results: list[float]) -> None:
     print(f"Mean Energy Cost: {mean_energy:.2f} Joules")
     print(f"Standard Deviation: ±{std_dev_energy:.2f} Joules")
     print(f"Coefficient of Variation: {cov:.2f}%")
+    print("------------------------\n")
+
+
+
+def _regenerate_water_height_with_fixed_colorbar(water_height_dir: Path) -> None:
+    """Regenerate water height PNGs with fixed colorbar range across all frames.
+    
+    This ensures that colors are consistent across animation frames, making changes meaningful.
+    Loads previously saved raster data from flood_model.py executions.
+    Uses only matplotlib (no synxflow dependency).
+    
+    Args:
+        water_height_dir: Path to directory containing water_height_*.png files
+    """
+    raster_data_dir = Path('plots/.raster_data')
+    if not raster_data_dir.exists():
+        print(f"Raster data directory not found at {raster_data_dir}. Skipping colorbar fix.")
+        return
+    
+    # Find all saved raster data files
+    pkl_files = sorted(raster_data_dir.glob('water_height_iter_*.pkl'))
+    
+    if not pkl_files:
+        print("No saved raster data found for colorbar fix.")
+        return
+    
+    # Find global min/max across all iterations
+    global_min = float('inf')
+    global_max = float('-inf')
+    raster_data_list = []
+    
+    print("Scanning water depth range across all iterations...")
+    for pkl_file in pkl_files:
+        try:
+            with open(pkl_file, 'rb') as f:
+                array, header = pickle.load(f)
+            # Exclude NODATA values
+            valid_data = array[array != header['NODATA_value']]
+            if len(valid_data) > 0:
+                global_min = min(global_min, float(np.nanmin(valid_data)))
+                global_max = max(global_max, float(np.nanmax(valid_data)))
+                raster_data_list.append((pkl_file, array, header))
+        except Exception as e:
+            print(f"  Warning: Could not load {pkl_file}: {e}")
+    
+    if global_min == float('inf') or global_max == float('-inf'):
+        print("Could not determine valid water depth range.")
+        return
+    
+    print(f"Water depth range: {global_min:.4f} - {global_max:.4f} m")
+    print(f"Regenerating {len(raster_data_list)} water height visualizations with fixed colorbar...")
+    
+    # Regenerate PNG files with fixed vmin/vmax using matplotlib
+    for pkl_file, array, header in raster_data_list:
+        # Extract iteration number
+        iteration_match = re.search(r'water_height_iter_(\d+)', pkl_file.stem)
+        if not iteration_match:
+            continue
+        
+        iteration_num = iteration_match.group(1)
+        png_filename = water_height_dir / f'water_height_iter_{iteration_num}.png'
+        
+        try:
+            # Set NODATA values to NaN for proper visualization
+            array_display = array.astype(float)
+            array_display[array == header['NODATA_value']] = np.nan
+            
+            # Create figure with matplotlib
+            fig, ax = plt.subplots(figsize=(12, 10))
+            
+            # Get extent from header (assuming standard grid structure)
+            ncols = header['ncols']
+            nrows = header['nrows']
+            xllcorner = header['xllcorner']
+            yllcorner = header['yllcorner']
+            cellsize = header['cellsize']
+            
+            extent = [xllcorner, xllcorner + ncols * cellsize,
+                      yllcorner, yllcorner + nrows * cellsize]
+            
+            # Plot with fixed colorbar range
+            im = ax.imshow(array_display, extent=extent, origin='upper', 
+                          cmap='viridis', vmin=global_min, vmax=global_max,
+                          aspect='equal', interpolation='nearest')
+            
+            ax.set_title('Simulated Water Depth', fontsize=14)
+            ax.set_xlabel('X (m)', fontsize=12)
+            ax.set_ylabel('Y (m)', fontsize=12)
+            
+            # Add colorbar
+            cbar = plt.colorbar(im, ax=ax, pad=0.05)
+            cbar.set_label('Depth (m)', fontsize=12, labelpad=20)
+            cbar.ax.tick_params(labelsize=10)
+            
+            fig.subplots_adjust(right=0.88)
+            fig.savefig(str(png_filename), dpi=300, bbox_inches='tight')
+            plt.close(fig)
+        except Exception as e:
+            print(f"  Warning: Could not regenerate {png_filename}: {e}")
+            import traceback
+            traceback.print_exc()
+
+
+def _regenerate_dem_with_fixed_colorbar(dem_output_dir: Path) -> None:
+    """Regenerate DEM PNGs with fixed colorbar range across all frames.
+    
+    This ensures that colors are consistent across animation frames, making changes meaningful.
+    Loads previously saved raster data from flood_model.py executions.
+    Uses only matplotlib (no synxflow dependency).
+    
+    Args:
+        dem_output_dir: Path to directory containing dem_3d_*.png files
+    """
+    raster_data_dir = Path('plots/.raster_data')
+    if not raster_data_dir.exists():
+        print(f"Raster data directory not found at {raster_data_dir}. Skipping DEM colorbar fix.")
+        return
+    
+    # Find all saved DEM raster data files
+    pkl_files = sorted(raster_data_dir.glob('dem_3d_iter_*.pkl'))
+    
+    if not pkl_files:
+        print("No saved DEM raster data found for colorbar fix.")
+        return
+    
+    # Find global min/max across all iterations
+    global_min = float('inf')
+    global_max = float('-inf')
+    raster_data_list = []
+    
+    print("Scanning DEM elevation range across all iterations...")
+    for pkl_file in pkl_files:
+        try:
+            with open(pkl_file, 'rb') as f:
+                array, header = pickle.load(f)
+            # For DEM, include all values (typically no NODATA)
+            valid_data = array[~np.isnan(array)]
+            if len(valid_data) > 0:
+                global_min = min(global_min, float(np.nanmin(valid_data)))
+                global_max = max(global_max, float(np.nanmax(valid_data)))
+                raster_data_list.append((pkl_file, array, header))
+        except Exception as e:
+            print(f"  Warning: Could not load {pkl_file}: {e}")
+    
+    if global_min == float('inf') or global_max == float('-inf'):
+        print("Could not determine valid DEM elevation range.")
+        return
+    
+    print(f"DEM elevation range: {global_min:.2f} - {global_max:.2f} m")
+    print(f"Regenerating {len(raster_data_list)} DEM visualizations with fixed colorbar...")
+    
+    # Regenerate PNG files with fixed vmin/vmax using matplotlib
+    for pkl_file, array, header in raster_data_list:
+        # Extract iteration number
+        iteration_match = re.search(r'dem_3d_iter_(\d+)', pkl_file.stem)
+        if not iteration_match:
+            continue
+        
+        iteration_num = iteration_match.group(1)
+        png_filename = dem_output_dir / f'dem_3d_iter_{iteration_num}.png'
+        
+        try:
+            # Create figure with matplotlib
+            fig, ax = plt.subplots(figsize=(12, 11))
+            
+            # Plot with fixed colorbar range
+            im = ax.imshow(array, cmap='terrain', origin='upper',
+                          vmin=global_min, vmax=global_max,
+                          aspect='equal', interpolation='nearest')
+            
+            ax.set_title('Digital Elevation Model', fontsize=16)
+            
+            # Add colorbar
+            cbar = plt.colorbar(im, ax=ax, pad=0.05)
+            cbar.set_label('Elevation (m)', fontsize=12, labelpad=20)
+            cbar.ax.tick_params(labelsize=10)
+            
+            fig.subplots_adjust(right=0.88)
+            fig.savefig(str(png_filename), dpi=300, bbox_inches='tight')
+            plt.close(fig)
+        except Exception as e:
+            print(f"  Warning: Could not regenerate {png_filename}: {e}")
+            import traceback
+            traceback.print_exc()
 
 
 def generate_gifs(config: dict) -> None:
@@ -408,7 +593,16 @@ def generate_gifs(config: dict) -> None:
     gif_duration_ms = analysis_visualization_cfg.get('duration_ms', 800)
     
     if generate_gif:
+        # Fix colorbar range before creating DEM GIF
+        print("Fixing DEM colorbar to consistent range...")
+        _regenerate_dem_with_fixed_colorbar(Path("plots/dem_3d"))
+        
         _create_gif_from_pngs(Path("plots/dem_3d"), Path("plots/dem_3d.gif"), duration_ms=gif_duration_ms)
+        
+        # Fix colorbar range before creating water height GIF
+        print("Fixing water height colorbar to consistent range...")
+        _regenerate_water_height_with_fixed_colorbar(Path("plots/water_height"))
+        
         _create_gif_from_pngs(Path("plots/water_height"), Path("plots/water_height.gif"), duration_ms=gif_duration_ms)
     else:
         print("GIF creation skipped because analysis.visualization.generate_gif is false.")
