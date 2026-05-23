@@ -485,7 +485,7 @@ def _regenerate_water_height_with_fixed_colorbar(water_height_dir: Path) -> None
                           cmap='viridis', vmin=global_min, vmax=global_max,
                           aspect='equal', interpolation='nearest')
             
-            ax.set_title('Simulated Water Depth', fontsize=14)
+            ax.set_title('Final Water Depth for each Iteration', fontsize=14)
             ax.set_xlabel('X (m)', fontsize=12)
             ax.set_ylabel('Y (m)', fontsize=12)
             
@@ -570,7 +570,7 @@ def _regenerate_dem_with_fixed_colorbar(dem_output_dir: Path) -> None:
                           vmin=global_min, vmax=global_max,
                           aspect='equal', interpolation='nearest')
             
-            ax.set_title('Digital Elevation Model', fontsize=16)
+            ax.set_title('Digital Elevation Model for each Iteration', fontsize=16)
             
             # Add colorbar
             cbar = plt.colorbar(im, ax=ax, pad=0.05)
