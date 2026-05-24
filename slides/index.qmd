@@ -4,6 +4,8 @@ author: "Eren Edgü <br> Alan Correa"
 institute: "Chair of Methods for Model-based Development in Computational Engineering"
 date: "2026-06-01"
 date-format: "MMMM D, YYYY"
+bibliography: references.bib
+csl: ieee.csl
 format: 
   revealjs:
     width: 1280
@@ -182,27 +184,58 @@ format:
 }
 </style>
 
+## Table of Contents
+
 * [Introduction](#intro)
 * [Motivation](#motivation)
-* [Experimental Setup](#setup)
-* [Preliminary Results](#results)
-* [Conclusion](#conclusion)
+* [Methodology](#methodology)
+* [Results](#results)
+* [References](#references)
 
 ## Introduction {#intro}
-- What is topographic uncertainty propagation?
-- Why is it important for flood simulations?
-- Alumet Introduction
 
-## Motivation
-- Why measure energy directly?
-- CPU time vs ALUMET attributed energy graph
+- DEM vs. Noisy DEM
+    - Which one is real?
+    - Errors?
 
-## Experimental Setup {#setup}
-- Alumet
-- Synxflow
-- Monte Carlo
-- Ensemble analysis
+## Introduction
 
-## Preliminary Results {#results}
+> "Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
 
-## Conclusion {#conclusion}
+- The flood and landslide models use the 3D map to calculate exactly how gravity will pull the water, mud and rocks downhill. Because they are so closely linked, any error in the map's shape directly causes an error in the mathematical prediction. [@Zhao2020]
+- We need an "ensemble of equiprobable realizations"
+    - 500 realizations [@Zhao2020] (Do we need to do our own convergence study?)
+
+## Motivation {#motivation}
+
+- Running stochastic simulations demands massive computational resources.
+- The need for energy benchmarking [reference needed]
+    - Time to solution
+        - GPU and CPU aren't heterogeneous in energy use
+        - Time and energy may not be linear (graph)
+    - Measuring energy directly
+        - There might be an unrelated process on the same GPU
+- We need to measure the energy spent by only our process.
+
+## Research Questions
+
+- How can the energy consumption of heterogeneous scientific computing workloads be accurately measured and modeled under input and execution uncertainty?
+    - To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
+    - How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
+    - What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
+
+## Methodology {#methodology}
+
+- Hardware: Gaia cluster
+- Solver: Synxflow
+- Soft Sensor for Energy Measurement: Alumet
+- Pipeline Flowchart:
+    - Original DEM → Noise Injection → Alumet + Synxflow → Analyze the ensemble and calculate energies
+
+
+
+## Results {#results}
+
+To be determined.
+
+## References {#references}
