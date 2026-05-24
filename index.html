@@ -32,27 +32,7 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-    /* CSS for citations */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-      margin-bottom: 0em;
-    }
-    .hanging-indent div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
-    }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
-    }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }  </style>
+  </style>
   <link rel="stylesheet" href="index_files/libs/revealjs/dist/theme/quarto-2740581606dc327e82f18f789b69d8a0.css">
   <link href="index_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="index_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -151,7 +131,7 @@
     <div class="slides">
 
 <section id="title-slide" class="quarto-title-block">
-  <h1 class="title">Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation</h1>
+  <h1 class="title">Soft Sensors for Energy Consumption in<br>Topographic Uncertainty Propagation</h1>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -166,398 +146,60 @@ Eren Edgü <br> Alan Correa
 
   <p class="date">June 1, 2026</p>
 </section>
-<section id="table-of-contents" class="slide level2">
-<h2>Table of Contents</h2>
+<section class="slide level2">
+
 <style>
-/* Hide edge navigation arrows (left/right) and pointer toggle button */
-.reveal .controls .navigate-left,
-.reveal .controls .navigate-right {
-  display: none !important;
-}
-.reveal-pointer-toggle {
-  display: none !important;
-}
-
-/* 1. HIDE FOOTER LINE AND SLIDE NUMBER ON TITLE SLIDE */
-.reveal:has(section.quarto-title-block.present)::before,
-.reveal:has(section.quarto-title-block.present) .slide-number {
-  display: none !important;
-}
-
-/* 2. TITLE SLIDE STYLING */
-.reveal:has(section.quarto-title-block.present) {
-  background: linear-gradient(to bottom, #0052a3 30%, white 30%) !important;
-}
-
-.reveal .slides section.quarto-title-block {
-  top: 0 !important;
-  transform: none !important; 
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: flex-start !important;
-  text-align: left !important;
-  height: 720px !important;
-  padding: 0 !important;
-}
-
-/* Main Title Slide Title */
+/* This shrinks the title text so it doesn't cover the whole slide */
 .reveal .slides section.quarto-title-block h1.title {
-  margin-top: 240px !important; 
-  margin-left: -10px !important; 
-  margin-bottom: 20px !important; 
-  color: #0052a3 !important;
-  font-size: 52px !important; 
-  font-weight: bold !important;
-  line-height: 1.1 !important;
-  text-align: left !important;
-  width: 1100px !important; 
+  font-size: 1.8em !important;
+  margin-bottom: 0.5em;
 }
-
-/* --- METADATA LAYOUT & UNIFORM FONT --- */
-.reveal .slides section.quarto-title-block .quarto-title-authors,
-.reveal .slides section.quarto-title-block .institute,
-.reveal .slides section.quarto-title-block .quarto-title-meta,
-.reveal .slides section.quarto-title-block .date {
-  margin-left: -10px !important; 
-  margin-top: 5px !important;
-  margin-bottom: 0 !important;
-  padding: 0 !important;
-  display: block !important;
-  text-align: left !important;
-  color: #000 !important;
-  font-size: 28px !important; 
-  font-weight: 400 !important;
-  line-height: 36px !important;
-  visibility: visible !important;
-}
-
-.reveal .slides section.quarto-title-block .quarto-title-meta {
-  display: block !important;
-}
-
-/* Metadata Font Override (PX based) */
-.reveal .slides section.quarto-title-block .quarto-title-authors *,
-.reveal .slides section.quarto-title-block .institute *,
-.reveal .slides section.quarto-title-block .quarto-title-meta *,
-.reveal .slides section.quarto-title-block .date * {
-  font-size: 28px !important;
-  color: #000 !important;
-  font-weight: 400 !important;
-  line-height: 36px !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* BOLD AUTHOR NAMES */
-.reveal .slides section.quarto-title-block .quarto-title-authors,
-.reveal .slides section.quarto-title-block .quarto-title-authors * {
-  font-weight: bold !important;
-}
-
-.reveal .slides section.quarto-title-block .quarto-title-meta-heading {
-  display: none !important;
-}
-
-/* 3. GLOBAL FOOTER & LOGO */
-.reveal::after {
-  content: "";
-  position: fixed;
-  bottom: 25px;
-  right: 35px;
-  width: 440px;
-  height: 110px;
-  background-image: url('mbd_logo.svg');
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: right bottom;
-  pointer-events: none;
-  z-index: 1000;
-}
-
-.reveal::before {
-  content: "";
-  position: fixed;
-  bottom: 120px;
-  left: 50px;
-  right: 50px;
-  height: 1px;
-  background-color: #4a4a4a;
-  z-index: 100;
-}
-
-.slide-number {
-  left: 45px !important;
-  bottom: 80px !important;
-  right: auto !important;
-  font-size: 18px !important;
-  color: #4a4a4a !important;
-}
-
-.slide-number::after {
-  content: "Soft Sensors for Energy Consumption in Topographic Uncertainty Propagation | Eren Edgü, Alan Correa | MBD Chair";
-  position: fixed;
-  bottom: 85px;
-  left: 200px;
-  font-size: 18px !important;
-  color: #4a4a4a !important;
-  white-space: nowrap;
-  z-index: 999;
-}
-
-/* Push Main Headers (h1, h2) Left */
-.reveal .slides section:not(.quarto-title-block) h1,
-.reveal .slides section:not(.quarto-title-block) h2 {
-  text-align: left !important;
-  margin-left: 0 !important;
-  padding-left: 0 !important; 
-  color: #0052a3 !important;
-  font-weight: bold !important;
-  font-size: 42px !important; 
-  margin-bottom: 15px !important; /* Reduced to save vertical space */
-  padding-bottom: 10px !important;
-  border-bottom: 1px solid #4a4a4a !important;
-  width: 100% !important; 
-}
-
-/* Sub-Headers (h3) Formatting */
-.reveal .slides section:not(.quarto-title-block) h3 {
-  text-align: left !important;
-  color: #0052a3 !important; /* Match the theme blue */
-  font-weight: bold !important;
-  font-size: 34px !important; /* Smaller than h2 to show hierarchy */
-  margin-top: 20px !important;
-  margin-bottom: 10px !important;
-}
-
-/* Push Lists Left & Adjust Size to Fit */
-.reveal .slides section:not(.quarto-title-block) ul,
-.reveal .slides section:not(.quarto-title-block) ol {
-  text-align: left !important;
-  margin-left: 0 !important; 
-  padding-left: 40px !important; 
-}
-
-/* Base text sizing */
-.reveal .slides section:not(.quarto-title-block) li {
-  margin-bottom: 12px !important; /* Tighter spacing */
-  font-size: 28px !important; /* Scaled down from 32px to prevent overflow */
-  line-height: 1.3 !important;
-}
-
-/* Compact Callout */
-.reveal .callout {
-  margin-top: 5px !important;
-  margin-bottom: 10px !important;
-}
-
-/* Figure caption styling */
-.reveal .slides section:not(.quarto-title-block) .figure-caption,
-.reveal .slides section:not(.quarto-title-block) figure figcaption {
-  font-size: 16px !important;
-  color: #333 !important;
-  margin-top: 6px !important;
-  text-align: center !important;
-  margin-left: auto !important;  
-  margin-right: auto !important; 
-  line-height: 1.2 !important;
-  max-width: 80% !important;
-}
-
-.reveal .slides section:not(.quarto-title-block) .figure-caption strong,
-.reveal .slides section:not(.quarto-title-block) figure figcaption strong {
-  font-weight: 600 !important;
-  font-size: 14px !important;
-}
-
-/* 5. FRAGMENT FIXES */
-.reveal .slides section .fragment:not(.visible) {
-  visibility: hidden;
-  opacity: 0;
+/* This ensures the authors and institute have room */
+.reveal .slides section.quarto-title-block .quarto-title-authors {
+  font-size: 0.8em;
 }
 </style>
+</section>
+<section id="table-of-contents" class="slide level2">
+<h2>Table of Contents</h2>
 <ul>
 <li><a href="#/intro">Introduction</a></li>
 <li><a href="#/motivation">Motivation</a></li>
-<li><a href="#/methodology">Methodology</a></li>
-<li><a href="#/results">Results</a></li>
-<li><a href="#/references">References</a></li>
+<li><a href="#/setup">Experimental Setup</a></li>
+<li><a href="#/results">Preliminary Results</a></li>
+<li><a href="#/conclusion">Conclusion</a></li>
 </ul>
 </section>
 <section id="intro" class="slide level2">
 <h2>Introduction</h2>
-<div style="text-align: center; width: 100%; margin-top: -20px;">
-<img src="pres_plots/introduction/original_vs_noisy_dem.gif" width="600">
-<p class="figure-caption">
-<strong>Figure 1:</strong> Original vs.&nbsp;Noisy DEM
-</p>
-</div>
-</section>
-<section id="the-impact-of-dem-uncertainty" class="slide level2">
-<h2>The Impact of DEM Uncertainty</h2>
-<div style="margin-bottom: 30px;">
-<div class="callout callout-important callout-style-simple">
-<div class="callout-body">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-content">
-<p>“Overlooking DEM uncertainty may lead to a bias in risk management decisions” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span></p>
-</div>
-</div>
-</div>
-</div>
-<div class="columns">
-<div class="column fragment" style="width:50%;">
-<h3 id="the-physical-link">The Physical Link</h3>
 <ul>
-<li><strong>Gravity-Driven:</strong> Models use 3D maps to calculate how water, mud, and rocks pull downhill.</li>
-<li><strong>Direct Impact:</strong> Any variation in the map’s shape can significantly alter the resulting mathematical prediction <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<li>What is topographic uncertainty propagation?</li>
+<li>Why is it important for flood simulations?</li>
+<li>Alumet Introduction</li>
 </ul>
-</div><div class="column fragment" style="width:50%;">
-<h3 id="the-solution">The Solution</h3>
-<ul>
-<li><strong>Probabilistic Approach:</strong> We use an “ensemble of equiprobable realizations” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
-<li><strong>Scale:</strong> 500 realizations are generated to quantify the range of possible outcomes <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
-</ul>
-</div></div>
 </section>
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
-<h3 id="the-computational-burden-of-uncertainty">The Computational Burden of Uncertainty</h3>
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Stochastic Scale:</strong> Generating an ensemble of 500 realizations requires massive computational throughput.
-</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>The Energy Footprint:</strong> Moving from standard desktop research to High-Performance Computing (HPC) drastically increases power consumption.
-</li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Resource Intensity:</strong> Running these simulations demands significant electricity, driving the need for benchmarking and optimization.
-</li>
+<ul>
+<li>Why measure energy directly?</li>
+<li>CPU time vs ALUMET attributed energy graph</li>
 </ul>
 </section>
-<section id="is-execution-time-a-reliable-proxy" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
-<div class="columns" style="display: flex; align-items: flex-start; justify-content: center; gap: 30px; margin-top: 40px;">
-<div class="column" style="width:50%;">
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Hardware Heterogeneity:</strong> CPUs and GPUs have fundamentally different power profiles.
-</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>Non-Linearity:</strong> Doubling the execution time does not necessarily double the energy consumption.
-</li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Complex Scaling:</strong> Power draw varies based on clock speeds, memory bandwidth, and thermal throttling.
-</li>
+<section id="setup" class="slide level2">
+<h2>Experimental Setup</h2>
+<ul>
+<li>Alumet</li>
+<li>Synxflow</li>
+<li>Monte Carlo</li>
+<li>Ensemble analysis</li>
 </ul>
-</div><div class="column" style="width:50%;">
-<div class="fragment" data-fragment-index="1" style="border: 2px dashed #0052a3; padding: 40px; border-radius: 15px; background-color: rgba(0, 82, 163, 0.02); height: 400px; display: flex; align-items: center; justify-content: center; text-align: center;">
-<p>[PLACEHOLDER: <br> Graph showing non-linear relationship <br> between Time and Energy consumption]</p>
-</div>
-</div></div>
-</section>
-<section id="the-attribution-challenge" class="slide level2">
-<h2>The Attribution Challenge</h2>
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Concurrent Workloads:</strong> Modern hardware (both local and HPC) often runs multiple tasks at the same time.
-</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>Sensor Limitations:</strong> Hardware sensors report the <em>total</em> power of the card, not the energy used by a specific Process ID (PID).
-</li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Measurement Noise:</strong> Background system tasks “pollute” the data, making it hard to see the true cost of just our simulation.
-</li>
-</ul>
-<div class="fragment" data-fragment-index="3" style="margin-top: 30px;">
-<div class="callout callout-note no-icon callout-style-simple">
-<div class="callout-body">
-<div class="callout-content">
-<p><strong>Objective:</strong> Develop a methodology to attribute energy consumption <strong>strictly to our specific simulation process</strong>, independent of other system activity.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-<section id="research-questions" class="slide level2">
-<h2>Research Questions</h2>
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 25px; font-weight: bold; color: #000;">
-How can the energy consumption of heterogeneous scientific computing workloads be accurately measured and modeled under input and execution uncertainty?
-</li>
-<ul style="list-style-type: circle; padding-left: 60px; margin-top: 10px; font-size: 26px !important;">
-<li class="fragment fade-in-then-semi-out" data-fragment-index="1" style="margin-bottom: 15px;">
-To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
-</li>
-<li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
-How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
-</li>
-<li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
-What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
-</li>
-</ul>
-</ul>
-</section>
-<section id="methodology" class="slide level2">
-<h2>Methodology</h2>
-<ul style="list-style-type: disc; padding-left: 40px; margin-bottom: 40px;">
-<li class="fragment" data-fragment-index="0">
-<strong>Hardware:</strong> Gaia HPC Cluster
-</li>
-<li class="fragment" data-fragment-index="1">
-<strong>Solver:</strong> Synxflow
-</li>
-<li class="fragment" data-fragment-index="2">
-<strong>Soft Sensor:</strong> Alumet
-<ul style="list-style-type: circle; padding-left: 40px; font-size: 22px; margin-top: 5px; color: #4a4a4a;">
-<li>
-Isolates energy consumption by process-level GPU/CPU utilization percentages.
-</li>
-</ul>
-</li>
-</ul>
-<div class="fragment" data-fragment-index="3" style="width: 100%; margin-top: 100px; position: relative;">
-<div style="position: absolute; top: -65px; left: 11%; right: 38.5%; height: 45px; border: 2px solid #0052a3; border-bottom: none; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center;">
-<span style="background: white; padding: 0 15px; font-size: 15px; font-weight: 600; color: #0052a3; letter-spacing: 0.5px;">ITERATE</span>
-<div style="position: absolute; bottom: -12px; left: -9px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 14px solid #0052a3;">
-
-</div>
-</div>
-<div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px;">
-<div style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;">
-<p>Original DEM</p>
-</div>
-<p><span style="font-size: 26px; color: #0052a3; font-weight: bold;">→</span></p>
-<div style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;">
-<p>Noise Injection</p>
-</div>
-<p><span style="font-size: 26px; color: #0052a3; font-weight: bold;">→</span></p>
-<div style="flex: 1.1; border: 2px solid #0052a3; background: rgba(0, 82, 163, 0.03); height: 90px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0, 82, 163, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #0052a3; font-weight: bold;">
-<p>Alumet + Synxflow</p>
-</div>
-<p><span style="font-size: 26px; color: #0052a3; font-weight: bold;">→</span></p>
-<div style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;">
-<p>Ensemble Analysis</p>
-</div>
-</div>
-<p class="figure-caption" style="margin-top: 50px;">
-<strong>Figure 3:</strong> Computational Pipeline Flowchart
-</p>
-</div>
 </section>
 <section id="results" class="slide level2">
-<h2>Results</h2>
-<p>To be determined.</p>
+<h2>Preliminary Results</h2>
 </section>
-<section id="references" class="slide level2 smaller scrollable">
-<h2>References</h2>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
 
-<div id="refs" class="references csl-bib-body" data-entry-spacing="0" role="list">
-<div id="ref-Zhao2020" class="csl-entry" role="listitem">
-<div class="csl-left-margin">[1] </div><div class="csl-right-inline">H. Zhao and J. Kowalski, <span>“Topographic uncertainty quantification for flow-like landslide models via stochastic simulations,”</span> <em>Natural Hazards and Earth System Sciences</em>, vol., vol. 20, no. 5, pp. 1441–1461, May 2020, doi: <a href="https://doi.org/10.5194/nhess-20-1441-2020">10.5194/nhess-20-1441-2020</a>.</div>
-</div>
-</div>
 </section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
@@ -573,7 +215,6 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
   <script src="index_files/libs/revealjs/plugin/pdf-export/pdfexport.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/menu.js"></script>
   <script src="index_files/libs/revealjs/plugin/reveal-menu/quarto-menu.js"></script>
-  <script src="index_files/libs/revealjs/plugin/reveal-pointer/pointer.js"></script>
   <script src="index_files/libs/revealjs/plugin/quarto-support/support.js"></script>
   
 
@@ -588,7 +229,7 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
       // Full list of configuration options available at:
       // https://revealjs.com/config/
       Reveal.initialize({
-'controlsAuto': false,
+'controlsAuto': true,
 'previewLinksAuto': false,
 'pdfSeparateFragments': false,
 'autoAnimateEasing': "ease",
@@ -599,7 +240,7 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
 'smaller': false,
  
         // Display controls in the bottom right corner
-        controls: true,
+        controls: false,
 
         // Help the user learn the controls by providing hints, for example by
         // bouncing the down arrow when they first encounter a vertical slide
@@ -741,12 +382,12 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1280,
+        width: 1050,
 
-        height: 720,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
-        margin: 5.0e-2,
+        margin: 0.1,
 
         math: {
           mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
@@ -766,7 +407,7 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
         },
 
         // reveal.js plugins
-        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, RevealPointer, QuartoSupport,
+        plugins: [QuartoLineHighlight, PdfExport, RevealMenu, QuartoSupport,
 
           RevealMath,
           RevealNotes,
