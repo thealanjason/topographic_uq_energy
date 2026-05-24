@@ -256,7 +256,7 @@ format:
 ::: {.column .fragment width="50%"}
 ### The Physical Link
 * **Gravity-Driven:** Models use 3D maps to calculate how water, mud, and rocks pull downhill.
-* **Direct Impact:** Any error in the map's shape causes a direct error in the mathematical prediction [@Zhao2020].
+* **Direct Impact:** Any variation in the map's shape can significantly alter the resulting mathematical prediction [@Zhao2020].
 :::
 
 ::: {.column .fragment width="50%"}
@@ -273,7 +273,7 @@ format:
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
   <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Stochastic Scale:** Generating an ensemble of 500 realizations requires massive computational throughput.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**The Energy Footprint:** Large-scale UQ (Uncertainty Propagation) transitions from "desktop research" to "High-Performance Computing" (HPC) scales.</li>
+<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**The Energy Footprint:** Moving from standard desktop research to High-Performance Computing (HPC) drastically increases power consumption.</li>
   <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Resource Intensity:** Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
 </ul>
 
@@ -301,9 +301,9 @@ format:
 ## The Attribution Challenge
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Concurrent Execution:** Whether on local workstations or HPC nodes, modern systems frequently execute multiple interleaved processes simultaneously.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Sensor Coarseness:** Integrated hardware sensors report aggregate board power, offering no native way to decouple energy draw by individual Process ID (PID).</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Data Pollution:** Background tasks and system overhead inject "noise" into the energy profile, masking the true computational cost of the simulation.</li>
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Concurrent Workloads:** Modern hardware (both local and HPC) often runs multiple tasks at the same time.</li>
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Sensor Limitations:** Hardware sensors report the *total* power of the card, not the energy used by a specific Process ID (PID).</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Measurement Noise:** Background system tasks "pollute" the data, making it hard to see the true cost of just our simulation.</li>
 </ul>
 
 ::: {.fragment data-fragment-index="3" .callout-note appearance="simple" icon=false style="margin-top: 30px;"}
