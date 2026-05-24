@@ -31,3 +31,6 @@ __pycache__/
 
 *.parquet
 *.log
+
+!slides/pres_plots/
+!slides/pres_plots/**

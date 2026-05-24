@@ -4,37 +4,10 @@ on:
   push:
     branches: 
       - main
-      - add-presentation
-  pull_request:
-    branches: [ main ]
-
+      - presentation
+    paths:
+      - "slides/**"
 jobs:
-  render:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      pull-requests: write
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
-        with:
-          tinytex: true
-
-      - name: Render slides
-        run: quarto render index.qmd
-
-      - name: Upload rendered slides preview
-        uses: actions/upload-artifact@v4
-        with:
-          name: slides-preview
-          path: |
-            index.html
-            index_files/
-
   publish:
     runs-on: ubuntu-latest
     if: github.event_name == 'push'
@@ -51,7 +24,7 @@ jobs:
           tinytex: true
 
       - name: Render slides to slides/
-        run: quarto render index.qmd --output-dir slides
+        run: quarto render slides/index.qmd --output-dir slides
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
