@@ -10,15 +10,29 @@ format:
   revealjs:
     width: 1280
     height: 720
+    margin: 0.05
     center-title-slide: false
     theme: default
     transition: fade
     slide-number: true
+    controls: true
+    touch: true
+    revealjs-plugins:
+      - slides/reveal-pointer
 ---
 
 ## Table of Contents
 
 <style>
+/* Hide edge navigation arrows (left/right) and pointer toggle button */
+.reveal .controls .navigate-left,
+.reveal .controls .navigate-right {
+  display: none !important;
+}
+.reveal-pointer-toggle {
+  display: none !important;
+}
+
 /* 1. HIDE FOOTER LINE AND SLIDE NUMBER ON TITLE SLIDE */
 .reveal:has(section.quarto-title-block.present)::before,
 .reveal:has(section.quarto-title-block.present) .slide-number {
@@ -122,7 +136,7 @@ format:
   left: 50px;
   right: 50px;
   height: 1px;
-  background-color: #323232;
+  background-color: #4a4a4a;
   z-index: 100;
 }
 
@@ -145,17 +159,7 @@ format:
   z-index: 999;
 }
 
-/* 4. CONTENT SLIDE ALIGNMENT & FONT ADJUSTMENTS */
-
-/* Slide Body Text */
-.reveal .slides section:not(.quarto-title-block) {
-  text-align: left !important;
-  margin-left: -10px !important; 
-  width: 1100px !important; 
-  font-size: 32px !important; 
-}
-
-/* Content Slide Headers with Identical Divider Line */
+/* Push Main Headers (h1, h2) Left */
 .reveal .slides section:not(.quarto-title-block) h1,
 .reveal .slides section:not(.quarto-title-block) h2 {
   text-align: left !important;
@@ -164,27 +168,68 @@ format:
   color: #0052a3 !important;
   font-weight: bold !important;
   font-size: 42px !important; 
-  margin-bottom: 25px !important;
+  margin-bottom: 15px !important; /* Reduced to save vertical space */
   padding-bottom: 10px !important;
-  border-bottom: 1px solid #323232 !important;
-  width: 1320px !important; 
+  border-bottom: 1px solid #4a4a4a !important;
+  width: 100% !important; 
 }
 
-/* List Formatting in PX */
+/* Sub-Headers (h3) Formatting */
+.reveal .slides section:not(.quarto-title-block) h3 {
+  text-align: left !important;
+  color: #0052a3 !important; /* Match the theme blue */
+  font-weight: bold !important;
+  font-size: 34px !important; /* Smaller than h2 to show hierarchy */
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
+}
+
+/* Push Lists Left & Adjust Size to Fit */
 .reveal .slides section:not(.quarto-title-block) ul,
 .reveal .slides section:not(.quarto-title-block) ol {
   text-align: left !important;
-  margin-left: 0 !important;
+  margin-left: 0 !important; 
   padding-left: 40px !important; 
 }
 
+/* Base text sizing */
 .reveal .slides section:not(.quarto-title-block) li {
-  margin-bottom: 15px !important;
-  font-size: 32px !important; 
+  margin-bottom: 12px !important; /* Tighter spacing */
+  font-size: 28px !important; /* Scaled down from 32px to prevent overflow */
+  line-height: 1.3 !important;
+}
+
+/* Compact Callout */
+.reveal .callout {
+  margin-top: 5px !important;
+  margin-bottom: 10px !important;
+}
+
+/* Figure caption styling */
+.reveal .slides section:not(.quarto-title-block) .figure-caption,
+.reveal .slides section:not(.quarto-title-block) figure figcaption {
+  font-size: 16px !important;
+  color: #333 !important;
+  margin-top: 6px !important;
+  text-align: center !important;
+  margin-left: auto !important;  
+  margin-right: auto !important; 
+  line-height: 1.2 !important;
+  max-width: 80% !important;
+}
+
+.reveal .slides section:not(.quarto-title-block) .figure-caption strong,
+.reveal .slides section:not(.quarto-title-block) figure figcaption strong {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+}
+
+/* 5. FRAGMENT FIXES */
+.reveal .slides section .fragment:not(.visible) {
+  visibility: hidden;
+  opacity: 0;
 }
 </style>
-
-## Table of Contents
 
 * [Introduction](#intro)
 * [Motivation](#motivation)
@@ -194,45 +239,144 @@ format:
 
 ## Introduction {#intro}
 
-- DEM vs. Noisy DEM
-    - Which one is real?
-    - Errors?
+<div style="text-align: center; width: 100%; margin-top: -20px;">
+  <img src="pres_plots/introduction/original_vs_noisy_dem.gif" width="600">
+  <p class="figure-caption"><strong>Figure 1:</strong> Original vs. Noisy DEM</p>
+</div>
 
-## Introduction
 
-> "Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
+## The Impact of DEM Uncertainty
 
-- The flood and landslide models use the 3D map to calculate exactly how gravity will pull the water, mud and rocks downhill. Because they are so closely linked, any error in the map's shape directly causes an error in the mathematical prediction. [@Zhao2020]
-- We need an "ensemble of equiprobable realizations"
-    - 500 realizations [@Zhao2020] (Do we need to do our own convergence study?)
+::: {.callout-important appearance="simple" style="margin-bottom: 30px;"}
+"Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
+:::
+
+::: {.columns}
+
+::: {.column .fragment width="50%"}
+### The Physical Link
+* **Gravity-Driven:** Models use 3D maps to calculate how water, mud, and rocks pull downhill.
+* **Direct Impact:** Any error in the map's shape causes a direct error in the mathematical prediction [@Zhao2020].
+:::
+
+::: {.column .fragment width="50%"}
+### The Solution
+* **Probabilistic Approach:** We use an "ensemble of equiprobable realizations" [@Zhao2020].
+* **Scale:** 500 realizations are generated to quantify the range of possible outcomes [@Zhao2020].
+:::
+
+:::
 
 ## Motivation {#motivation}
 
-- Running stochastic simulations demands massive computational resources.
-- The need for energy benchmarking [reference needed]
-    - Time to solution
-        - GPU and CPU aren't heterogeneous in energy use
-        - Time and energy may not be linear (graph)
-    - Measuring energy directly
-        - There might be an unrelated process on the same GPU
-- We need to measure the energy spent by only our process.
+### The Computational Burden of Uncertainty
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Stochastic Scale:** Generating an ensemble of 500 realizations requires massive computational throughput.</li>
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**The Energy Footprint:** Large-scale UQ (Uncertainty Propagation) transitions from "desktop research" to "High-Performance Computing" (HPC) scales.</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Resource Intensity:** Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
+</ul>
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 30px; margin-top: 40px;"}
+
+::: {.column width="50%"}
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Hardware Heterogeneity:** CPUs and GPUs have fundamentally different power profiles.</li>
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Non-Linearity:** Doubling the execution time does not necessarily double the energy consumption.</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Complex Scaling:** Power draw varies based on clock speeds, memory bandwidth, and thermal throttling.</li>
+</ul>
+:::
+
+::: {.column width="50%"}
+::: {.fragment data-fragment-index="1" style="border: 2px dashed #0052a3; padding: 40px; border-radius: 15px; background-color: rgba(0, 82, 163, 0.02); height: 400px; display: flex; align-items: center; justify-content: center; text-align: center;"}
+[PLACEHOLDER: <br> Graph showing non-linear relationship <br> between Time and Energy consumption]
+:::
+:::
+
+:::
+
+## The Attribution Challenge
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Concurrent Execution:** Whether on local workstations or HPC nodes, modern systems frequently execute multiple interleaved processes simultaneously.</li>
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Sensor Coarseness:** Integrated hardware sensors report aggregate board power, offering no native way to decouple energy draw by individual Process ID (PID).</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Data Pollution:** Background tasks and system overhead inject "noise" into the energy profile, masking the true computational cost of the simulation.</li>
+</ul>
+
+::: {.fragment data-fragment-index="3" .callout-note appearance="simple" icon=false style="margin-top: 30px;"}
+**Objective:** Develop a methodology to attribute energy consumption **strictly to our specific simulation process**, independent of other system activity.
+:::
 
 ## Research Questions
 
-- How can the energy consumption of heterogeneous scientific computing workloads be accurately measured and modeled under input and execution uncertainty?
-    - To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
-    - How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
-    - What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 25px; font-weight: bold; color: #000;">
+    How can the energy consumption of heterogeneous scientific computing workloads be accurately measured and modeled under input and execution uncertainty?
+  </li>
+  
+  <ul style="list-style-type: circle; padding-left: 60px; margin-top: 10px; font-size: 26px !important;">
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="1" style="margin-bottom: 15px;">
+      To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
+    </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
+      How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
+    </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
+      What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
+    </li>
+  </ul>
+</ul>
 
 ## Methodology {#methodology}
 
-- Hardware: Gaia cluster
-- Solver: Synxflow
-- Soft Sensor for Energy Measurement: Alumet
-- Pipeline Flowchart:
-    - Original DEM → Noise Injection → Alumet + Synxflow → Analyze the ensemble and calculate energies
+<ul style="list-style-type: disc; padding-left: 40px; margin-bottom: 40px;">
+  <li class="fragment" data-fragment-index="0">**Hardware:** Gaia HPC Cluster</li>
+  <li class="fragment" data-fragment-index="1">**Solver:** Synxflow</li>
+  <li class="fragment" data-fragment-index="2">**Soft Sensor:** Alumet 
+    <ul style="list-style-type: circle; padding-left: 40px; font-size: 22px; margin-top: 5px; color: #4a4a4a;">
+      <li>Isolates energy consumption by process-level GPU/CPU utilization percentages.</li>
+    </ul>
+  </li>
+</ul>
 
+::: {.fragment data-fragment-index="3" style="width: 100%; margin-top: 100px; position: relative;"}
 
+<div style="position: absolute; top: -65px; left: 11%; right: 38.5%; height: 45px; border: 2px solid #0052a3; border-bottom: none; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: center;">
+  <span style="background: white; padding: 0 15px; font-size: 15px; font-weight: 600; color: #0052a3; letter-spacing: 0.5px;">ITERATE</span>
+  <div style="position: absolute; bottom: -12px; left: -9px; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 14px solid #0052a3;"></div>
+</div>
+
+::: {style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px;"}
+
+::: {style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;"}
+Original DEM
+:::
+
+[→]{style="font-size: 26px; color: #0052a3; font-weight: bold;"}
+
+::: {style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;"}
+Noise Injection
+:::
+
+[→]{style="font-size: 26px; color: #0052a3; font-weight: bold;"}
+
+::: {style="flex: 1.1; border: 2px solid #0052a3; background: rgba(0, 82, 163, 0.03); height: 90px; border-radius: 6px; box-shadow: 0 4px 8px rgba(0, 82, 163, 0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #0052a3; font-weight: bold;"}
+Alumet + Synxflow
+:::
+
+[→]{style="font-size: 26px; color: #0052a3; font-weight: bold;"}
+
+::: {style="flex: 1; border: 1px solid #dee2e6; background: #fff; height: 90px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: center; font-size: 18px; color: #333;"}
+Ensemble Analysis
+:::
+
+:::
+
+<p class="figure-caption" style="margin-top: 50px;"><strong>Figure 3:</strong> Computational Pipeline Flowchart</p>
+:::
 
 ## Results {#results}
 
