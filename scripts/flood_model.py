@@ -166,6 +166,14 @@ if visualize_enabled:
             # 5a. Visualize the DEM with coloring and colorbar
             dem_hillshade_filename = os.path.join(dem_output_dir, f'dem_3d_{run_tag}.png')
             
+            # Save DEM raster data for later colorbar correction
+            import pickle
+            raster_data_dir = os.path.join(project_root, 'plots', '.raster_data')
+            os.makedirs(raster_data_dir, exist_ok=True)
+            dem_pkl_path = os.path.join(raster_data_dir, f'dem_3d_{run_tag}.pkl')
+            with open(dem_pkl_path, 'wb') as f:
+                pickle.dump((DEM.array, DEM.header), f)
+            
             fig, ax = plt.subplots(figsize=(12, 11))
             im = ax.imshow(DEM.array, cmap='terrain', aspect='equal', interpolation='nearest')
             ax.set_title('Digital Elevation Model', fontsize=16)
@@ -178,6 +186,7 @@ if visualize_enabled:
             plt.savefig(dem_hillshade_filename, dpi=300, bbox_inches='tight')
             plt.close()
             print(f"  - DEM visualization saved: {dem_hillshade_filename}")
+            print(f"  - DEM raster data saved for colorbar correction: {dem_pkl_path}")
             
             # 5b. Visualize water depth map
             sim_output_dir = os.path.join(case_folder, 'output')
@@ -188,6 +197,14 @@ if visualize_enabled:
             
             if os.path.exists(output_h_path):
                 h_raster = IO.Raster(output_h_path)
+                
+                # Save water depth raster data for later colorbar correction
+                import pickle
+                raster_data_dir = os.path.join(project_root, 'plots', '.raster_data')
+                os.makedirs(raster_data_dir, exist_ok=True)
+                raster_pkl_path = os.path.join(raster_data_dir, f'water_height_{run_tag}.pkl')
+                with open(raster_pkl_path, 'wb') as f:
+                    pickle.dump((h_raster.array, h_raster.header), f)
                 
                 # Save water depth map
                 mapshow_filename = os.path.join(water_output_dir, f'water_height_{run_tag}.png')
@@ -201,6 +218,7 @@ if visualize_enabled:
                     cax_str='Depth (m)'
                 )
                 print(f"  - Water depth map saved: {mapshow_filename}")
+                print(f"  - Raster data saved for colorbar correction: {raster_pkl_path}")
             else:
                 print(f"  WARNING: Output water depth file not found at {output_h_path}")
         
