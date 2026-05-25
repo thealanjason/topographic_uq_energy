@@ -82,10 +82,20 @@ def _build_total_energy_timeline(
     return cpu_index
 
 
-def _create_gif_from_pngs(image_dir: Path, output_path: Path, duration_ms: int = 800) -> None:
+def _create_gif_from_pngs(
+    image_dir: Path,
+    output_path: Path,
+    duration_ms: int = 800,
+    include_regex: str | None = None,
+) -> None:
     """Build a GIF slideshow from PNG images in a directory."""
+    image_paths = list(image_dir.glob("*.png"))
+    if include_regex:
+        pattern = re.compile(include_regex)
+        image_paths = [path for path in image_paths if pattern.search(path.stem)]
+
     image_paths = sorted(
-        image_dir.glob("*.png"),
+        image_paths,
         key=lambda path: (
             int(match.group(1)) if (match := re.search(r"_iter_(\d+)", path.stem)) else float("inf"),
             path.name,
@@ -123,6 +133,133 @@ def load_config(config_file: str = 'config.yml') -> dict:
     
     with open(config_file, 'r') as file:
         return yaml.safe_load(file)
+
+
+def _get_uq_config(cfg: dict) -> tuple[bool, dict]:
+    uq_cfg = cfg.get('uq', {})
+    if isinstance(uq_cfg, dict):
+        return bool(uq_cfg.get('enabled', False)), uq_cfg
+    return bool(uq_cfg), {}
+
+
+def load_uq_samples(uq_cfg: dict) -> pd.DataFrame:
+    output_csv = uq_cfg.get('output_csv', os.path.join('plots', 'uq_water_depth_samples.csv'))
+
+    if not os.path.exists(output_csv):
+        print(f"UQ samples not found at {output_csv}.")
+        return pd.DataFrame()
+
+    df = pd.read_csv(output_csv)
+    if 'water_depth_m' not in df.columns:
+        print(f"UQ samples missing 'water_depth_m' column in {output_csv}.")
+        return pd.DataFrame()
+
+    return df
+
+
+def plot_uq_distribution(uq_samples: np.ndarray, config: dict, uq_cfg: dict) -> None:
+    """Generate and save QoI water depth distribution plot."""
+    if uq_samples.size == 0:
+        return
+
+    analysis_visualization_cfg = config.get('analysis', {}).get('visualization', {})
+
+    dpi = analysis_visualization_cfg.get('dpi', 300)
+    figsize = tuple(analysis_visualization_cfg.get('figsize', [10, 6]))
+    grid_cfg = analysis_visualization_cfg.get('grid', {})
+    grid_enabled = grid_cfg.get('enabled', True)
+    grid_linestyle = grid_cfg.get('linestyle', '--')
+    grid_alpha = grid_cfg.get('alpha', 0.6)
+
+    uq_plot_cfg = analysis_visualization_cfg.get(
+        'uq_distribution_plot', analysis_visualization_cfg.get('distribution_plot', {})
+    )
+    hist_color = uq_plot_cfg.get('hist_color', 'seagreen')
+    hist_edgecolor = uq_plot_cfg.get('hist_edgecolor', 'black')
+    hist_alpha = uq_plot_cfg.get('hist_alpha', 0.8)
+    kde_color = uq_plot_cfg.get('kde_color', 'darkgreen')
+    kde_linewidth = uq_plot_cfg.get('kde_linewidth', 2)
+    kde_bw_method = uq_plot_cfg.get('kde_bw_method', 0.3)
+    dist_mean_color = uq_plot_cfg.get('mean_color', 'red')
+    dist_mean_linestyle = uq_plot_cfg.get('mean_linestyle', ':')
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    min_val = float(np.min(uq_samples))
+    max_val = float(np.max(uq_samples))
+
+    if np.isclose(min_val, max_val):
+        bins = 3
+    else:
+        q75, q25 = np.percentile(uq_samples, [75, 25])
+        iqr = q75 - q25
+        bin_width = 2 * iqr / (len(uq_samples) ** (1/3)) if iqr > 0 else (max_val - min_val) / 10
+        bins = max(3, int(np.ceil((max_val - min_val) / bin_width)))
+
+    n, bins_edges, _ = ax.hist(
+        uq_samples,
+        bins=bins,
+        color=hist_color,
+        edgecolor=hist_edgecolor,
+        alpha=hist_alpha,
+    )
+
+    ax_twin = None
+    if len(uq_samples) > 1 and not np.isclose(min_val, max_val):
+        kde = stats.gaussian_kde(uq_samples, bw_method=kde_bw_method)
+        x_range = np.linspace(min_val, max_val, 200)
+        kde_values = kde(x_range)
+        kde_values = kde_values * n.sum() * (bins_edges[1] - bins_edges[0])
+        ax_twin = ax.twinx()
+        ax_twin.plot(x_range, kde_values, color=kde_color, linewidth=kde_linewidth,
+                     label='Kernel Density Estimate')
+        ax_twin.set_ylabel('Density', fontsize=10)
+
+    mean_val = float(np.mean(uq_samples))
+    ax.axvline(mean_val, color=dist_mean_color, linestyle=dist_mean_linestyle,
+               label=f'Mean: {mean_val:.3f} m')
+
+    point_xy = uq_cfg.get('point_xy')
+    if isinstance(point_xy, (list, tuple)) and len(point_xy) == 2:
+        ax.set_title(f"Distribution of Water Depth at ({point_xy[0]}, {point_xy[1]})")
+    else:
+        ax.set_title("Distribution of Water Depth (QoI)")
+
+    ax.set_xlabel("Water Depth (m)")
+    ax.set_ylabel("Count")
+    if grid_enabled:
+        ax.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
+
+    lines1, labels1 = ax.get_legend_handles_labels()
+    if ax_twin is not None:
+        lines2, labels2 = ax_twin.get_legend_handles_labels()
+        ax.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
+    else:
+        ax.legend()
+
+    output_plot = uq_cfg.get('output_plot', os.path.join('plots', 'uq_water_depth_distribution.png'))
+    os.makedirs(os.path.dirname(output_plot) or '.', exist_ok=True)
+    fig.tight_layout()
+    fig.savefig(output_plot, dpi=dpi)
+    plt.close(fig)
+    print(f"Plot saved as '{output_plot}'")
+
+
+def print_uq_statistics(uq_samples: np.ndarray, uq_cfg: dict) -> None:
+    if uq_samples.size == 0:
+        return
+
+    mean_val = float(np.mean(uq_samples))
+    std_val = float(np.std(uq_samples))
+    cov = (std_val / mean_val) * 100 if mean_val != 0 else float('inf')
+    point_xy = uq_cfg.get('point_xy')
+    point_label = f" at ({point_xy[0]}, {point_xy[1]})" if isinstance(point_xy, (list, tuple)) and len(point_xy) == 2 else ""
+
+    print("\n--- UQ Water Depth Statistics ---")
+    print(f"Mean Water Depth{point_label}: {mean_val:.3f} m")
+    print(f"Standard Deviation: ±{std_val:.3f} m")
+    print(f"Coefficient of Variation: {cov:.2f}%")
+    print("----------------------------------\n")
 
 
 def collect_energy_data(iterations: int) -> tuple[list[float], list[dict]]:
@@ -597,13 +734,23 @@ def generate_gifs(config: dict) -> None:
         print("Fixing DEM colorbar to consistent range...")
         _regenerate_dem_with_fixed_colorbar(Path("plots/dem_3d"))
         
-        _create_gif_from_pngs(Path("plots/dem_3d"), Path("plots/dem_3d.gif"), duration_ms=gif_duration_ms)
+        _create_gif_from_pngs(
+            Path("plots/dem_3d"),
+            Path("plots/dem_3d.gif"),
+            duration_ms=gif_duration_ms,
+            include_regex=r"_iter_\d+$",
+        )
         
         # Fix colorbar range before creating water height GIF
         print("Fixing water height colorbar to consistent range...")
         _regenerate_water_height_with_fixed_colorbar(Path("plots/water_height"))
         
-        _create_gif_from_pngs(Path("plots/water_height"), Path("plots/water_height.gif"), duration_ms=gif_duration_ms)
+        _create_gif_from_pngs(
+            Path("plots/water_height"),
+            Path("plots/water_height.gif"),
+            duration_ms=gif_duration_ms,
+            include_regex=r"_iter_\d+$",
+        )
     else:
         print("GIF creation skipped because analysis.visualization.generate_gif is false.")
 
@@ -622,6 +769,16 @@ def main() -> None:
         plot_energy_per_iteration(energy_results, cfg)
         plot_energy_distribution(energy_results, cfg)
         print_statistics(energy_results)
+
+    uq_enabled, uq_cfg = _get_uq_config(cfg)
+    if uq_enabled:
+        uq_df = load_uq_samples(uq_cfg)
+        if not uq_df.empty:
+            uq_samples = uq_df['water_depth_m'].to_numpy(dtype=float)
+            plot_uq_distribution(uq_samples, cfg, uq_cfg)
+            print_uq_statistics(uq_samples, uq_cfg)
+        else:
+            print("UQ enabled but no samples found; skipping UQ distribution plot.")
     
     # Generate GIFs
     generate_gifs(cfg)

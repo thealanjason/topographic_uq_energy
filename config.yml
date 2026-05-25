@@ -6,6 +6,12 @@ monte_carlo:
 
 dem: 'DEM.gz'
 
+uq:
+  enabled: true  # When true, sample water depth and plot its distribution
+  point_xy: [92, 208]  # Point of interest (x, y)
+  point_type: "index"  # "map" uses raster coordinates; "index" uses [col, row] indices
+  output_csv: "ensemble_results/uq_water_depth_samples.csv"
+
 analysis:
   visualization:
     generate_gif: false  # Whether to generate animated GIFs from output frames
