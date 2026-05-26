@@ -14,13 +14,19 @@ def _normalize_point_type(point_type: str) -> str:
     return "map"
 
 
-def _resolve_uq_point(cfg: dict, point_xy):
+def _resolve_uq_point(cfg: dict, point_xy, point_type: str):
     if point_xy is not None:
-        return point_xy
+        return point_xy, point_type
     gauges = cfg.get("model", {}).get("observation", {}).get("gauges_position", [])
     if gauges:
-        return gauges[0]
-    return None
+        if point_type == "index":
+            print(
+                "WARNING: uq.point_xy is missing while uq.point_type is 'index'. "
+                "Falling back to model.observation.gauges_position uses map coordinates."
+            )
+            point_type = "map"
+        return gauges[0], point_type
+    return None, point_type
 
 
 def _is_valid_point(point_xy) -> bool:
@@ -172,8 +178,8 @@ if isinstance(uq_cfg, dict):
 else:
     uq_enabled = bool(uq_cfg)
 
-uq_point_xy = _resolve_uq_point(cfg, uq_point_xy)
 uq_point_type = _normalize_point_type(uq_point_type)
+uq_point_xy, uq_point_type = _resolve_uq_point(cfg, uq_point_xy, uq_point_type)
 
 uq_output_dir = os.path.dirname(uq_output_csv)
 uq_end_time = None
