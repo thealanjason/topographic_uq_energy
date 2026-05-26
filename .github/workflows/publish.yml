@@ -2,9 +2,8 @@ name: Render and Publish Slides
 
 on:
   push:
-    branches: 
-      - main
-      - add-presentation
+    branches:
+      - presentation
   pull_request:
     branches: [ main ]
 
