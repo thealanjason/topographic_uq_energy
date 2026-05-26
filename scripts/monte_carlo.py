@@ -4,6 +4,7 @@ import subprocess
 import tomllib
 import yaml
 import rasterio
+from rasterio.windows import Window
 import textwrap
 
 
@@ -45,20 +46,21 @@ def _select_water_depth_output(output_dir: str, end_time: int) -> str | None:
 
 def _sample_water_depth_at_point(output_path: str, point_xy, point_type: str) -> float | None:
     with rasterio.open(output_path) as src:
-        data = src.read(1)
         if point_type == "index":
             col = int(round(float(point_xy[0])))
             row = int(round(float(point_xy[1])))
         else:
             row, col = src.index(float(point_xy[0]), float(point_xy[1]))
+            row = int(row)
+            col = int(col)
 
-        if row < 0 or col < 0 or row >= data.shape[0] or col >= data.shape[1]:
+        if row < 0 or col < 0 or row >= src.height or col >= src.width:
             print(
                 f"WARNING: UQ point ({point_xy[0]}, {point_xy[1]}) is out of bounds for {output_path}."
             )
             return None
 
-        value = data[row, col]
+        value = src.read(1, window=Window(col, row, 1, 1))[0, 0]
         nodata = src.nodata
         if nodata is not None and value == nodata:
             print(f"WARNING: UQ sample landed on NODATA at row={row}, col={col}.")
