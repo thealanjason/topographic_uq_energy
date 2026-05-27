@@ -277,26 +277,6 @@ format:
   <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Resource Intensity:** Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
 </ul>
 
-## Is Execution Time a Reliable Proxy? {auto-animate="true"}
-
-::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 30px; margin-top: 40px;"}
-
-::: {.column width="50%"}
-
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Hardware Heterogeneity:** CPUs and GPUs have fundamentally different power profiles.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Non-Linearity:** Doubling the execution time does not necessarily double the energy consumption.</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Complex Scaling:** Power draw varies based on clock speeds, memory bandwidth, and thermal throttling.</li>
-</ul>
-:::
-
-::: {.column width="50%"}
-::: {.fragment data-fragment-index="1" style="border: 2px dashed #0052a3; padding: 40px; border-radius: 15px; background-color: rgba(0, 82, 163, 0.02); height: 400px; display: flex; align-items: center; justify-content: center; text-align: center;"}
-[PLACEHOLDER: <br> Graph showing non-linear relationship <br> between Time and Energy consumption]
-:::
-:::
-
-:::
 
 ## The Attribution Challenge
 
@@ -375,12 +355,62 @@ Ensemble Analysis
 
 :::
 
-<p class="figure-caption" style="margin-top: 50px;"><strong>Figure 3:</strong> Computational Pipeline Flowchart</p>
+<p class="figure-caption" style="margin-top: 50px;"><strong>Figure 2:</strong> Computational Pipeline Flowchart</p>
 :::
 
 ## Results {#results}
 
-To be determined.
+<ul style="list-style-type: disc; padding-left: 60px">
+  <li style="margin-bottom: 40px;">The Failure of the Time Proxy</li>
+  <li style="margin-bottom: 40px;">Uncertainty Propagation of Energy Consumption</li>
+  
+</ul>
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 40px; margin-top: -30px;"}
+
+::: {.column width="50%" style="text-align: center;"}
+![](pres_plots/motivation/original_dem_with_noise.png){width="100%"}
+
+<p class="figure-caption"><strong>Figure 3a:</strong> Original Resolution DEM</p>
+:::
+
+::: {.column width="50%" style="text-align: center;"}
+![](pres_plots/motivation/lowres_dem_with_noise.png){width="100%"}
+
+<p class="figure-caption"><strong>Figure 3b:</strong> Downsampled Low-Res DEM</p>
+:::
+
+:::
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 40px;">
+  <li style="margin-bottom: 25px; font-size: 28px;">Energy ($E$) is the product of power ($P$) and time ($t$).</li>
+  <li style="margin-bottom: 25px; font-size: 28px;">For execution time to be a reliable proxy, the **Average Power ($P$)** should be nearly constant for both cases.</li>
+</ul>
+
+<div style="text-align: center; margin-top: 120px;">
+  <p style="font-size: 50px; color: #000000; font-family: 'Poppins', sans-serif; margin: 0;">$E = P \cdot t$</p>
+</div>
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+![](pres_plots/motivation/proxy_fallacy.png){width="70%"}
+
+<p class="figure-caption"><strong>Figure 4:</strong> The Proxy Fallacy – Discrepancy between Execution Time and Actual Energy Consumption</p>
+:::
+
+## Is Execution Time a Reliable Proxy?
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+
+![](pres_plots/motivation/power_signature.png){width="70%"}
+
+<p class="figure-caption"><strong>Figure 5:</strong> Average Cumulative Energy-Time Plot</p>
+:::
 
 
 ## References {#references}
