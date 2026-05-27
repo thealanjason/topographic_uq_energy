@@ -255,14 +255,14 @@ format:
 
 ::: {.column .fragment width="50%"}
 ### The Physical Link
-* **Gravity-Driven:** Models use 3D maps to calculate how water, mud, and rocks pull downhill.
-* **Direct Impact:** Any variation in the map's shape can significantly alter the resulting mathematical prediction [@Zhao2020].
+* Models use 3D maps to calculate how water, mud, and rocks pull downhill.
+* Any variation in the map's shape can significantly alter the resulting mathematical prediction [@Zhao2020].
 :::
 
 ::: {.column .fragment width="50%"}
 ### The Solution
-* **Probabilistic Approach:** We use an "ensemble of equiprobable realizations" [@Zhao2020].
-* **Scale:** 500 realizations are generated to quantify the range of possible outcomes [@Zhao2020].
+* We use an "ensemble of equiprobable realizations" [@Zhao2020].
+* 500 realizations are generated to quantify the range of possible outcomes [@Zhao2020].
 :::
 
 :::
@@ -272,18 +272,17 @@ format:
 ### The Computational Burden of Uncertainty
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Stochastic Scale:** Generating an ensemble of 500 realizations requires massive computational throughput.</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**The Energy Footprint:** Moving from standard desktop research to High-Performance Computing (HPC) drastically increases power consumption.</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Resource Intensity:** Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
 </ul>
 
 
 ## The Attribution Challenge
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">**Concurrent Workloads:** Modern hardware (both local and HPC) often runs multiple tasks at the same time.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">**Sensor Limitations:** Hardware sensors report the *total* power of the card, not the energy used by a specific Process ID (PID).</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">**Measurement Noise:** Background system tasks "pollute" the data, making it hard to see the true cost of just our simulation.</li>
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;"> Modern hardware (both local and HPC) often runs multiple tasks at the same time.</li>
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;"> Hardware sensors report the *total* power of the card, not the energy used by a specific Process ID (PID).</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Background system tasks "pollute" the data, making it hard to see the true cost of just our simulation.</li>
 </ul>
 
 ::: {.fragment data-fragment-index="3" .callout-note appearance="simple" icon=false style="margin-top: 30px;"}
@@ -400,7 +399,7 @@ Ensemble Analysis
 ::: {style="text-align: center; width: 100%; margin-top: -20px;"}
 ![](pres_plots/motivation/proxy_fallacy.png){width="70%"}
 
-<p class="figure-caption"><strong>Figure 4:</strong> The Proxy Fallacy – Discrepancy between Execution Time and Actual Energy Consumption</p>
+<p class="figure-caption"><strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption</p>
 :::
 
 ## Is Execution Time a Reliable Proxy?

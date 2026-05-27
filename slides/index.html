@@ -410,14 +410,14 @@ Eren Edgü <br> Alan Correa
 <div class="column fragment" style="width:50%;">
 <h3 id="the-physical-link">The Physical Link</h3>
 <ul>
-<li><strong>Gravity-Driven:</strong> Models use 3D maps to calculate how water, mud, and rocks pull downhill.</li>
-<li><strong>Direct Impact:</strong> Any variation in the map’s shape can significantly alter the resulting mathematical prediction <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<li>Models use 3D maps to calculate how water, mud, and rocks pull downhill.</li>
+<li>Any variation in the map’s shape can significantly alter the resulting mathematical prediction <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
 </ul>
 </div><div class="column fragment" style="width:50%;">
 <h3 id="the-solution">The Solution</h3>
 <ul>
-<li><strong>Probabilistic Approach:</strong> We use an “ensemble of equiprobable realizations” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
-<li><strong>Scale:</strong> 500 realizations are generated to quantify the range of possible outcomes <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<li>We use an “ensemble of equiprobable realizations” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<li>500 realizations are generated to quantify the range of possible outcomes <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
 </ul>
 </div></div>
 </section>
@@ -426,13 +426,10 @@ Eren Edgü <br> Alan Correa
 <h3 id="the-computational-burden-of-uncertainty">The Computational Burden of Uncertainty</h3>
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
 <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Stochastic Scale:</strong> Generating an ensemble of 500 realizations requires massive computational throughput.
-</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>The Energy Footprint:</strong> Moving from standard desktop research to High-Performance Computing (HPC) drastically increases power consumption.
+Generating an ensemble of 500 realizations requires massive computational throughput.
 </li>
 <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Resource Intensity:</strong> Running these simulations demands significant electricity, driving the need for benchmarking and optimization.
+Running these simulations demands significant electricity, driving the need for benchmarking and optimization.
 </li>
 </ul>
 </section>
@@ -440,13 +437,13 @@ Eren Edgü <br> Alan Correa
 <h2>The Attribution Challenge</h2>
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
 <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Concurrent Workloads:</strong> Modern hardware (both local and HPC) often runs multiple tasks at the same time.
+Modern hardware (both local and HPC) often runs multiple tasks at the same time.
 </li>
 <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>Sensor Limitations:</strong> Hardware sensors report the <em>total</em> power of the card, not the energy used by a specific Process ID (PID).
+Hardware sensors report the <em>total</em> power of the card, not the energy used by a specific Process ID (PID).
 </li>
 <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Measurement Noise:</strong> Background system tasks “pollute” the data, making it hard to see the true cost of just our simulation.
+Background system tasks “pollute” the data, making it hard to see the true cost of just our simulation.
 </li>
 </ul>
 <div class="fragment" data-fragment-index="3" style="margin-top: 30px;">
@@ -572,7 +569,7 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 <div style="text-align: center; width: 100%; margin-top: -20px;">
 <p><img data-src="pres_plots/motivation/proxy_fallacy.png" style="width:70.0%"></p>
 <p class="figure-caption">
-<strong>Figure 4:</strong> The Proxy Fallacy – Discrepancy between Execution Time and Actual Energy Consumption
+<strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption
 </p>
 </div>
 </section>
