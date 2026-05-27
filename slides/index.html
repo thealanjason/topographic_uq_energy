@@ -436,27 +436,6 @@ Eren Edgü <br> Alan Correa
 </li>
 </ul>
 </section>
-<section id="is-execution-time-a-reliable-proxy" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
-<div class="columns" style="display: flex; align-items: flex-start; justify-content: center; gap: 30px; margin-top: 40px;">
-<div class="column" style="width:50%;">
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-<strong>Hardware Heterogeneity:</strong> CPUs and GPUs have fundamentally different power profiles.
-</li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-<strong>Non-Linearity:</strong> Doubling the execution time does not necessarily double the energy consumption.
-</li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-<strong>Complex Scaling:</strong> Power draw varies based on clock speeds, memory bandwidth, and thermal throttling.
-</li>
-</ul>
-</div><div class="column" style="width:50%;">
-<div class="fragment" data-fragment-index="1" style="border: 2px dashed #0052a3; padding: 40px; border-radius: 15px; background-color: rgba(0, 82, 163, 0.02); height: 400px; display: flex; align-items: center; justify-content: center; text-align: center;">
-<p>[PLACEHOLDER: <br> Graph showing non-linear relationship <br> between Time and Energy consumption]</p>
-</div>
-</div></div>
-</section>
 <section id="the-attribution-challenge" class="slide level2">
 <h2>The Attribution Challenge</h2>
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
@@ -542,13 +521,69 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
 </div>
 </div>
 <p class="figure-caption" style="margin-top: 50px;">
-<strong>Figure 3:</strong> Computational Pipeline Flowchart
+<strong>Figure 2:</strong> Computational Pipeline Flowchart
 </p>
 </div>
 </section>
 <section id="results" class="slide level2">
 <h2>Results</h2>
-<p>To be determined.</p>
+<ul style="list-style-type: disc; padding-left: 60px">
+<li style="margin-bottom: 40px;">
+The Failure of the Time Proxy
+</li>
+<li style="margin-bottom: 40px;">
+Uncertainty Propagation of Energy Consumption
+</li>
+</ul>
+</section>
+<section id="is-execution-time-a-reliable-proxy" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
+<div class="columns" style="display: flex; align-items: flex-start; justify-content: center; gap: 40px; margin-top: -30px;">
+<div class="column" style="text-align: center;">
+<p><img data-src="pres_plots/motivation/original_dem_with_noise.png" style="width:100.0%"></p>
+<p class="figure-caption">
+<strong>Figure 3a:</strong> Original Resolution DEM
+</p>
+</div><div class="column" style="text-align: center;">
+<p><img data-src="pres_plots/motivation/lowres_dem_with_noise.png" style="width:100.0%"></p>
+<p class="figure-caption">
+<strong>Figure 3b:</strong> Downsampled Low-Res DEM
+</p>
+</div></div>
+</section>
+<section id="is-execution-time-a-reliable-proxy-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 40px;">
+<li style="margin-bottom: 25px; font-size: 28px;">
+Energy (<span class="math inline">\(E\)</span>) is the product of power (<span class="math inline">\(P\)</span>) and time (<span class="math inline">\(t\)</span>).
+</li>
+<li style="margin-bottom: 25px; font-size: 28px;">
+For execution time to be a reliable proxy, the <strong>Average Power (<span class="math inline">\(P\)</span>)</strong> should be nearly constant for both cases.
+</li>
+</ul>
+<div style="text-align: center; margin-top: 120px;">
+<p style="font-size: 50px; color: #000000; font-family: 'Poppins', sans-serif; margin: 0;">
+<span class="math inline">\(E = P \cdot t\)</span>
+</p>
+</div>
+</section>
+<section id="is-execution-time-a-reliable-proxy-2" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
+<div style="text-align: center; width: 100%; margin-top: -20px;">
+<p><img data-src="pres_plots/motivation/proxy_fallacy.png" style="width:70.0%"></p>
+<p class="figure-caption">
+<strong>Figure 4:</strong> The Proxy Fallacy – Discrepancy between Execution Time and Actual Energy Consumption
+</p>
+</div>
+</section>
+<section id="is-execution-time-a-reliable-proxy-3" class="slide level2">
+<h2>Is Execution Time a Reliable Proxy?</h2>
+<div style="text-align: center; width: 100%; margin-top: -20px;">
+<p><img data-src="pres_plots/motivation/power_signature.png" style="width:70.0%"></p>
+<p class="figure-caption">
+<strong>Figure 5:</strong> Average Cumulative Energy-Time Plot
+</p>
+</div>
 </section>
 <section id="references" class="slide level2 smaller scrollable">
 <h2>References</h2>
