@@ -251,18 +251,32 @@ format:
 "Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
 :::
 
-::: {.columns}
+::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 30px;"}
 
-::: {.column .fragment width="50%"}
+::: {.column width="40%"}
+
+::: {.fragment data-fragment-index="1"}
 ### The Physical Link
-* Models use 3D maps to calculate how water, mud, and rocks pull downhill.
-* Any variation in the map's shape can significantly alter the resulting mathematical prediction [@Zhao2020].
+<ul style="list-style-type: disc; padding-left: 40px; margin-bottom: 20px;">
+  <li style="font-size: 20px; margin-bottom: 10px;">Topography governs downhill flow physics.</li>
+  <li style="font-size: 20px; margin-bottom: 10px;">Surface variations alter mathematical predictions [@Zhao2020].</li>
+</ul>
 :::
 
-::: {.column .fragment width="50%"}
+::: {.fragment data-fragment-index="2"}
 ### The Solution
-* We use an "ensemble of equiprobable realizations" [@Zhao2020].
-* 500 realizations are generated to quantify the range of possible outcomes [@Zhao2020].
+<ul style="list-style-type: disc; padding-left: 40px;">
+  <li style="font-size: 20px; margin-bottom: 10px;">Use an “ensemble of equiprobable realizations” [@Zhao2020].</li>
+</ul>
+:::
+:::
+
+::: {.column width="60%" style="text-align: center;"}
+::: {.fragment data-fragment-index="1"}
+![](pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png){width="100%"}
+
+<p class="figure-caption"><strong>Figure 1:</strong> Water depth distribution across the computational ensemble.</p>
+:::
 :::
 
 :::
@@ -273,7 +287,7 @@ format:
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
   <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Running these simulations demands significant energy, driving the need for benchmarking and optimization.</li>
 </ul>
 
 
@@ -298,14 +312,14 @@ format:
   
   <ul style="list-style-type: circle; padding-left: 60px; margin-top: 10px; font-size: 26px !important;">
     <li class="fragment fade-in-then-semi-out" data-fragment-index="1" style="margin-bottom: 15px;">
-      To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
-    </li>
-    <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
-      How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
-    </li>
-    <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
       What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
     </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
+      To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
+    </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
+      How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
+    </li>    
   </ul>
 </ul>
 
