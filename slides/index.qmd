@@ -365,23 +365,6 @@ Ensemble Analysis
   
 </ul>
 
-## Is Execution Time a Reliable Proxy? {auto-animate="true"}
-
-::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 40px; margin-top: -30px;"}
-
-::: {.column width="50%" style="text-align: center;"}
-![](pres_plots/motivation/original_dem_with_noise.png){width="100%"}
-
-<p class="figure-caption"><strong>Figure 3a:</strong> Original Resolution DEM</p>
-:::
-
-::: {.column width="50%" style="text-align: center;"}
-![](pres_plots/motivation/lowres_dem_with_noise.png){width="100%"}
-
-<p class="figure-caption"><strong>Figure 3b:</strong> Downsampled Low-Res DEM</p>
-:::
-
-:::
 
 ## Is Execution Time a Reliable Proxy? {auto-animate="true"}
 
@@ -396,8 +379,16 @@ Ensemble Analysis
 
 ## Is Execution Time a Reliable Proxy? {auto-animate="true"}
 
+::: {style="text-align: center; width: 100%; margin-top: -25px;"}
+![](pres_plots/results/time/dem_resolutions_cropped.gif){width="40%"}
+
+<p class="figure-caption"><strong>Figure 3:</strong> Comparison of Original and Downsampled DEM Resolutions</p>
+:::
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
 ::: {style="text-align: center; width: 100%; margin-top: -20px;"}
-![](pres_plots/motivation/proxy_fallacy.png){width="70%"}
+![](pres_plots/results/time/proxy_fallacy_clean.png){width="70%"}
 
 <p class="figure-caption"><strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption</p>
 :::
@@ -406,7 +397,7 @@ Ensemble Analysis
 
 ::: {style="text-align: center; width: 100%; margin-top: -20px;"}
 
-![](pres_plots/motivation/power_signature.png){width="70%"}
+![](pres_plots/results/time/power_signature.png){width="70%"}
 
 <p class="figure-caption"><strong>Figure 5:</strong> Average Cumulative Energy-Time Plot</p>
 :::

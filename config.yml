@@ -1,7 +1,7 @@
 # config.yml
 monte_carlo:
   iterations: 2
-  std_dev: 0.5
+  std_dev: 0
   alumet_bin: "/Users/share/alumet/alumet-agent"
 
 dem: 'DEM.gz'
