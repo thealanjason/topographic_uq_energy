@@ -213,7 +213,8 @@ def plot_uq_distribution(uq_samples: np.ndarray, config: dict, uq_cfg: dict) -> 
         ax_twin = ax.twinx()
         ax_twin.plot(x_range, kde_values, color=kde_color, linewidth=kde_linewidth,
                      label='Kernel Density Estimate')
-        ax_twin.set_ylabel('Density', fontsize=10)
+        ax_twin.set_yticklabels([])
+        ax_twin.set_yticks([])
 
     mean_val = float(np.mean(uq_samples))
     ax.axvline(mean_val, color=dist_mean_color, linestyle=dist_mean_linestyle,
@@ -226,9 +227,9 @@ def plot_uq_distribution(uq_samples: np.ndarray, config: dict, uq_cfg: dict) -> 
         ax.set_title("Distribution of Water Depth (QoI)")
 
     ax.set_xlabel("Water Depth (m)")
-    ax.set_ylabel("Count")
-    if grid_enabled:
-        ax.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
+    ax.set_yticklabels([])
+    ax.set_yticks([])
+    ax.grid(False)
 
     lines1, labels1 = ax.get_legend_handles_labels()
     if ax_twin is not None:
@@ -497,7 +498,8 @@ def plot_energy_distribution(energy_results: list[float], config: dict) -> None:
         ax_twin = ax.twinx()
         ax_twin.plot(x_range, kde_values, color=kde_color, linewidth=kde_linewidth, 
                      label='Kernel Density Estimate')
-        ax_twin.set_ylabel('Density', fontsize=10)
+        ax_twin.set_yticklabels([])
+        ax_twin.set_yticks([])
 
     mean_val = np.mean(energy_results)
     ax.axvline(mean_val, color=dist_mean_color, linestyle=dist_mean_linestyle, 
@@ -505,9 +507,9 @@ def plot_energy_distribution(energy_results: list[float], config: dict) -> None:
 
     ax.set_title("Distribution of Total Energy Cost")
     ax.set_xlabel("Final Joules")
-    ax.set_ylabel("Count")
-    if grid_enabled:
-        ax.grid(True, linestyle=grid_linestyle, alpha=grid_alpha)
+    ax.set_yticklabels([])
+    ax.set_yticks([])
+    ax.grid(False)
     
     # Combine legends from both axes
     lines1, labels1 = ax.get_legend_handles_labels()
