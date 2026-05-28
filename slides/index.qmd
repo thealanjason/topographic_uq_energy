@@ -283,25 +283,22 @@ format:
 
 ## Motivation {#motivation}
 
-### The Computational Burden of Uncertainty
-
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Running these simulations demands significant energy, driving the need for benchmarking and optimization.</li>
+::: {.fragment data-fragment-index="1"}
+### The Computational Burden
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-bottom: 25px;">
+  <li style="margin-bottom: 12px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
+  <li style="margin-bottom: 12px;">Running these simulations demands significant energy.</li>
 </ul>
-
-
-## The Attribution Challenge
-
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;"> Modern hardware (both local and HPC) often runs multiple tasks at the same time.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;"> Hardware sensors report the *total* power of the card, not the energy used by a specific Process ID (PID).</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Background system tasks "pollute" the data, making it hard to see the true cost of just our simulation.</li>
-</ul>
-
-::: {.fragment data-fragment-index="3" .callout-note appearance="simple" icon=false style="margin-top: 30px;"}
-**Objective:** Develop a methodology to attribute energy consumption **strictly to our specific simulation process**, independent of other system activity.
 :::
+
+::: {.fragment data-fragment-index="2"}
+### The Attribution Challenge
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
+  <li style="margin-bottom: 12px;">Modern hardware often runs multiple tasks at the same time.</li>
+  <li style="margin-bottom: 12px;">Hardware sensors report the *total* power of the card, not the energy used by a specific process.</li>
+</ul>
+:::
+
 
 ## Research Questions
 
