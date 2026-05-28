@@ -18,7 +18,6 @@ def _extract_pid_from_execution_log(iteration: int) -> int:
     Returns the PID as an integer, or None if not found.
     """
     log_file = f'ensemble_results/iter_{iteration}/execution.log'
-    
     if not os.path.exists(log_file):
         return None
     
@@ -222,9 +221,9 @@ def plot_uq_distribution(uq_samples: np.ndarray, config: dict, uq_cfg: dict) -> 
 
     point_xy = uq_cfg.get('point_xy')
     if isinstance(point_xy, (list, tuple)) and len(point_xy) == 2:
-        ax.set_title(f"Distribution of Water Depth at ({point_xy[0]}, {point_xy[1]})")
+        ax.set_title(f"Distribution of Maximum Water Depth for each Iteration at ({point_xy[0]}, {point_xy[1]})")
     else:
-        ax.set_title("Distribution of Water Depth (QoI)")
+        ax.set_title("Distribution of Maximum Water Depth (QoI)")
 
     ax.set_xlabel("Water Depth (m)")
     ax.set_yticklabels([])
