@@ -394,7 +394,7 @@ Eren Edgü <br> Alan Correa
 </section>
 <section id="the-impact-of-dem-uncertainty" class="slide level2">
 <h2>The Impact of DEM Uncertainty</h2>
-<div style="margin-bottom: 30px;">
+<div style="margin-bottom: 20px;">
 <div class="callout callout-important callout-style-simple">
 <div class="callout-body">
 <div class="callout-icon-container">
@@ -406,54 +406,70 @@ Eren Edgü <br> Alan Correa
 </div>
 </div>
 </div>
-<div class="columns">
-<div class="column fragment" style="width:50%;">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; width: 100%; margin-top: 20px;">
+<div style="width: 40%;">
+<div class="fragment" data-fragment-index="1">
 <h3 id="the-physical-link">The Physical Link</h3>
-<ul>
-<li>Models use 3D maps to calculate how water, mud, and rocks pull downhill.</li>
-<li>Any variation in the map’s shape can significantly alter the resulting mathematical prediction <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<ul style="list-style-type: disc; padding-left: 30px; margin-bottom: 20px;">
+<li style="font-size: 20px; margin-bottom: 10px;">
+Topography governs downhill flow physics.
+</li>
+<li style="font-size: 20px; margin-bottom: 10px;">
+Surface variations alter mathematical predictions <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.
+</li>
 </ul>
-</div><div class="column fragment" style="width:50%;">
+</div>
+<div class="fragment" data-fragment-index="2">
 <h3 id="the-solution">The Solution</h3>
-<ul>
-<li>We use an “ensemble of equiprobable realizations” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
-<li>500 realizations are generated to quantify the range of possible outcomes <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.</li>
+<ul style="list-style-type: disc; padding-left: 30px;">
+<li style="font-size: 20px; margin-bottom: 10px;">
+Use an “ensemble of equiprobable realizations” <span class="citation" data-cites="Zhao2020"><a href="#/references" role="doc-biblioref" onclick="">[1]</a></span>.
+</li>
 </ul>
-</div></div>
+</div>
+</div>
+<div style="width: 60%; text-align: center; margin-top: -40px;">
+<div class="fragment" data-fragment-index="1">
+<p><img data-src="pres_plots/introduction/water_depth_uq/dem_3d.gif" style="max-height: 470px; width: auto; object-fit: contain;"></p>
+<p class="figure-caption" style="margin-top: -10px;">
+<strong>Figure 1:</strong> DEM for each Iteration
+</p>
+</div>
+</div>
+</div>
+</section>
+<section id="the-impact-of-dem-uncertainty-1" class="slide level2">
+<h2>The Impact of DEM Uncertainty</h2>
+<div style="text-align: center; width: 100%; margin-top: -20px;">
+<p><img data-src="pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png" style="width:70.0%"></p>
+<p class="figure-caption" style="margin-top: -20px;">
+<strong>Figure 2:</strong> Spatial distribution of water depth uncertainty across the ensemble.
+</p>
+</div>
 </section>
 <section id="motivation" class="slide level2">
 <h2>Motivation</h2>
-<h3 id="the-computational-burden-of-uncertainty">The Computational Burden of Uncertainty</h3>
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
+<div class="fragment" data-fragment-index="1">
+<h3 id="the-computational-burden">The Computational Burden</h3>
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-bottom: 25px;">
+<li style="margin-bottom: 12px;">
 Generating an ensemble of 500 realizations requires massive computational throughput.
 </li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-Running these simulations demands significant electricity, driving the need for benchmarking and optimization.
+<li style="margin-bottom: 12px;">
+Running these simulations demands significant energy.
 </li>
 </ul>
-</section>
-<section id="the-attribution-challenge" class="slide level2">
-<h2>The Attribution Challenge</h2>
+</div>
+<div class="fragment" data-fragment-index="2">
+<h3 id="the-attribution-challenge">The Attribution Challenge</h3>
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-<li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">
-Modern hardware (both local and HPC) often runs multiple tasks at the same time.
+<li style="margin-bottom: 12px;">
+Modern hardware often runs multiple tasks at the same time.
 </li>
-<li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;">
-Hardware sensors report the <em>total</em> power of the card, not the energy used by a specific Process ID (PID).
-</li>
-<li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;">
-Background system tasks “pollute” the data, making it hard to see the true cost of just our simulation.
+<li style="margin-bottom: 12px;">
+Hardware sensors report the <em>total</em> power of the card, not the energy used by a specific process.
 </li>
 </ul>
-<div class="fragment" data-fragment-index="3" style="margin-top: 30px;">
-<div class="callout callout-note no-icon callout-style-simple">
-<div class="callout-body">
-<div class="callout-content">
-<p><strong>Objective:</strong> Develop a methodology to attribute energy consumption <strong>strictly to our specific simulation process</strong>, independent of other system activity.</p>
-</div>
-</div>
-</div>
 </div>
 </section>
 <section id="research-questions" class="slide level2">
@@ -464,13 +480,13 @@ How can the energy consumption of heterogeneous scientific computing workloads b
 </li>
 <ul style="list-style-type: circle; padding-left: 60px; margin-top: 10px; font-size: 26px !important;">
 <li class="fragment fade-in-then-semi-out" data-fragment-index="1" style="margin-bottom: 15px;">
-To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
+What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
 </li>
 <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
-How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
+To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
 </li>
 <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
-What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
+How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
 </li>
 </ul>
 </ul>
@@ -535,21 +551,6 @@ Uncertainty Propagation of Energy Consumption
 </section>
 <section id="is-execution-time-a-reliable-proxy" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
-<div class="columns" style="display: flex; align-items: flex-start; justify-content: center; gap: 40px; margin-top: -30px;">
-<div class="column" style="text-align: center;">
-<p><img data-src="pres_plots/motivation/original_dem_with_noise.png" style="width:100.0%"></p>
-<p class="figure-caption">
-<strong>Figure 3a:</strong> Original Resolution DEM
-</p>
-</div><div class="column" style="text-align: center;">
-<p><img data-src="pres_plots/motivation/lowres_dem_with_noise.png" style="width:100.0%"></p>
-<p class="figure-caption">
-<strong>Figure 3b:</strong> Downsampled Low-Res DEM
-</p>
-</div></div>
-</section>
-<section id="is-execution-time-a-reliable-proxy-1" class="slide level2" data-auto-animate="true">
-<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 40px;">
 <li style="margin-bottom: 25px; font-size: 28px;">
 Energy (<span class="math inline">\(E\)</span>) is the product of power (<span class="math inline">\(P\)</span>) and time (<span class="math inline">\(t\)</span>).
@@ -564,19 +565,37 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 </p>
 </div>
 </section>
+<section id="is-execution-time-a-reliable-proxy-1" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
+<div style="text-align: center; width: 100%; margin-top: -25px;">
+<p><img data-src="pres_plots/results/time/dem_resolutions_cropped.gif" style="width:40.0%"></p>
+<p class="figure-caption">
+<strong>Figure 3:</strong> Comparison of Original and Downsampled DEM Resolutions
+</p>
+</div>
+</section>
 <section id="is-execution-time-a-reliable-proxy-2" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
 <div style="text-align: center; width: 100%; margin-top: -20px;">
-<p><img data-src="pres_plots/motivation/proxy_fallacy.png" style="width:70.0%"></p>
+<p><img data-src="pres_plots/results/time/proxy_fallacy.png" style="width:70.0%"></p>
 <p class="figure-caption">
 <strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption
 </p>
 </div>
 </section>
-<section id="is-execution-time-a-reliable-proxy-3" class="slide level2">
+<section id="is-execution-time-a-reliable-proxy-3" class="slide level2" data-auto-animate="true">
+<h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
+<div style="text-align: center; width: 100%; margin-top: -20px;">
+<p><img data-src="pres_plots/results/time/proxy_fallacy_clean.png" style="width:70.0%"></p>
+<p class="figure-caption">
+<strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption
+</p>
+</div>
+</section>
+<section id="is-execution-time-a-reliable-proxy-4" class="slide level2">
 <h2>Is Execution Time a Reliable Proxy?</h2>
 <div style="text-align: center; width: 100%; margin-top: -20px;">
-<p><img data-src="pres_plots/motivation/power_signature.png" style="width:70.0%"></p>
+<p><img data-src="pres_plots/results/time/power_signature.png" style="width:70.0%"></p>
 <p class="figure-caption">
 <strong>Figure 5:</strong> Average Cumulative Energy-Time Plot
 </p>

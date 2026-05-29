@@ -247,47 +247,65 @@ format:
 
 ## The Impact of DEM Uncertainty
 
-::: {.callout-important appearance="simple" style="margin-bottom: 30px;"}
+::: {.callout-important appearance="simple" style="margin-bottom: 20px;"}
 "Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
 :::
 
-::: {.columns}
+::: {style="display: flex; align-items: flex-start; justify-content: space-between; width: 100%; margin-top: 20px;"}
 
-::: {.column .fragment width="50%"}
+::: {style="width: 40%;"}
+::: {.fragment data-fragment-index="1"}
 ### The Physical Link
-* Models use 3D maps to calculate how water, mud, and rocks pull downhill.
-* Any variation in the map's shape can significantly alter the resulting mathematical prediction [@Zhao2020].
+<ul style="list-style-type: disc; padding-left: 30px; margin-bottom: 20px;">
+  <li style="font-size: 20px; margin-bottom: 10px;">Topography governs downhill flow physics.</li>
+  <li style="font-size: 20px; margin-bottom: 10px;">Surface variations alter mathematical predictions [@Zhao2020].</li>
+</ul>
 :::
 
-::: {.column .fragment width="50%"}
+::: {.fragment data-fragment-index="2"}
 ### The Solution
-* We use an "ensemble of equiprobable realizations" [@Zhao2020].
-* 500 realizations are generated to quantify the range of possible outcomes [@Zhao2020].
+<ul style="list-style-type: disc; padding-left: 30px;">
+  <li style="font-size: 20px; margin-bottom: 10px;">Use an “ensemble of equiprobable realizations” [@Zhao2020].</li>
+</ul>
+:::
 :::
 
+::: {style="width: 60%; text-align: center; margin-top: -40px;"}
+::: {.fragment data-fragment-index="1"}
+![](pres_plots/introduction/water_depth_uq/dem_3d.gif){style="max-height: 470px; width: auto; object-fit: contain;"}
+
+<p class="figure-caption" style="margin-top: -10px;"><strong>Figure 1:</strong> DEM for each Iteration</p>
+:::
+:::
+
+:::
+
+## The Impact of DEM Uncertainty
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+![](pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png){width="70%"}
+
+<p class="figure-caption" style="margin-top: -20px;"><strong>Figure 2:</strong> Spatial distribution of water depth uncertainty across the ensemble.</p>
 :::
 
 ## Motivation {#motivation}
 
-### The Computational Burden of Uncertainty
-
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Running these simulations demands significant electricity, driving the need for benchmarking and optimization.</li>
+::: {.fragment data-fragment-index="1"}
+### The Computational Burden
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-bottom: 25px;">
+  <li style="margin-bottom: 12px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
+  <li style="margin-bottom: 12px;">Running these simulations demands significant energy.</li>
 </ul>
-
-
-## The Attribution Challenge
-
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 15px;"> Modern hardware (both local and HPC) often runs multiple tasks at the same time.</li>
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 15px;"> Hardware sensors report the *total* power of the card, not the energy used by a specific Process ID (PID).</li>
-  <li class="fragment" data-fragment-index="2" style="margin-bottom: 15px;"> Background system tasks "pollute" the data, making it hard to see the true cost of just our simulation.</li>
-</ul>
-
-::: {.fragment data-fragment-index="3" .callout-note appearance="simple" icon=false style="margin-top: 30px;"}
-**Objective:** Develop a methodology to attribute energy consumption **strictly to our specific simulation process**, independent of other system activity.
 :::
+
+::: {.fragment data-fragment-index="2"}
+### The Attribution Challenge
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0;">
+  <li style="margin-bottom: 12px;">Modern hardware often runs multiple tasks at the same time.</li>
+  <li style="margin-bottom: 12px;">Hardware sensors report the *total* power of the card, not the energy used by a specific process.</li>
+</ul>
+:::
+
 
 ## Research Questions
 
@@ -298,14 +316,14 @@ format:
   
   <ul style="list-style-type: circle; padding-left: 60px; margin-top: 10px; font-size: 26px !important;">
     <li class="fragment fade-in-then-semi-out" data-fragment-index="1" style="margin-bottom: 15px;">
-      To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
-    </li>
-    <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
-      How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
-    </li>
-    <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
       What methodologies enable accurate process-level energy attribution in shared heterogeneous computing infrastructures?
     </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="2" style="margin-bottom: 15px;">
+      To what extent can execution time serve as a proxy for energy consumption in heterogeneous CPU–GPU computing systems?
+    </li>
+    <li class="fragment fade-in-then-semi-out" data-fragment-index="3" style="margin-bottom: 15px;">
+      How does uncertainty in simulation inputs propagate to variability in computational energy consumption?
+    </li>    
   </ul>
 </ul>
 
@@ -365,23 +383,6 @@ Ensemble Analysis
   
 </ul>
 
-## Is Execution Time a Reliable Proxy? {auto-animate="true"}
-
-::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 40px; margin-top: -30px;"}
-
-::: {.column width="50%" style="text-align: center;"}
-![](pres_plots/motivation/original_dem_with_noise.png){width="100%"}
-
-<p class="figure-caption"><strong>Figure 3a:</strong> Original Resolution DEM</p>
-:::
-
-::: {.column width="50%" style="text-align: center;"}
-![](pres_plots/motivation/lowres_dem_with_noise.png){width="100%"}
-
-<p class="figure-caption"><strong>Figure 3b:</strong> Downsampled Low-Res DEM</p>
-:::
-
-:::
 
 ## Is Execution Time a Reliable Proxy? {auto-animate="true"}
 
@@ -396,8 +397,24 @@ Ensemble Analysis
 
 ## Is Execution Time a Reliable Proxy? {auto-animate="true"}
 
+::: {style="text-align: center; width: 100%; margin-top: -25px;"}
+![](pres_plots/results/time/dem_resolutions_cropped.gif){width="40%"}
+
+<p class="figure-caption"><strong>Figure 3:</strong> Comparison of Original and Downsampled DEM Resolutions</p>
+:::
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
 ::: {style="text-align: center; width: 100%; margin-top: -20px;"}
-![](pres_plots/motivation/proxy_fallacy.png){width="70%"}
+![](pres_plots/results/time/proxy_fallacy.png){width="70%"}
+
+<p class="figure-caption"><strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption</p>
+:::
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+![](pres_plots/results/time/proxy_fallacy_clean.png){width="70%"}
 
 <p class="figure-caption"><strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption</p>
 :::
@@ -406,7 +423,7 @@ Ensemble Analysis
 
 ::: {style="text-align: center; width: 100%; margin-top: -20px;"}
 
-![](pres_plots/motivation/power_signature.png){width="70%"}
+![](pres_plots/results/time/power_signature.png){width="70%"}
 
 <p class="figure-caption"><strong>Figure 5:</strong> Average Cumulative Energy-Time Plot</p>
 :::
