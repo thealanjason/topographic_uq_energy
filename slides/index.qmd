@@ -247,17 +247,16 @@ format:
 
 ## The Impact of DEM Uncertainty
 
-::: {.callout-important appearance="simple" style="margin-bottom: 30px;"}
+::: {.callout-important appearance="simple" style="margin-bottom: 20px;"}
 "Overlooking DEM uncertainty may lead to a bias in risk management decisions" [@Zhao2020]
 :::
 
-::: {.columns style="display: flex; align-items: flex-start; justify-content: center; gap: 30px;"}
+::: {style="display: flex; align-items: flex-start; justify-content: space-between; width: 100%; margin-top: 20px;"}
 
-::: {.column width="40%"}
-
+::: {style="width: 40%;"}
 ::: {.fragment data-fragment-index="1"}
 ### The Physical Link
-<ul style="list-style-type: disc; padding-left: 40px; margin-bottom: 20px;">
+<ul style="list-style-type: disc; padding-left: 30px; margin-bottom: 20px;">
   <li style="font-size: 20px; margin-bottom: 10px;">Topography governs downhill flow physics.</li>
   <li style="font-size: 20px; margin-bottom: 10px;">Surface variations alter mathematical predictions [@Zhao2020].</li>
 </ul>
@@ -265,20 +264,28 @@ format:
 
 ::: {.fragment data-fragment-index="2"}
 ### The Solution
-<ul style="list-style-type: disc; padding-left: 40px;">
+<ul style="list-style-type: disc; padding-left: 30px;">
   <li style="font-size: 20px; margin-bottom: 10px;">Use an “ensemble of equiprobable realizations” [@Zhao2020].</li>
 </ul>
 :::
 :::
 
-::: {.column width="60%" style="text-align: center;"}
+::: {style="width: 60%; text-align: center; margin-top: -40px;"}
 ::: {.fragment data-fragment-index="1"}
-![](pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png){width="100%"}
+![](pres_plots/introduction/water_depth_uq/dem_3d.gif){style="max-height: 470px; width: auto; object-fit: contain;"}
 
-<p class="figure-caption"><strong>Figure 1:</strong> Water depth distribution across the computational ensemble.</p>
+<p class="figure-caption" style="margin-top: -10px;"><strong>Figure 1:</strong> DEM for each Iteration</p>
 :::
 :::
 
+:::
+
+## The Impact of DEM Uncertainty
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+![](pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png){width="70%"}
+
+<p class="figure-caption" style="margin-top: -20px;"><strong>Figure 2:</strong> Spatial distribution of water depth uncertainty across the ensemble.</p>
 :::
 
 ## Motivation {#motivation}
@@ -394,6 +401,14 @@ Ensemble Analysis
 ![](pres_plots/results/time/dem_resolutions_cropped.gif){width="40%"}
 
 <p class="figure-caption"><strong>Figure 3:</strong> Comparison of Original and Downsampled DEM Resolutions</p>
+:::
+
+## Is Execution Time a Reliable Proxy? {auto-animate="true"}
+
+::: {style="text-align: center; width: 100%; margin-top: -20px;"}
+![](pres_plots/results/time/proxy_fallacy.png){width="70%"}
+
+<p class="figure-caption"><strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption</p>
 :::
 
 ## Is Execution Time a Reliable Proxy? {auto-animate="true"}
