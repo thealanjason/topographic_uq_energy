@@ -142,7 +142,8 @@ def _get_uq_config(cfg: dict) -> tuple[bool, dict]:
 
 
 def load_uq_samples(uq_cfg: dict) -> pd.DataFrame:
-    output_csv = uq_cfg.get('output_csv', os.path.join('plots', 'uq_water_depth_samples.csv'))
+    # Use a single hardcoded, non-configurable location for UQ samples
+    output_csv = os.path.join('ensemble_results', 'uq_water_depth_samples.csv')
 
     if not os.path.exists(output_csv):
         print(f"UQ samples not found at {output_csv}.")

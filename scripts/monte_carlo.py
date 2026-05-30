@@ -170,13 +170,12 @@ uq_cfg = cfg.get('uq', {})
 uq_enabled = False
 uq_point_xy = None
 uq_point_type = "map"
-uq_output_csv = os.path.join('plots', 'uq_water_depth_samples.csv')
+uq_output_csv = os.path.join('ensemble_results', 'uq_water_depth_samples.csv')
 
 if isinstance(uq_cfg, dict):
     uq_enabled = bool(uq_cfg.get('enabled', False))
     uq_point_xy = uq_cfg.get('point_xy')
     uq_point_type = uq_cfg.get('point_type', uq_point_type)
-    uq_output_csv = uq_cfg.get('output_csv', uq_output_csv)
 else:
     uq_enabled = bool(uq_cfg)
 
