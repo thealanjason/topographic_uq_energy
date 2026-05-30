@@ -407,7 +407,7 @@ Eren Edgü <br> Alan Correa
 </div>
 </div>
 <div style="display: flex; align-items: flex-start; justify-content: space-between; width: 100%; margin-top: 20px;">
-<div style="width: 40%;">
+<div style="width: 50%;">
 <div class="fragment" data-fragment-index="1">
 <h3 id="the-physical-link">The Physical Link</h3>
 <ul style="list-style-type: disc; padding-left: 30px; margin-bottom: 20px;">
@@ -428,11 +428,11 @@ Use an “ensemble of equiprobable realizations” <span class="citation" data-c
 </ul>
 </div>
 </div>
-<div style="width: 60%; text-align: center; margin-top: -40px;">
-<div class="fragment" data-fragment-index="1">
+<div style="width: 50%; text-align: center; margin-top: -40px;">
+<div class="fragment" data-fragment-index="2">
 <p><img data-src="pres_plots/introduction/water_depth_uq/dem_3d.gif" style="max-height: 470px; width: auto; object-fit: contain;"></p>
 <p class="figure-caption" style="margin-top: -10px;">
-<strong>Figure 1:</strong> DEM for each Iteration
+<strong>Figure 2:</strong> DEM for each Iteration
 </p>
 </div>
 </div>
@@ -440,11 +440,105 @@ Use an “ensemble of equiprobable realizations” <span class="citation" data-c
 </section>
 <section id="the-impact-of-dem-uncertainty-1" class="slide level2">
 <h2>The Impact of DEM Uncertainty</h2>
-<div style="text-align: center; width: 100%; margin-top: -20px;">
-<p><img data-src="pres_plots/introduction/water_depth_uq/uq_water_depth_distribution.png" style="width:70.0%"></p>
-<p class="figure-caption" style="margin-top: -20px;">
-<strong>Figure 2:</strong> Spatial distribution of water depth uncertainty across the ensemble.
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; margin-top: -30px;">
+<div style="width: 48%; font-family: 'Poppins', sans-serif;">
+<table style="width: 100%; border-collapse: collapse; font-size: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+<thead>
+<tr style="background-color: #0052a3; color: white;">
+<th style="padding: 15px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\sigma_{input}\)</span>
+</th>
+<th style="padding: 15px; border: 1px solid #dee2e6;">
+Mean (m)
+</th>
+<th style="padding: 15px; border: 1px solid #dee2e6;">
+Std. Dev (m)
+</th>
+<th style="padding: 15px; border: 1px solid #dee2e6;">
+CV (%)
+</th>
+</tr>
+</thead>
+<tbody style="color: #333;">
+<tr>
+<td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; background-color: #f8fafc;">
+0.05
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+0.739
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\pm 0.050\)</span>
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+6.78%
+</td>
+</tr>
+<tr style="background-color: #f1f5f9;">
+<td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; background-color: #f8fafc;">
+0.1
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+0.756
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\pm 0.110\)</span>
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+14.50%
+</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; background-color: #f8fafc;">
+0.2
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+0.774
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\pm 0.206\)</span>
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+26.61%
+</td>
+</tr>
+<tr style="background-color: #f1f5f9;">
+<td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; background-color: #f8fafc;">
+0.5
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+0.880
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\pm 0.446\)</span>
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+50.71%
+</td>
+</tr>
+<tr>
+<td style="padding: 12px; border: 1px solid #dee2e6; font-weight: bold; background-color: #f8fafc;">
+1.0
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+1.101
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+<span class="math inline">\(\pm 0.817\)</span>
+</td>
+<td style="padding: 12px; border: 1px solid #dee2e6;">
+74.21%
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div style="width: 50%; text-align: center;">
+<p><img data-src="pres_plots/introduction/water_depth_uq/water_height.gif" style="max-height: 500px; width: auto; object-fit: contain;"></p>
+<p class="figure-caption" style="margin-top: 15px; font-size: 16px;">
+<strong>Figure 3:</strong> Water depth uncertainty propagation.
 </p>
+</div>
 </div>
 </section>
 <section id="motivation" class="slide level2">
@@ -534,35 +628,36 @@ Isolates energy consumption by process-level GPU/CPU utilization percentages.
 </div>
 </div>
 <p class="figure-caption" style="margin-top: 50px;">
-<strong>Figure 2:</strong> Computational Pipeline Flowchart
+<strong>Figure 4:</strong> Computational Pipeline Flowchart
 </p>
 </div>
 </section>
 <section id="results" class="slide level2">
 <h2>Results</h2>
-<ul style="list-style-type: disc; padding-left: 60px">
-<li style="margin-bottom: 40px;">
+<ul style="list-style-type: disc; padding-left: 60px; margin-top: 0px;">
+<li style="margin-bottom: 40px; font-size: 32px; font-weight: bold; color: #0052a3;">
 The Failure of the Time Proxy
 </li>
-<li style="margin-bottom: 40px;">
+<li style="margin-bottom: 40px; font-size: 32px; opacity: 0.3;">
 Uncertainty Propagation of Energy Consumption
 </li>
 </ul>
 </section>
 <section id="is-execution-time-a-reliable-proxy" class="slide level2" data-auto-animate="true">
 <h2 data-id="quarto-animate-title">Is Execution Time a Reliable Proxy?</h2>
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 40px;">
+<div class="fragment" data-fragment-index="1">
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0px;">
 <li style="margin-bottom: 25px; font-size: 28px;">
 Energy (<span class="math inline">\(E\)</span>) is the product of power (<span class="math inline">\(P\)</span>) and time (<span class="math inline">\(t\)</span>).
 </li>
-<li style="margin-bottom: 25px; font-size: 28px;">
-For execution time to be a reliable proxy, the <strong>Average Power (<span class="math inline">\(P\)</span>)</strong> should be nearly constant for both cases.
-</li>
 </ul>
-<div style="text-align: center; margin-top: 120px;">
-<p style="font-size: 50px; color: #000000; font-family: 'Poppins', sans-serif; margin: 0;">
-<span class="math inline">\(E = P \cdot t\)</span>
+</div>
+<div class="fragment" data-fragment-index="2" style="text-align: center; margin-top: 80px;">
+<div style="display: inline-block; padding: 30px 60px; border: 3px solid #0052a3; border-radius: 10px; background-color: #f8fafc; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+<p style="font-size: 60px; color: #0052a3; font-family: 'Poppins', sans-serif; margin: 0; font-weight: bold;">
+<span class="math inline">\(E = A + P \cdot t\)</span>
 </p>
+</div>
 </div>
 </section>
 <section id="is-execution-time-a-reliable-proxy-1" class="slide level2" data-auto-animate="true">
@@ -570,7 +665,7 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 <div style="text-align: center; width: 100%; margin-top: -25px;">
 <p><img data-src="pres_plots/results/time/dem_resolutions_cropped.gif" style="width:40.0%"></p>
 <p class="figure-caption">
-<strong>Figure 3:</strong> Comparison of Original and Downsampled DEM Resolutions
+<strong>Figure 5:</strong> Comparison of Original and Downsampled DEM Resolutions
 </p>
 </div>
 </section>
@@ -579,7 +674,7 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 <div style="text-align: center; width: 100%; margin-top: -20px;">
 <p><img data-src="pres_plots/results/time/proxy_fallacy.png" style="width:70.0%"></p>
 <p class="figure-caption">
-<strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption
+<strong>Figure 6:</strong> Total energy consumption vs.&nbsp;execution duration for all iterations
 </p>
 </div>
 </section>
@@ -588,7 +683,7 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 <div style="text-align: center; width: 100%; margin-top: -20px;">
 <p><img data-src="pres_plots/results/time/proxy_fallacy_clean.png" style="width:70.0%"></p>
 <p class="figure-caption">
-<strong>Figure 4:</strong> Discrepancy between Execution Time and Actual Energy Consumption
+<strong>Figure 7:</strong> Total energy consumption vs.&nbsp;execution duration for all clean iterations
 </p>
 </div>
 </section>
@@ -597,7 +692,36 @@ For execution time to be a reliable proxy, the <strong>Average Power (<span clas
 <div style="text-align: center; width: 100%; margin-top: -20px;">
 <p><img data-src="pres_plots/results/time/power_signature.png" style="width:70.0%"></p>
 <p class="figure-caption">
-<strong>Figure 5:</strong> Average Cumulative Energy-Time Plot
+<strong>Figure 8:</strong> Average Cumulative Energy-Time Plot
+</p>
+</div>
+</section>
+<section id="results-2" class="slide level2">
+<h2>Results</h2>
+<ul style="list-style-type: disc; padding-left: 60px; margin-top: 0px;">
+<li style="margin-bottom: 40px; font-size: 32px; opacity: 0.3;">
+The Failure of the Time Proxy
+</li>
+<li style="margin-bottom: 40px; font-size: 32px; font-weight: bold; color: #0052a3;">
+Uncertainty Propagation of Energy Consumption
+</li>
+</ul>
+</section>
+<section id="uncertainty-quantification-in-consumed-energy" class="slide level2">
+<h2>Uncertainty Quantification in consumed Energy</h2>
+<div style="text-align: center; width: 100%; margin-top: 20px;">
+<p><img data-src="pres_plots/results/uq/energy_uq_stripplot.png" style="max-height: 520px; width: auto; object-fit: contain; display: block; margin: 0 auto;"></p>
+<p class="figure-caption" style="margin-top: 20px; font-family: 'Poppins', sans-serif;">
+<strong>Figure 9:</strong> Raw distribution of total energy consumption for each topographic noise level
+</p>
+</div>
+</section>
+<section id="uncertainty-quantification-in-consumed-energy-1" class="slide level2">
+<h2>Uncertainty Quantification in consumed Energy</h2>
+<div style="text-align: center; width: 100%; margin-top: 20px;">
+<p><img data-src="pres_plots/results/uq/energy_uq_boxplot.png" style="max-height: 520px; width: auto; object-fit: contain; display: block; margin: 0 auto;"></p>
+<p class="figure-caption" style="margin-top: 20px; font-family: 'Poppins', sans-serif;">
+<strong>Figure 10:</strong> Statistical distribution of total energy consumption for each topographic noise level
 </p>
 </div>
 </section>
