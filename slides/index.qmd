@@ -271,11 +271,9 @@ format:
 :::
 
 ::: {style="width: 50%; text-align: center; margin-top: -40px;"}
-::: {.fragment data-fragment-index="2"}
 ![](pres_plots/introduction/water_depth_uq/dem_3d.gif){style="max-height: 470px; width: auto; object-fit: contain;"}
 
 <p class="figure-caption" style="margin-top: -10px;"><strong>Figure 2:</strong> DEM for each Iteration</p>
-:::
 :::
 
 :::
@@ -516,5 +514,38 @@ $E = A + P \cdot t$
 <p class="figure-caption" style="margin-top: 20px; font-family: 'Poppins', sans-serif;"><strong>Figure 10:</strong> Statistical distribution of total energy consumption for each topographic noise level</p>
 :::
 
+## Conclusion
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0px;">
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 35px;">
+    **Time is not a Proxy:** Execution duration fails to capture energy consumption due to dynamic hardware power signatures.
+  </li>
+  
+  <li class="fragment" data-fragment-index="2" style="margin-bottom: 35px;">
+    **The 0.2m Tipping Point:** Topographic noise beyond 20cm triggers non-linear explosions in both solver energy cost and water depth variance.
+  </li>
+  
+  <li class="fragment" data-fragment-index="3" style="margin-bottom: 35px;">
+    **Isolation is Essential:** Process-level attribution is mandatory for reliable Uncertainty Quantification in shared HPC environments.
+  </li>
+</ul>
+
+## Outlook
+
+<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0px;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 40px;">
+    **The High-Resolution Energy Anomaly**
+    <ul style="list-style-type: circle; padding-left: 40px; font-size: 26px; margin-top: 10px; color: #4a4a4a;">
+      <li>Investigate why the 0.05m noise profile paradoxically exhibits higher energy variance (19.7 J) than the 0.1m profile (16.2 J).</li>
+    </ul>
+  </li>
+  
+  <li class="fragment" data-fragment-index="1" style="margin-bottom: 40px;">
+    **Isolating the 60-Second Execution Stalls**
+    <ul style="list-style-type: circle; padding-left: 40px; font-size: 26px; margin-top: 10px; color: #4a4a4a;">
+      <li>Determine the exact root cause of the extreme 60-second hardware outliers present in the raw duration data.</li>
+    </ul>
+  </li>
+</ul>
 
 ## References {#references}
