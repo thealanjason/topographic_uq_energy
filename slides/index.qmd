@@ -280,14 +280,18 @@ format:
 
 ## The Impact of DEM Uncertainty
 
-::: {style="display: flex; align-items: center; justify-content: space-between; gap: 20px; width: 100%; margin-top: -30px;"}
+::: {style="display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; width: 100%; margin-top: -10px;"}
 
 ::: {style="width: 48%; font-family: 'Poppins', sans-serif;"}
+
+<p style="margin-bottom: 15px; font-size: 22px; color: #333;">
+  <strong style="color: #0052a3;">Quantity of Interest:</strong> Water depth at the houses coordinates
+</p>
 
 <table style="width: 100%; border-collapse: collapse; font-size: 20px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
   <thead>
     <tr style="background-color: #0052a3; color: white;">
-      <th style="padding: 15px; border: 1px solid #dee2e6;">$\sigma_{input}$</th>
+      <th style="padding: 15px; border: 1px solid #dee2e6;">$\sigma_{input}$ (m)</th>
       <th style="padding: 15px; border: 1px solid #dee2e6;">Mean (m)</th>
       <th style="padding: 15px; border: 1px solid #dee2e6;">Std. Dev (m)</th>
       <th style="padding: 15px; border: 1px solid #dee2e6;">CV (%)</th>
@@ -330,13 +334,12 @@ format:
 :::
 
 ::: {style="width: 50%; text-align: center;"}
-![](pres_plots/introduction/water_depth_uq/water_height.gif){style="max-height: 500px; width: auto; object-fit: contain;"}
+![](pres_plots/introduction/water_depth_uq/water_height.gif){style="max-height: 520px; width: auto; object-fit: contain;"}
 
 <p class="figure-caption" style="margin-top: 15px; font-size: 16px;">**Figure 3:** Water depth uncertainty propagation.</p>
 :::
 
 :::
-
 ## Motivation {#motivation}
 
 ::: {.fragment data-fragment-index="1"}
@@ -344,6 +347,7 @@ format:
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-bottom: 25px;">
   <li style="margin-bottom: 12px;">Generating an ensemble of 500 realizations requires massive computational throughput.</li>
   <li style="margin-bottom: 12px;">Running these simulations demands significant energy.</li>
+  <li style="margin-bottom: 12px;">Time is being used as a proxy for energy consumption.</li>
 </ul>
 :::
 
@@ -517,6 +521,9 @@ $E = A + P \cdot t$
 ## Conclusion
 
 <ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0px;">
+  <li class="fragment" data-fragment-index="0" style="margin-bottom: 35px;">
+    **Isolation is Essential:** Process-level attribution is mandatory for reliable Uncertainty Quantification in shared HPC environments.
+  </li>
   <li class="fragment" data-fragment-index="1" style="margin-bottom: 35px;">
     **Time is not a Proxy:** Execution duration fails to capture energy consumption due to dynamic hardware power signatures.
   </li>
@@ -525,26 +532,18 @@ $E = A + P \cdot t$
     **The 0.2m Tipping Point:** Topographic noise beyond 20cm triggers non-linear explosions in both solver energy cost and water depth variance.
   </li>
   
-  <li class="fragment" data-fragment-index="3" style="margin-bottom: 35px;">
-    **Isolation is Essential:** Process-level attribution is mandatory for reliable Uncertainty Quantification in shared HPC environments.
-  </li>
+
 </ul>
 
 ## Outlook
 
-<ul style="list-style-type: disc; padding-left: 40px; margin-left: 0; margin-top: 0px;">
-  <li class="fragment" data-fragment-index="0" style="margin-bottom: 40px;">
-    **The High-Resolution Energy Anomaly**
-    <ul style="list-style-type: circle; padding-left: 40px; font-size: 26px; margin-top: 10px; color: #4a4a4a;">
-      <li>Investigate why the 0.05m noise profile paradoxically exhibits higher energy variance (19.7 J) than the 0.1m profile (16.2 J).</li>
-    </ul>
+<ul style="list-style-type: disc; padding-left: 60px; margin-top: 0px;">
+  <li style="margin-bottom: 40px; font-size: 28px; line-height: 1.5;">
+    Investigate why the 0.05m noise profile paradoxically exhibits higher energy variance (19.7 J) than the 0.1m profile (16.2 J).
   </li>
   
-  <li class="fragment" data-fragment-index="1" style="margin-bottom: 40px;">
-    **Isolating the 60-Second Execution Stalls**
-    <ul style="list-style-type: circle; padding-left: 40px; font-size: 26px; margin-top: 10px; color: #4a4a4a;">
-      <li>Determine the exact root cause of the extreme 60-second hardware outliers present in the raw duration data.</li>
-    </ul>
+  <li style="margin-bottom: 40px; font-size: 28px; line-height: 1.5;">
+    Determine the exact root cause of the extreme 60-second hardware outliers present in the raw duration data.
   </li>
 </ul>
 
