@@ -8,8 +8,8 @@ dem: 'DEM.gz'
 
 uq:
   enabled: true  # When true, sample water depth and plot its distribution
-  point_xy: [92, 208]  # Point of interest (x, y)
-  point_type: "index"  # "map" uses raster coordinates; "index" uses [col, row] indices
+  point_xy: [925.0, 605.0]  # Point of interest (x, y)
+  point_type: "map"  # "map" uses raster coordinates; "index" uses [col, row] indices
 
 analysis:
   visualization:
