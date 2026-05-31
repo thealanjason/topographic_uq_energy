@@ -703,13 +703,23 @@ def _regenerate_dem_with_fixed_colorbar(dem_output_dir: Path) -> None:
         try:
             # Create figure with matplotlib
             fig, ax = plt.subplots(figsize=(12, 11))
+            ncols = header['ncols']
+            nrows = header['nrows']
+            xllcorner = header['xllcorner']
+            yllcorner = header['yllcorner']
+            cellsize = header['cellsize']
+
+            extent = [xllcorner, xllcorner + ncols * cellsize,
+                      yllcorner, yllcorner + nrows * cellsize]
             
             # Plot with fixed colorbar range
-            im = ax.imshow(array, cmap='terrain', origin='upper',
+            im = ax.imshow(array, cmap='terrain', extent=extent, origin='upper',
                           vmin=global_min, vmax=global_max,
                           aspect='equal', interpolation='nearest')
             
             ax.set_title('Digital Elevation Model for each Iteration', fontsize=16)
+            ax.set_xlabel('X (m)', fontsize=12)
+            ax.set_ylabel('Y (m)', fontsize=12)
             
             # Add colorbar
             cbar = plt.colorbar(im, ax=ax, pad=0.05)

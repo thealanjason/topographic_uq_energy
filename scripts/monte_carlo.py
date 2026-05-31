@@ -101,6 +101,7 @@ def _render_baseline_dem_with_point(
         with rasterio.open(vfs_path) as src:
             dem = src.read(1)
             nodata = src.nodata
+            bounds = src.bounds
             if nodata is not None:
                 dem = dem.astype(float)
                 dem[dem == nodata] = np.nan
@@ -115,9 +116,19 @@ def _render_baseline_dem_with_point(
                 row, col = src.index(map_x, map_y)
 
         fig, ax = plt.subplots(figsize=(10, 8))
-        im = ax.imshow(dem, cmap="terrain", origin="upper", interpolation="nearest")
-        ax.scatter([col], [row], s=120, c="red", edgecolors="white", linewidths=1.5, zorder=5)
+        extent = [bounds.left, bounds.right, bounds.bottom, bounds.top]
+        im = ax.imshow(
+            dem,
+            cmap="terrain",
+            extent=extent,
+            origin="upper",
+            interpolation="nearest",
+            aspect="equal",
+        )
+        ax.scatter([map_x], [map_y], s=120, c="red", edgecolors="white", linewidths=1.5, zorder=5)
         ax.set_title("Digital Elevation Model")
+        ax.set_xlabel("X (m)")
+        ax.set_ylabel("Y (m)")
 
         cbar = plt.colorbar(im, ax=ax, pad=0.03)
         cbar.set_label("Elevation (m)")
