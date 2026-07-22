@@ -67,18 +67,12 @@ def _build_total_energy_timeline(
     gpu_pid: pd.DataFrame,
 ) -> pd.DatetimeIndex:
     """
-    Build timestamps for attributed total energy.
-
-    Mirrors Alumet's energy-attribution interpolation plug-in (https://github.com/alumet-dev/alumet/tree/main/plugins/energy-attribution): 
-    one timeseries is the reference and remains unchanged, while other timeseries are interpolated onto its timestamps.
-    CPU timestamps are the reference when CPU data exists; GPU timestamps are used only for GPU-only data.
+    Build timestamps for attributed total energy using the union of both sensors.
     """
     cpu_index = pd.DatetimeIndex(pd.Index(cpu_pid["timestamp"]).unique()).sort_values()
     gpu_index = pd.DatetimeIndex(pd.Index(gpu_pid["timestamp"]).unique()).sort_values()
 
-    if cpu_index.empty:
-        return gpu_index
-    return cpu_index
+    return pd.DatetimeIndex(cpu_index.union(gpu_index).sort_values())
 
 
 def _create_gif_from_pngs(
@@ -265,10 +259,7 @@ def print_uq_statistics(uq_samples: np.ndarray, uq_cfg: dict) -> None:
 
 def collect_energy_data(iterations: int) -> tuple[list[float], list[dict]]:
     """
-    Collect energy data from all iterations.
-    
-    Returns:
-        Tuple of (energy_results list, iteration_data list with detailed timelines)
+    Collect energy data for the target PID across all iterations.
     """
     energy_results = []
     iteration_data = []
@@ -281,41 +272,37 @@ def collect_energy_data(iterations: int) -> tuple[list[float], list[dict]]:
         if not os.path.exists(filename):
             continue
         
-        # Extract the target process PID from execution.log
         target_pid = _extract_pid_from_execution_log(i)
         if target_pid is None:
-            raise FileNotFoundError(f"Iteration {i}: Could not extract PID from execution.log. Execution log missing or PID not found.")
+            print(f"Iteration {i}: Could not extract PID from execution.log.")
+            continue
             
-        df = pd.read_csv(filename, sep=';', dtype={'resource_id': 'str'})
+        # Ensure resource_id and consumer_id are read as strings to prevent matching bugs
+        df = pd.read_csv(filename, sep=';', dtype={'resource_id': str, 'consumer_id': str})
+        target_pid_str = str(target_pid)
         
-        # 1. Extract Joules & Isolate the Process by PID
+        # 1. Isolate the Process by PID safely
         df_gpu_raw = df[(df['metric'].str.contains('attributed_energy_gpu', na=False)) 
                         & (df['consumer_kind'] == 'process')
-                        & (df['consumer_id'] == target_pid)]
+                        & (df['consumer_id'] == target_pid_str)].copy()
+                        
         df_cpu_raw = df[(df['metric'].str.contains('attributed_energy_cpu', na=False)) 
                         & (df['consumer_kind'] == 'process')
-                        & (df['consumer_id'] == target_pid)]
+                        & (df['consumer_id'] == target_pid_str)].copy()
         
         if df_gpu_raw.empty and df_cpu_raw.empty:
             print(f"Iteration {i}: Missing CPU or GPU data for PID {target_pid}.")
             continue
 
-        # We directly copy the remaining columns to prevent memory warnings.
-        df_gpu_raw = df_gpu_raw[['timestamp', 'value']].copy()
-        df_cpu_raw = df_cpu_raw[['timestamp', 'value']].copy()
-
-        # 2. Format Time
-        df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp']).dt.floor('100ms')
-        df_cpu_raw['timestamp'] = pd.to_datetime(df_cpu_raw['timestamp']).dt.floor('100ms')
+        # 2. Format Time (Use exact time, do NOT use dt.floor('100ms'))
+        df_gpu_raw['timestamp'] = pd.to_datetime(df_gpu_raw['timestamp'])
+        df_cpu_raw['timestamp'] = pd.to_datetime(df_cpu_raw['timestamp'])
         
         # 3. Squash Duplicates
-        df_gpu = df_gpu_raw.groupby('timestamp', as_index=False).sum()
-        df_cpu = df_cpu_raw.groupby('timestamp', as_index=False).sum()
+        df_gpu = df_gpu_raw.groupby('timestamp', as_index=False)['value'].sum().sort_values('timestamp')
+        df_cpu = df_cpu_raw.groupby('timestamp', as_index=False)['value'].sum().sort_values('timestamp')
 
-        df_gpu = df_gpu.sort_values('timestamp')
-        df_cpu = df_cpu.sort_values('timestamp')
-
-        # 4. Cumulative Energy Calculation
+        # 4. Cumulative Energy Calculation (Convert interval deltas to running total)
         df_gpu['value'] = df_gpu['value'].cumsum()
         df_cpu['value'] = df_cpu['value'].cumsum()
 
