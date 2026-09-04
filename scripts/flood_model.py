@@ -175,8 +175,29 @@ if visualize_enabled:
                 pickle.dump((DEM.array, DEM.header), f)
             
             fig, ax = plt.subplots(figsize=(12, 11))
-            im = ax.imshow(DEM.array, cmap='terrain', aspect='equal', interpolation='nearest')
+            ncols = DEM.header['ncols']
+            nrows = DEM.header['nrows']
+            xllcorner = DEM.header['xllcorner']
+            yllcorner = DEM.header['yllcorner']
+            cellsize = DEM.header['cellsize']
+            extent = [
+                xllcorner,
+                xllcorner + ncols * cellsize,
+                yllcorner,
+                yllcorner + nrows * cellsize,
+            ]
+
+            im = ax.imshow(
+                DEM.array,
+                cmap='terrain',
+                extent=extent,
+                origin='upper',
+                aspect='equal',
+                interpolation='nearest'
+            )
             ax.set_title('Digital Elevation Model', fontsize=16)
+            ax.set_xlabel('X (m)', fontsize=12)
+            ax.set_ylabel('Y (m)', fontsize=12)
             
             cbar = plt.colorbar(im, ax=ax, pad=0.05)
             cbar.set_label('Elevation (m)', fontsize=12, labelpad=20)
